@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Coming Soon — Active Development · VER Intelligence Hub</title>
+<style>
+:root{
+  --navy:#0F1E3C;--navy2:#1E3A5F;--navy3:#EFF6FF;
+  --teal:#0D9488;--teal2:#0F766E;--teal3:#F0FDF9;
+  --green:#059669;--green2:#065F46;--green3:#D1FAE5;
+  --amber:#D97706;--amber2:#78350F;--amber3:#FEF3C7;
+  --red:#DC2626;--red2:#7F1D1D;--red3:#FEE2E2;
+  --purple:#7C3AED;--purple3:#F5F3FF;
+  --orange:#EA580C;--orange3:#FFF7ED;
+  --ink:#111827;--ink2:#1F2937;--ink3:#374151;--ink4:#6B7280;
+  --gray:#F9FAFB;--gray2:#F3F4F6;--gray3:#E5E7EB;
+  --border:#E5E7EB;--border2:#D1D5DB;--white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gray);color:var(--ink2);font-size:9pt;}
+.page-wrap{max-width:1100px;margin:0 auto;padding:24px 28px;}
+
+/* TOP BAR */
+.top-bar{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.top-bar-left{display:flex;align-items:center;gap:12px;}
+.back-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;
+  border-radius:6px;background:var(--gray2);border:1px solid var(--border2);
+  color:var(--ink3);font-size:8pt;font-weight:600;text-decoration:none;cursor:pointer;
+  font-family:inherit;transition:all 0.15s;}
+.back-btn:hover{background:var(--navy);color:#fff;}
+.page-title{font-size:15pt;font-weight:900;color:var(--navy);}
+.page-sub{font-size:8.5pt;color:var(--ink4);margin-top:2px;}
+
+/* CARDS */
+.card{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.card-title{font-size:9.5pt;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.card-sub{font-size:8pt;color:var(--ink4);margin-bottom:12px;}
+
+/* STAT TILES */
+.stat-grid{display:grid;gap:12px;margin-bottom:20px;}
+.stat-grid.g4{grid-template-columns:repeat(4,1fr);}
+.stat-grid.g3{grid-template-columns:repeat(3,1fr);}
+.stat{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;border-top:3px solid var(--navy);}
+.stat.teal{border-top-color:var(--teal);}
+.stat.green{border-top-color:var(--green);}
+.stat.amber{border-top-color:var(--amber);}
+.stat.red{border-top-color:var(--red);}
+.stat.purple{border-top-color:var(--purple);}
+.stat-val{font-size:20pt;font-weight:900;color:var(--navy);line-height:1;margin-bottom:3px;}
+.stat.teal .stat-val{color:var(--teal);}
+.stat.green .stat-val{color:var(--green);}
+.stat.amber .stat-val{color:var(--amber);}
+.stat.red .stat-val{color:var(--red);}
+.stat.purple .stat-val{color:var(--purple);}
+.stat-lbl{font-size:7.5pt;font-weight:600;color:var(--ink4);text-transform:uppercase;letter-spacing:0.06em;}
+.stat-note{font-size:7pt;color:var(--ink4);margin-top:4px;}
+
+/* PROGRESS BAR */
+.prog-wrap{background:var(--gray2);border-radius:4px;height:10px;margin:4px 0;overflow:hidden;}
+.prog-bar{height:10px;border-radius:4px;transition:width 0.8s ease;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:7pt;font-weight:700;
+  padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.badge-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.b-green{background:var(--green3);color:var(--green2);}
+.b-amber{background:var(--amber3);color:var(--amber2);}
+.b-red{background:var(--red3);color:var(--red2);}
+.b-navy{background:var(--navy3);color:var(--navy2);}
+.b-teal{background:var(--teal3);color:var(--teal2);}
+.b-purple{background:var(--purple3);color:var(--purple);}
+.b-gray{background:var(--gray2);color:var(--ink4);}
+.b-orange{background:var(--orange3);color:var(--orange);}
+
+/* TABLE */
+.vp-table{width:100%;border-collapse:collapse;font-size:8.5pt;}
+.vp-table th{background:var(--navy);color:#fff;padding:8px 12px;text-align:left;
+  font-size:7.5pt;font-weight:700;letter-spacing:0.03em;position:sticky;top:0;}
+.vp-table td{padding:9px 12px;border-bottom:1px solid var(--gray2);vertical-align:middle;}
+.vp-table tr:hover td{background:var(--gray);}
+.vp-table tr:last-child td{border-bottom:none;}
+
+/* CALLOUT */
+.callout{border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:16px;
+  border-left:4px solid;font-size:8.5pt;line-height:1.6;}
+.callout.info{background:var(--navy3);border-color:var(--navy2);color:var(--navy2);}
+.callout.teal{background:var(--teal3);border-color:var(--teal);color:var(--green2);}
+.callout.amber{background:var(--amber3);border-color:var(--amber);color:var(--amber2);}
+
+/* SECTION HEADER */
+.section-hdr{font-size:10pt;font-weight:800;color:var(--navy);margin:20px 0 10px;
+  display:flex;align-items:center;gap:8px;padding-bottom:8px;
+  border-bottom:2px solid var(--gray3);}
+
+/* PILL TABS */
+.tab-bar{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.tab{font-size:8pt;padding:6px 14px;border-radius:20px;cursor:pointer;
+  border:1.5px solid var(--border2);background:#fff;font-family:inherit;
+  transition:all 0.15s;font-weight:600;color:var(--ink4);}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab:hover:not(.active){border-color:var(--navy);color:var(--navy);}
+
+/* PIE CHART (CSS-only) */
+.pie-wrap{position:relative;width:160px;height:160px;margin:0 auto;}
+.pie-legend{margin-top:12px;}
+.pie-legend-item{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:8pt;}
+.pie-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+
+/* PRINT */
+@media print{
+  .back-btn,.tab-bar{display:none!important;}
+  .page-wrap{padding:12px;}
+}
+
+
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <button class="back-btn" onclick="history.back()">← Back to Hub</button>
+      <div>
+        <div class="page-title">Coming Soon — Active Development</div>
+        <div class="page-sub">VER Intelligence Hub · Salesforce DET · FY Current</div>
+      </div>
+    </div>
+    <div style="font-size:7.5pt;color:var(--ink4);text-align:right;">
+      DET Portfolio Intelligence — Powered by VER<br>
+      <span id="last-updated" style="font-size:7pt;">Last updated: April 2026</span>
+    </div>
+  </div>
+
+
+  <div class="callout teal" style="margin-bottom:20px;">
+    <strong>What was here is now live.</strong>
+    VER Intake Requests, Consumption Monitoring, and Vendor Health are fully operational
+    across the Hub and VER Vendor Platform. The sections below represent the genuine
+    next frontier for VER Intelligence.
+  </div>
+
+  <!-- THREE FUTURE HORIZON CARDS -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px;">
+
+    <!-- AI-Assisted Spend Analysis -->
+    <div class="card" style="border-top:3px solid #7C3AED;">
+      <div style="font-size:24pt;margin-bottom:10px;">🤖</div>
+      <div style="font-size:10pt;font-weight:800;color:var(--navy);margin-bottom:6px;">AI-Assisted Spend Analysis</div>
+      <span class="badge b-purple" style="margin-bottom:12px;display:inline-block;">In Planning · H2 FY27</span>
+      <div style="font-size:8.5pt;color:var(--ink3);line-height:1.7;">
+        Anomaly detection across portfolio spend patterns. Predictive variance alerts
+        when engagements trend toward budget overrun. Pattern recognition across vendor
+        performance data to surface risks before they escalate. Powered by VER Intelligence
+        and AI tooling.
+      </div>
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--gray3);">
+        <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);margin-bottom:6px;">CAPABILITIES PLANNED</div>
+        <div style="font-size:8pt;color:var(--ink3);">✦ Spend anomaly detection</div>
+        <div style="font-size:8pt;color:var(--ink3);">✦ Predictive renewal risk scoring</div>
+        <div style="font-size:8pt;color:var(--ink3);">✦ Rate card overpayment alerts</div>
+        <div style="font-size:8pt;color:var(--ink3);">✦ Portfolio optimization recommendations</div>
+      </div>
+    </div>
+
+    <!-- Vendor Self-Service Portal -->
+    <div class="card" style="border-top:3px solid #0D9488;">
+      <div style="font-size:24pt;margin-bottom:10px;">🏢</div>
+      <div style="font-size:10pt;font-weight:800;color:var(--navy);margin-bottom:6px;">Vendor Self-Service Portal</div>
+      <span class="badge b-teal" style="margin-bottom:12px;display:inline-block;">In Design · Q3 FY27</span>
+      <div style="font-size:8.5pt;color:var(--ink3);line-height:1.7;">
+        Vendors submit their own capability profiles, rate information, certifications,
+        and regional coverage directly into the VER Vendor Platform via a branded
+        questionnaire. VER reviews and approves before profiles go live. Removes manual
+        data entry burden and keeps the registry current.
+      </div>
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--gray3);">
+        <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);margin-bottom:6px;">CAPABILITIES PLANNED</div>
+        <div style="font-size:8pt;color:var(--ink3);">✦ Google Form → Vendor Platform integration</div>
+        <div style="font-size:8pt;color:var(--ink3);">✦ VER review gate before publishing</div>
+        <div style="font-size:8pt;color:var(--ink3);">✦ Vendor-branded questionnaire</div>
+        <div style="font-size:8pt;color:var(--ink3);">✦ Auto-profile refresh workflow</div>
+      </div>
+    </div>
+
+    <!-- Cinematic QBR Generation -->
+    <div class="card" style="border-top:3px solid #0F1E3C;">
+      <div style="font-size:24pt;margin-bottom:10px;">🎬</div>
+      <div style="font-size:10pt;font-weight:800;color:var(--navy);margin-bottom:6px;">Cinematic QBR Generation</div>
+      <span class="badge b-navy" style="margin-bottom:12px;display:inline-block;">On Roadmap · Q4 FY27</span>
+      <div style="font-size:8.5pt;color:var(--ink3);line-height:1.7;">
+        Death by slide deck ends here. On-demand narrative intelligence pulled directly
+        from the VER Intelligence Hub and Vendor Platform data. Executive-ready QBR
+        content generated automatically — spend trends, vendor health, savings realized,
+        pipeline risks — formatted as a living document not a static export.
+      </div>
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--gray3);">
+        <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);margin-bottom:6px;">CAPABILITIES PLANNED</div>
+        <div style="font-size:8pt;color:var(--ink3);">✦ Auto-generated QBR narrative</div>
+        <div style="font-size:8pt;color:var(--ink3);">✦ Live data pull from Hub + Platform</div>
+        <div style="font-size:8pt;color:var(--ink3);">✦ Pillar-level and vendor-level views</div>
+        <div style="font-size:8pt;color:var(--ink3);">✦ On-demand, viewer schedule</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="text-align:center;padding:16px;background:var(--gray2);border-radius:10px;
+    font-size:8.5pt;color:var(--ink4);">
+    VER Intelligence Hub is a living platform. New capabilities are added continuously
+    as the function matures and the portfolio grows. These planned features represent
+    VER's commitment to delivering genuine strategic intelligence — not just reporting.
+  </div>
+
+
+  <div style="margin-top:24px;padding-top:12px;border-top:1px solid var(--border);
+    font-size:7.5pt;color:var(--ink4);text-align:center;font-style:italic;">
+    VER Intelligence Hub · Vendor Engagement & Reliability · Salesforce DET ·
+    DET Portfolio Intelligence — Powered by VER · Confidential
+  </div>
+</div>
+<script>
+
+</script>
+</body>
+</html>

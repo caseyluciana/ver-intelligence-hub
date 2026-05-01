@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Savings & Value Realization · VER Intelligence Hub</title>
+<style>
+:root{
+  --navy:#0F1E3C;--navy2:#1E3A5F;--navy3:#EFF6FF;
+  --teal:#0D9488;--teal2:#0F766E;--teal3:#F0FDF9;
+  --green:#059669;--green2:#065F46;--green3:#D1FAE5;
+  --amber:#D97706;--amber2:#78350F;--amber3:#FEF3C7;
+  --red:#DC2626;--red2:#7F1D1D;--red3:#FEE2E2;
+  --purple:#7C3AED;--purple3:#F5F3FF;
+  --orange:#EA580C;--orange3:#FFF7ED;
+  --blue:#2563EB;--blue3:#EFF6FF;
+  --ink:#111827;--ink2:#1F2937;--ink3:#374151;--ink4:#6B7280;
+  --gray:#F9FAFB;--gray2:#F3F4F6;--gray3:#E5E7EB;
+  --border:#E5E7EB;--border2:#D1D5DB;--white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gray);color:var(--ink2);font-size:9pt;}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 28px;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--border);}
+.back{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;
+  border-radius:6px;background:var(--gray2);border:1px solid var(--border2);
+  color:var(--ink3);font-size:8pt;font-weight:600;text-decoration:none;
+  cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.back:hover{background:var(--navy);color:#fff;}
+.pg-title{font-size:15pt;font-weight:900;color:var(--navy);}
+.pg-sub{font-size:8.5pt;color:var(--ink4);margin-top:2px;}
+.card{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.card-title{font-size:9.5pt;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.card-sub{font-size:8pt;color:var(--ink4);margin-bottom:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.stat{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;border-top:3px solid var(--navy);}
+.stat.teal{border-top-color:var(--teal);}
+.stat.green{border-top-color:var(--green);}
+.stat.amber{border-top-color:var(--amber);}
+.stat.red{border-top-color:var(--red);}
+.stat.purple{border-top-color:var(--purple);}
+.stat.blue{border-top-color:var(--blue);}
+.stat-val{font-size:20pt;font-weight:900;color:var(--navy);line-height:1;margin-bottom:3px;}
+.stat.teal .stat-val{color:var(--teal);}
+.stat.green .stat-val{color:var(--green);}
+.stat.amber .stat-val{color:var(--amber);}
+.stat.red .stat-val{color:var(--red);}
+.stat.purple .stat-val{color:var(--purple);}
+.stat.blue .stat-val{color:var(--blue);}
+.stat-lbl{font-size:7.5pt;font-weight:600;color:var(--ink4);text-transform:uppercase;letter-spacing:0.06em;}
+.stat-note{font-size:7pt;color:var(--ink4);margin-top:4px;}
+.prog{background:var(--gray2);border-radius:4px;height:10px;overflow:hidden;}
+.prog-bar{height:10px;border-radius:4px;transition:width 0.8s;}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:7pt;font-weight:700;
+  padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.bg{background:var(--green3);color:var(--green2);}
+.ba{background:var(--amber3);color:var(--amber2);}
+.br{background:var(--red3);color:var(--red2);}
+.bn{background:var(--navy3);color:var(--navy2);}
+.bt{background:var(--teal3);color:var(--teal2);}
+.bp{background:var(--purple3);color:var(--purple);}
+.bz{background:var(--gray2);color:var(--ink4);}
+.bo{background:var(--orange3);color:var(--orange);}
+.bb{background:var(--blue3);color:var(--blue);}
+.vt{width:100%;border-collapse:collapse;font-size:8.5pt;}
+.vt th{background:var(--navy);color:#fff;padding:8px 12px;text-align:left;
+  font-size:7.5pt;font-weight:700;letter-spacing:0.03em;}
+.vt td{padding:9px 12px;border-bottom:1px solid var(--gray2);vertical-align:middle;}
+.vt tr:hover td{background:var(--gray);}
+.vt tr:last-child td{border-bottom:none;}
+.callout{border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:16px;
+  border-left:4px solid;font-size:8.5pt;line-height:1.6;}
+.c-info{background:var(--navy3);border-color:var(--navy2);color:var(--navy2);}
+.c-teal{background:var(--teal3);border-color:var(--teal);color:var(--green2);}
+.c-amber{background:var(--amber3);border-color:var(--amber);color:var(--amber2);}
+.shdr{font-size:10pt;font-weight:800;color:var(--navy);margin:20px 0 10px;
+  display:flex;align-items:center;gap:8px;padding-bottom:8px;
+  border-bottom:2px solid var(--gray3);}
+.tab-bar{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.tab{font-size:8pt;padding:6px 14px;border-radius:20px;cursor:pointer;
+  border:1.5px solid var(--border2);background:#fff;font-family:inherit;
+  transition:all 0.15s;font-weight:600;color:var(--ink4);}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab:hover:not(.active){border-color:var(--navy);color:var(--navy);}
+.footer{margin-top:24px;padding-top:12px;border-top:1px solid var(--border);
+  font-size:7.5pt;color:var(--ink4);text-align:center;font-style:italic;}
+@media print{.back,.tab-bar{display:none!important;}.wrap{padding:12px!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <div>
+      <button class="back" onclick="history.back()">← Back to Hub</button>
+      <div style="margin-top:8px;">
+        <div class="pg-title">Savings & Value Realization</div>
+        <div class="pg-sub">VER-identified savings across the DET portfolio · FY27 · Advisory scope</div>
+      </div>
+    </div>
+    <div style="text-align:right;font-size:7.5pt;color:var(--ink4);">
+      DET Portfolio Intelligence — Powered by VER<br>
+      <span style="font-size:7pt;">Updated: May 2026 · Salesforce DET · Confidential</span>
+    </div>
+  </div>
+
+  <div class="callout c-info">
+    <strong>DET Portfolio Intelligence — Powered by VER.</strong>
+    VER identifies, quantifies, and advises on savings opportunities across the DET portfolio.
+    Savings decisions and execution authority rest with Pillar Leads, Procurement, and Finance.
+    VER's role is advisory — providing the analysis and intelligence that enables better outcomes.
+  </div>
+
+  <!-- FY27 PROGRESS -->
+  <div class="card" style="border-top:3px solid var(--green);">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+      <div>
+        <div class="card-title">FY27 Savings Progress — Identified & Realized</div>
+        <div class="card-sub">Advisory scope savings across DET portfolio · VER-identified opportunities</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:7.5pt;color:var(--ink4);">FY27 Target</div>
+        <div style="font-size:20pt;font-weight:900;color:var(--navy);" id="s-target">—</div>
+      </div>
+    </div>
+    <div class="prog" style="height:16px;margin-bottom:8px;">
+      <div class="prog-bar" id="progress-bar" style="width:0%;background:linear-gradient(90deg,#059669,#0D9488);"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:8pt;color:var(--ink4);">
+      <span>$0</span><span id="s-pct" style="font-weight:700;color:var(--green);"></span><span id="s-target-echo"></span>
+    </div>
+  </div>
+
+  <!-- KPI TILES -->
+  <div class="g4">
+    <div class="stat green">
+      <div class="stat-val" id="s-realized">—</div>
+      <div class="stat-lbl">FY27 Realized</div>
+      <div class="stat-note">Confirmed savings delivered</div>
+    </div>
+    <div class="stat teal">
+      <div class="stat-val" id="s-pct-tile">97.7%</div>
+      <div class="stat-lbl">% to Target</div>
+      <div class="stat-note">vs $10.236M FY27 goal</div>
+    </div>
+    <div class="stat amber">
+      <div class="stat-val" id="s-pipeline">—</div>
+      <div class="stat-lbl">Pipeline Identified</div>
+      <div class="stat-note">Opportunities under evaluation</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">4</div>
+      <div class="stat-lbl">Active Initiatives</div>
+      <div class="stat-note">2 realized · 2 in pipeline</div>
+    </div>
+  </div>
+
+  <!-- REALIZED SAVINGS -->
+  <div class="shdr">✅ Realized Savings — FY27</div>
+  <div id="realized-list"></div>
+
+  <!-- PIPELINE -->
+  <div class="shdr">🔍 Savings Pipeline — Under Evaluation</div>
+  <div id="pipeline-list"></div>
+
+  <!-- METHODOLOGY -->
+  <div class="shdr">📐 VER Savings Methodology</div>
+  <div class="card">
+    <div class="card-sub">How VER identifies and supports savings realization — without owning spend authority</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;" id="methodology"></div>
+  </div>
+
+  <div class="footer">VER Intelligence Hub · Vendor Engagement &amp; Reliability · Salesforce DET · DET Portfolio Intelligence — Powered by VER</div>
+</div>
+<script>
+const SAVINGS_DATA = {
+  fy27_realized: '$10.0M',
+  fy27_target: '$10.236M',
+  fy27_pct: 97.7,
+  fy27_pipeline: '$3-5M',
+  total_lifetime: '$10.0M',
+
+  realized: [
+    {
+      id:'S001', title:'NTT Data — Application Development Restructure',
+      category:'Contract Restructure', vendor:'NTT Data', pillar:'Multiple',
+      date_identified:'Q1 FY27', date_realized:'Apr 2026',
+      amount:'$9.0M', status:'Realized',
+      methodology:'Decentralized master PO into 24 individual pillar-aligned POs. '
+        +'Eliminated duplicate management fees and realigned ~140 resources to staff-aug model. '
+        +'Removed $9M in overhead and redundant engagement costs.',
+      ver_action:'VER led engagement restructure analysis, identified fee redundancies, '
+        +'negotiated new PO structure with NTT and internal stakeholders.',
+      yoy_impact:'-$8.4M vs FY26 actual spend',
+      evidence:'24 new POs executed Apr 2026 · DET Engineering confirmed',
+      icon:'🔄',
+    },
+    {
+      id:'S002', title:'Cognizant — Partner Development Termination Avoidance',
+      category:'Contract Termination', vendor:'Cognizant', pillar:'SF on Salesforce',
+      date_identified:'Q2 FY27', date_realized:'Pending (notice May 1)',
+      amount:'$1.236M', status:'Target — Notice Pending',
+      methodology:'Identified underutilized Partner Development engagement. '
+        +'$247K/month with limited measurable output. VER initiated 120-day termination notice '
+        +'to realize $1.236M in avoidance savings before Aug 31, 2026.',
+      ver_action:'VER Director-led decision analysis. Termination notice issued May 1, 2026. '
+        +'Coordinated with Procurement and Legal on notice requirements.',
+      yoy_impact:'$1.236M avoidance vs continued FY27 spend',
+      evidence:'120-day notice issued · Termination date Aug 31, 2026',
+      icon:'📋',
+    },
+  ],
+
+  pipeline: [
+    {
+      id:'P001', title:'NTT AMS — 50% Cost Reduction',
+      category:'Contract Renegotiation', vendor:'NTT Data', pillar:'Multiple',
+      timeline:'Q4 FY27', amount:'TBD', status:'In Evaluation',
+      description:'VER is evaluating potential 50% reduction in AMS scope and cost '
+        +'aligned with decentralization strategy. Requires pillar lead alignment '
+        +'and NTT negotiation. Target Q4 FY27.',
+      icon:'🔍',
+    },
+    {
+      id:'P002', title:'IBM — Renewal Optimization',
+      category:'Contract Renegotiation', vendor:'IBM', pillar:'Tech Services',
+      timeline:'Aug 2026', amount:'$1-3M potential', status:'Renewal Active',
+      description:'IBM contract expires Aug 2026. VER is conducting rate benchmarking '
+        +'and scope analysis ahead of renewal. Early indications suggest 15-25% cost '
+        +'optimization opportunity available.',
+      icon:'📊',
+    },
+    {
+      id:'P003', title:'Poland Rate Card — ITECH Overpayment Recovery',
+      category:'Rate Optimization', vendor:'ITECH (Poland resources)', pillar:'Multiple',
+      timeline:'Q3 FY27', amount:'$0.5-1M potential', status:'Under Review',
+      description:'Rate benchmarking identified ITECH charging US-equivalent rates ($112-$200/hr) '
+        +'for Poland-based resources where market rate is $60-$130/hr. '
+        +'VER flagged for engagement review and potential rate renegotiation.',
+      icon:'⚠️',
+    },
+    {
+      id:'P004', title:'Workday — License Renewal Optimization',
+      category:'License Optimization', vendor:'Workday', pillar:'SF on Salesforce',
+      timeline:'Nov 2026', amount:'$1-2M potential', status:'Planning',
+      description:'Workday enterprise license renews Nov 2026 at $23.7M. '
+        +'VER is analyzing seat utilization, module usage, and market benchmarks '
+        +'to inform renewal negotiation strategy. ',
+      icon:'🔑',
+    },
+  ],
+
+  methodology_principles: [
+    { icon:'🔍', title:'Identify', desc:'VER analyzes engagement terms, rate benchmarks, utilization, and scope alignment to surface optimization opportunities.' },
+    { icon:'📊', title:'Quantify', desc:'Each opportunity is sized against market data, contracted rates, and projected spend to establish the savings case.' },
+    { icon:'🤝', title:'Advise', desc:'VER provides advisory guidance and analysis to Pillar Leads and Procurement. Decisions rest with business owners.' },
+    { icon:'✅', title:'Realize', desc:'Savings are tracked from identification through realization, with evidence documented for audit and reporting purposes.' },
+  ],
+};
+
+function init() {
+  // KPI tiles
+  const pct = SAVINGS_DATA.fy27_pct;
+  document.getElementById('s-realized').textContent = SAVINGS_DATA.fy27_realized;
+  document.getElementById('s-target').textContent = SAVINGS_DATA.fy27_target;
+  document.getElementById('s-pct').textContent = pct.toFixed(1) + '%';
+  document.getElementById('s-pipeline').textContent = SAVINGS_DATA.fy27_pipeline;
+  document.getElementById('progress-bar').style.width = Math.min(pct, 100) + '%';
+
+  // Realized savings
+  document.getElementById('realized-list').innerHTML = SAVINGS_DATA.realized.map(s => {
+    const statusCls = s.status === 'Realized' ? 'bg' : 'ba';
+    return `<div class="card" style="border-left:4px solid ${s.status==='Realized'?'#059669':'#D97706'};margin-bottom:12px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="font-size:20pt;">${s.icon}</div>
+          <div>
+            <div style="font-size:9.5pt;font-weight:800;color:var(--navy);">${s.title}</div>
+            <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap;">
+              <span class="badge bn">${s.category}</span>
+              <span class="badge ${statusCls}">${s.status}</span>
+              <span class="badge bz">${s.vendor}</span>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:16pt;font-weight:900;color:var(--green);">${s.amount}</div>
+          <div style="font-size:7.5pt;color:var(--ink4);">${s.date_realized}</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:8.5pt;">
+        <div>
+          <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);text-transform:uppercase;margin-bottom:4px;">Savings Methodology</div>
+          <div style="color:var(--ink3);line-height:1.6;">${s.methodology}</div>
+        </div>
+        <div>
+          <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);text-transform:uppercase;margin-bottom:4px;">VER Action Taken</div>
+          <div style="color:var(--ink3);line-height:1.6;">${s.ver_action}</div>
+          <div style="margin-top:8px;padding:6px 10px;background:var(--green3);border-radius:6px;font-size:8pt;color:var(--green2);">
+            <strong>YoY Impact:</strong> ${s.yoy_impact}
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:10px;padding:6px 10px;background:var(--gray);border-radius:6px;font-size:7.5pt;color:var(--ink4);">
+        <strong>Evidence:</strong> ${s.evidence}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Pipeline
+  document.getElementById('pipeline-list').innerHTML = SAVINGS_DATA.pipeline.map(p => `
+    <div class="card" style="border-left:4px solid var(--amber);margin-bottom:10px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="font-size:18pt;">${p.icon}</div>
+          <div>
+            <div style="font-size:9pt;font-weight:800;color:var(--navy);">${p.title}</div>
+            <div style="display:flex;gap:5px;margin-top:4px;flex-wrap:wrap;">
+              <span class="badge ba">${p.status}</span>
+              <span class="badge bz">${p.vendor}</span>
+              <span class="badge bz">${p.timeline}</span>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;font-size:10pt;font-weight:800;color:var(--amber);">${p.amount}</div>
+      </div>
+      <div style="margin-top:8px;font-size:8.5pt;color:var(--ink3);line-height:1.6;">${p.description}</div>
+    </div>`).join('');
+
+  // Methodology
+  document.getElementById('methodology').innerHTML = SAVINGS_DATA.methodology_principles.map(m => `
+    <div style="text-align:center;padding:16px;">
+      <div style="font-size:22pt;margin-bottom:8px;">${m.icon}</div>
+      <div style="font-size:9pt;font-weight:800;color:var(--navy);margin-bottom:6px;">${m.title}</div>
+      <div style="font-size:8pt;color:var(--ink3);line-height:1.6;">${m.desc}</div>
+    </div>`).join('');
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

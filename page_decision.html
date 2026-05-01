@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Decision Support Center · VER Intelligence Hub</title>
+<style>
+:root{
+  --navy:#0F1E3C;--navy2:#1E3A5F;--navy3:#EFF6FF;
+  --teal:#0D9488;--teal2:#0F766E;--teal3:#F0FDF9;
+  --green:#059669;--green2:#065F46;--green3:#D1FAE5;
+  --amber:#D97706;--amber2:#78350F;--amber3:#FEF3C7;
+  --red:#DC2626;--red2:#7F1D1D;--red3:#FEE2E2;
+  --purple:#7C3AED;--purple3:#F5F3FF;
+  --orange:#EA580C;--orange3:#FFF7ED;
+  --blue:#2563EB;--blue3:#EFF6FF;
+  --ink:#111827;--ink2:#1F2937;--ink3:#374151;--ink4:#6B7280;
+  --gray:#F9FAFB;--gray2:#F3F4F6;--gray3:#E5E7EB;
+  --border:#E5E7EB;--border2:#D1D5DB;--white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gray);color:var(--ink2);font-size:9pt;}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 28px;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--border);}
+.back{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;
+  border-radius:6px;background:var(--gray2);border:1px solid var(--border2);
+  color:var(--ink3);font-size:8pt;font-weight:600;text-decoration:none;
+  cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.back:hover{background:var(--navy);color:#fff;}
+.pg-title{font-size:15pt;font-weight:900;color:var(--navy);}
+.pg-sub{font-size:8.5pt;color:var(--ink4);margin-top:2px;}
+.card{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.card-title{font-size:9.5pt;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.card-sub{font-size:8pt;color:var(--ink4);margin-bottom:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.stat{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;border-top:3px solid var(--navy);}
+.stat.teal{border-top-color:var(--teal);}
+.stat.green{border-top-color:var(--green);}
+.stat.amber{border-top-color:var(--amber);}
+.stat.red{border-top-color:var(--red);}
+.stat.purple{border-top-color:var(--purple);}
+.stat.blue{border-top-color:var(--blue);}
+.stat-val{font-size:20pt;font-weight:900;color:var(--navy);line-height:1;margin-bottom:3px;}
+.stat.teal .stat-val{color:var(--teal);}
+.stat.green .stat-val{color:var(--green);}
+.stat.amber .stat-val{color:var(--amber);}
+.stat.red .stat-val{color:var(--red);}
+.stat.purple .stat-val{color:var(--purple);}
+.stat.blue .stat-val{color:var(--blue);}
+.stat-lbl{font-size:7.5pt;font-weight:600;color:var(--ink4);text-transform:uppercase;letter-spacing:0.06em;}
+.stat-note{font-size:7pt;color:var(--ink4);margin-top:4px;}
+.prog{background:var(--gray2);border-radius:4px;height:10px;overflow:hidden;}
+.prog-bar{height:10px;border-radius:4px;transition:width 0.8s;}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:7pt;font-weight:700;
+  padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.bg{background:var(--green3);color:var(--green2);}
+.ba{background:var(--amber3);color:var(--amber2);}
+.br{background:var(--red3);color:var(--red2);}
+.bn{background:var(--navy3);color:var(--navy2);}
+.bt{background:var(--teal3);color:var(--teal2);}
+.bp{background:var(--purple3);color:var(--purple);}
+.bz{background:var(--gray2);color:var(--ink4);}
+.bo{background:var(--orange3);color:var(--orange);}
+.bb{background:var(--blue3);color:var(--blue);}
+.vt{width:100%;border-collapse:collapse;font-size:8.5pt;}
+.vt th{background:var(--navy);color:#fff;padding:8px 12px;text-align:left;
+  font-size:7.5pt;font-weight:700;letter-spacing:0.03em;}
+.vt td{padding:9px 12px;border-bottom:1px solid var(--gray2);vertical-align:middle;}
+.vt tr:hover td{background:var(--gray);}
+.vt tr:last-child td{border-bottom:none;}
+.callout{border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:16px;
+  border-left:4px solid;font-size:8.5pt;line-height:1.6;}
+.c-info{background:var(--navy3);border-color:var(--navy2);color:var(--navy2);}
+.c-teal{background:var(--teal3);border-color:var(--teal);color:var(--green2);}
+.c-amber{background:var(--amber3);border-color:var(--amber);color:var(--amber2);}
+.shdr{font-size:10pt;font-weight:800;color:var(--navy);margin:20px 0 10px;
+  display:flex;align-items:center;gap:8px;padding-bottom:8px;
+  border-bottom:2px solid var(--gray3);}
+.tab-bar{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.tab{font-size:8pt;padding:6px 14px;border-radius:20px;cursor:pointer;
+  border:1.5px solid var(--border2);background:#fff;font-family:inherit;
+  transition:all 0.15s;font-weight:600;color:var(--ink4);}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab:hover:not(.active){border-color:var(--navy);color:var(--navy);}
+.footer{margin-top:24px;padding-top:12px;border-top:1px solid var(--border);
+  font-size:7.5pt;color:var(--ink4);text-align:center;font-style:italic;}
+@media print{.back,.tab-bar{display:none!important;}.wrap{padding:12px!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <div>
+      <button class="back" onclick="history.back()">← Back to Hub</button>
+      <div style="margin-top:8px;">
+        <div class="pg-title">Decision Support Center</div>
+        <div class="pg-sub">Find the right VER intelligence for any vendor or engagement decision</div>
+      </div>
+    </div>
+    <div style="text-align:right;font-size:7.5pt;color:var(--ink4);">
+      DET Portfolio Intelligence — Powered by VER<br>
+      <span style="font-size:7pt;">Updated: May 2026 · Salesforce DET · Confidential</span>
+    </div>
+  </div>
+
+  <div class="callout c-teal">
+    <strong>Your VER Intelligence Navigator.</strong>
+    Find the right intelligence for any vendor, engagement, or spend decision.
+    VER's role is to provide the analysis, guidance, and advisory support that helps
+    DET teams and leadership make better-informed decisions.
+  </div>
+
+  <!-- SEARCH / QUESTION NAVIGATOR -->
+  <div class="card" style="border-top:3px solid var(--navy);margin-bottom:20px;">
+    <div class="card-title">What decision are you trying to make?</div>
+    <div class="card-sub">Select a scenario below to find the right VER intelligence resource</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;">
+
+      <a href="vendor_selector.html" style="text-decoration:none;">
+        <div style="border:1.5px solid var(--border2);border-radius:8px;padding:14px 16px;
+          cursor:pointer;transition:all 0.15s;background:#fff;"
+          onmouseover="this.style.borderColor='var(--teal)';this.style.background='var(--teal3)'"
+          onmouseout="this.style.borderColor='var(--border2)';this.style.background='#fff'">
+          <div style="font-size:14pt;margin-bottom:6px;">🎯</div>
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);margin-bottom:4px;">Who should I use for this engagement?</div>
+          <div style="font-size:8pt;color:var(--ink4);">→ VER Vendor Selector — AI-powered recommendation engine</div>
+        </div>
+      </a>
+
+      <a href="page_renewal.html" style="text-decoration:none;">
+        <div style="border:1.5px solid var(--border2);border-radius:8px;padding:14px 16px;
+          cursor:pointer;transition:all 0.15s;background:#fff;"
+          onmouseover="this.style.borderColor='var(--amber)';this.style.background='var(--amber3)'"
+          onmouseout="this.style.borderColor='var(--border2)';this.style.background='#fff'">
+          <div style="font-size:14pt;margin-bottom:6px;">📅</div>
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);margin-bottom:4px;">When does my vendor contract renew?</div>
+          <div style="font-size:8pt;color:var(--ink4);">→ Renewal Calendar — 12-month forward view</div>
+        </div>
+      </a>
+
+      <a href="page_market.html" style="text-decoration:none;">
+        <div style="border:1.5px solid var(--border2);border-radius:8px;padding:14px 16px;
+          cursor:pointer;transition:all 0.15s;background:#fff;"
+          onmouseover="this.style.borderColor='var(--green)';this.style.background='var(--green3)'"
+          onmouseout="this.style.borderColor='var(--border2)';this.style.background='#fff'">
+          <div style="font-size:14pt;margin-bottom:6px;">💰</div>
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);margin-bottom:4px;">Are we paying market rates?</div>
+          <div style="font-size:8pt;color:var(--ink4);">→ Market Intelligence — rate benchmarks & peer data</div>
+        </div>
+      </a>
+
+      <a href="vendor_risk.html" style="text-decoration:none;">
+        <div style="border:1.5px solid var(--border2);border-radius:8px;padding:14px 16px;
+          cursor:pointer;transition:all 0.15s;background:#fff;"
+          onmouseover="this.style.borderColor='var(--red)';this.style.background='var(--red3)'"
+          onmouseout="this.style.borderColor='var(--border2)';this.style.background='#fff'">
+          <div style="font-size:14pt;margin-bottom:6px;">⚠️</div>
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);margin-bottom:4px;">What's the risk profile of this vendor?</div>
+          <div style="font-size:8pt;color:var(--ink4);">→ Risk Dashboard — concentration, delivery, compliance, financial</div>
+        </div>
+      </a>
+
+      <a href="vendor_intake.html" style="text-decoration:none;">
+        <div style="border:1.5px solid var(--border2);border-radius:8px;padding:14px 16px;
+          cursor:pointer;transition:all 0.15s;background:#fff;"
+          onmouseover="this.style.borderColor='var(--purple)';this.style.background='var(--purple3)'"
+          onmouseout="this.style.borderColor='var(--border2)';this.style.background='#fff'">
+          <div style="font-size:14pt;margin-bottom:6px;">📥</div>
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);margin-bottom:4px;">I need to start a new vendor engagement</div>
+          <div style="font-size:8pt;color:var(--ink4);">→ VER Intake — submit and track your request</div>
+        </div>
+      </a>
+
+      <a href="page_savings.html" style="text-decoration:none;">
+        <div style="border:1.5px solid var(--border2);border-radius:8px;padding:14px 16px;
+          cursor:pointer;transition:all 0.15s;background:#fff;"
+          onmouseover="this.style.borderColor='var(--green)';this.style.background='var(--green3)'"
+          onmouseout="this.style.borderColor='var(--border2)';this.style.background='#fff'">
+          <div style="font-size:14pt;margin-bottom:6px;">✅</div>
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);margin-bottom:4px;">What has VER delivered this year?</div>
+          <div style="font-size:8pt;color:var(--ink4);">→ Savings & Value Realization — FY27 impact tracker</div>
+        </div>
+      </a>
+
+      <a href="page_consumption.html" style="text-decoration:none;">
+        <div style="border:1.5px solid var(--border2);border-radius:8px;padding:14px 16px;
+          cursor:pointer;transition:all 0.15s;background:#fff;"
+          onmouseover="this.style.borderColor='var(--teal)';this.style.background='var(--teal3)'"
+          onmouseout="this.style.borderColor='var(--border2)';this.style.background='#fff'">
+          <div style="font-size:14pt;margin-bottom:6px;">📈</div>
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);margin-bottom:4px;">Are we approaching a license or usage cap?</div>
+          <div style="font-size:8pt;color:var(--ink4);">→ Consumption Monitoring — utilization by tool</div>
+        </div>
+      </a>
+
+      <a href="page_pillar.html" style="text-decoration:none;">
+        <div style="border:1.5px solid var(--border2);border-radius:8px;padding:14px 16px;
+          cursor:pointer;transition:all 0.15s;background:#fff;"
+          onmouseover="this.style.borderColor='var(--navy)';this.style.background='var(--navy3)'"
+          onmouseout="this.style.borderColor='var(--border2)';this.style.background='#fff'">
+          <div style="font-size:14pt;margin-bottom:6px;">🎯</div>
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);margin-bottom:4px;">What is my pillar spending on vendors?</div>
+          <div style="font-size:8pt;color:var(--ink4);">→ Pillar Portfolio Intelligence — pillar-by-pillar view</div>
+        </div>
+      </a>
+
+      <a href="vendor_sow.html" style="text-decoration:none;">
+        <div style="border:1.5px solid var(--border2);border-radius:8px;padding:14px 16px;
+          cursor:pointer;transition:all 0.15s;background:#fff;"
+          onmouseover="this.style.borderColor='var(--navy)';this.style.background='var(--navy3)'"
+          onmouseout="this.style.borderColor='var(--border2)';this.style.background='#fff'">
+          <div style="font-size:14pt;margin-bottom:6px;">📄</div>
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);margin-bottom:4px;">I need to generate a Statement of Work</div>
+          <div style="font-size:8pt;color:var(--ink4);">→ SOW Generator — Salesforce standard template</div>
+        </div>
+      </a>
+
+      <a href="page_governance.html" style="text-decoration:none;">
+        <div style="border:1.5px solid var(--border2);border-radius:8px;padding:14px 16px;
+          cursor:pointer;transition:all 0.15s;background:#fff;"
+          onmouseover="this.style.borderColor='var(--teal)';this.style.background='var(--teal3)'"
+          onmouseout="this.style.borderColor='var(--border2)';this.style.background='#fff'">
+          <div style="font-size:14pt;margin-bottom:6px;">⏱️</div>
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);margin-bottom:4px;">When is the next vendor review scheduled?</div>
+          <div style="font-size:8pt;color:var(--ink4);">→ Governance Cadence — review schedule & health</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- VER ADVISORY SERVICES SUMMARY -->
+  <div class="shdr">🤝 What VER Can Help With</div>
+  <div class="g3">
+    <div class="card" style="border-top:3px solid var(--teal);">
+      <div style="font-size:18pt;margin-bottom:8px;">🔍</div>
+      <div class="card-title">Vendor Intelligence</div>
+      <div style="font-size:8.5pt;color:var(--ink3);line-height:1.7;">
+        Risk scoring · Rate benchmarking · Capability assessment ·
+        Vendor selection analysis · Market positioning · Concentration risk
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--navy);">
+      <div style="font-size:18pt;margin-bottom:8px;">📊</div>
+      <div class="card-title">Spend Intelligence</div>
+      <div style="font-size:8.5pt;color:var(--ink3);line-height:1.7;">
+        Portfolio visibility · Pillar-level analysis · MFT support ·
+        Savings identification · Rate optimization · Renewal strategy
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--purple);">
+      <div style="font-size:18pt;margin-bottom:8px;">🛡️</div>
+      <div class="card-title">Engagement Governance</div>
+      <div style="font-size:8.5pt;color:var(--ink3);line-height:1.7;">
+        SOW review support · Intake evaluation · SLA monitoring ·
+        QBR facilitation · Escalation advisory · Compliance monitoring
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT VER -->
+  <div class="card" style="background:linear-gradient(135deg,var(--navy) 0%,#1E3A5F 100%);border:none;">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;">
+      <div>
+        <div style="font-size:10pt;font-weight:800;color:#fff;margin-bottom:4px;">Need Advisory Support?</div>
+        <div style="font-size:8.5pt;color:rgba(255,255,255,0.75);line-height:1.6;">
+          Submit a VER intake request for any new engagement, vendor assessment, SOW review,
+          or advisory need. VER will review and respond within 3-5 business days.
+        </div>
+      </div>
+      <a href="vendor_intake.html" style="text-decoration:none;flex-shrink:0;">
+        <div style="background:var(--teal);color:#fff;padding:10px 20px;border-radius:8px;
+          font-size:9pt;font-weight:700;white-space:nowrap;">Submit Intake Request →</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="footer">VER Intelligence Hub · Vendor Engagement &amp; Reliability · Salesforce DET · DET Portfolio Intelligence — Powered by VER</div>
+</div>
+<script></script>
+</body>
+</html>

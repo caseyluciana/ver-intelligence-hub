@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Pillar Portfolio Intelligence · VER Intelligence Hub</title>
+<style>
+:root{
+  --navy:#0F1E3C;--navy2:#1E3A5F;--navy3:#EFF6FF;
+  --teal:#0D9488;--teal2:#0F766E;--teal3:#F0FDF9;
+  --green:#059669;--green2:#065F46;--green3:#D1FAE5;
+  --amber:#D97706;--amber2:#78350F;--amber3:#FEF3C7;
+  --red:#DC2626;--red2:#7F1D1D;--red3:#FEE2E2;
+  --purple:#7C3AED;--purple3:#F5F3FF;
+  --orange:#EA580C;--orange3:#FFF7ED;
+  --ink:#111827;--ink2:#1F2937;--ink3:#374151;--ink4:#6B7280;
+  --gray:#F9FAFB;--gray2:#F3F4F6;--gray3:#E5E7EB;
+  --border:#E5E7EB;--border2:#D1D5DB;--white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gray);color:var(--ink2);font-size:9pt;}
+.page-wrap{max-width:1100px;margin:0 auto;padding:24px 28px;}
+
+/* TOP BAR */
+.top-bar{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.top-bar-left{display:flex;align-items:center;gap:12px;}
+.back-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;
+  border-radius:6px;background:var(--gray2);border:1px solid var(--border2);
+  color:var(--ink3);font-size:8pt;font-weight:600;text-decoration:none;cursor:pointer;
+  font-family:inherit;transition:all 0.15s;}
+.back-btn:hover{background:var(--navy);color:#fff;}
+.page-title{font-size:15pt;font-weight:900;color:var(--navy);}
+.page-sub{font-size:8.5pt;color:var(--ink4);margin-top:2px;}
+
+/* CARDS */
+.card{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.card-title{font-size:9.5pt;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.card-sub{font-size:8pt;color:var(--ink4);margin-bottom:12px;}
+
+/* STAT TILES */
+.stat-grid{display:grid;gap:12px;margin-bottom:20px;}
+.stat-grid.g4{grid-template-columns:repeat(4,1fr);}
+.stat-grid.g3{grid-template-columns:repeat(3,1fr);}
+.stat{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;border-top:3px solid var(--navy);}
+.stat.teal{border-top-color:var(--teal);}
+.stat.green{border-top-color:var(--green);}
+.stat.amber{border-top-color:var(--amber);}
+.stat.red{border-top-color:var(--red);}
+.stat.purple{border-top-color:var(--purple);}
+.stat-val{font-size:20pt;font-weight:900;color:var(--navy);line-height:1;margin-bottom:3px;}
+.stat.teal .stat-val{color:var(--teal);}
+.stat.green .stat-val{color:var(--green);}
+.stat.amber .stat-val{color:var(--amber);}
+.stat.red .stat-val{color:var(--red);}
+.stat.purple .stat-val{color:var(--purple);}
+.stat-lbl{font-size:7.5pt;font-weight:600;color:var(--ink4);text-transform:uppercase;letter-spacing:0.06em;}
+.stat-note{font-size:7pt;color:var(--ink4);margin-top:4px;}
+
+/* PROGRESS BAR */
+.prog-wrap{background:var(--gray2);border-radius:4px;height:10px;margin:4px 0;overflow:hidden;}
+.prog-bar{height:10px;border-radius:4px;transition:width 0.8s ease;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:7pt;font-weight:700;
+  padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.badge-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.b-green{background:var(--green3);color:var(--green2);}
+.b-amber{background:var(--amber3);color:var(--amber2);}
+.b-red{background:var(--red3);color:var(--red2);}
+.b-navy{background:var(--navy3);color:var(--navy2);}
+.b-teal{background:var(--teal3);color:var(--teal2);}
+.b-purple{background:var(--purple3);color:var(--purple);}
+.b-gray{background:var(--gray2);color:var(--ink4);}
+.b-orange{background:var(--orange3);color:var(--orange);}
+
+/* TABLE */
+.vp-table{width:100%;border-collapse:collapse;font-size:8.5pt;}
+.vp-table th{background:var(--navy);color:#fff;padding:8px 12px;text-align:left;
+  font-size:7.5pt;font-weight:700;letter-spacing:0.03em;position:sticky;top:0;}
+.vp-table td{padding:9px 12px;border-bottom:1px solid var(--gray2);vertical-align:middle;}
+.vp-table tr:hover td{background:var(--gray);}
+.vp-table tr:last-child td{border-bottom:none;}
+
+/* CALLOUT */
+.callout{border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:16px;
+  border-left:4px solid;font-size:8.5pt;line-height:1.6;}
+.callout.info{background:var(--navy3);border-color:var(--navy2);color:var(--navy2);}
+.callout.teal{background:var(--teal3);border-color:var(--teal);color:var(--green2);}
+.callout.amber{background:var(--amber3);border-color:var(--amber);color:var(--amber2);}
+
+/* SECTION HEADER */
+.section-hdr{font-size:10pt;font-weight:800;color:var(--navy);margin:20px 0 10px;
+  display:flex;align-items:center;gap:8px;padding-bottom:8px;
+  border-bottom:2px solid var(--gray3);}
+
+/* PILL TABS */
+.tab-bar{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.tab{font-size:8pt;padding:6px 14px;border-radius:20px;cursor:pointer;
+  border:1.5px solid var(--border2);background:#fff;font-family:inherit;
+  transition:all 0.15s;font-weight:600;color:var(--ink4);}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab:hover:not(.active){border-color:var(--navy);color:var(--navy);}
+
+/* PIE CHART (CSS-only) */
+.pie-wrap{position:relative;width:160px;height:160px;margin:0 auto;}
+.pie-legend{margin-top:12px;}
+.pie-legend-item{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:8pt;}
+.pie-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+
+/* PRINT */
+@media print{
+  .back-btn,.tab-bar{display:none!important;}
+  .page-wrap{padding:12px;}
+}
+
+
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <button class="back-btn" onclick="history.back()">← Back to Hub</button>
+      <div>
+        <div class="page-title">Pillar Portfolio Intelligence</div>
+        <div class="page-sub">VER Intelligence Hub · Salesforce DET · FY Current</div>
+      </div>
+    </div>
+    <div style="font-size:7.5pt;color:var(--ink4);text-align:right;">
+      DET Portfolio Intelligence — Powered by VER<br>
+      <span id="last-updated" style="font-size:7pt;">Last updated: April 2026</span>
+    </div>
+  </div>
+
+
+  <!-- CALLOUT -->
+  <div class="callout info">
+    <strong>DET Portfolio Intelligence — Powered by VER.</strong>
+    VER monitors and provides advisory guidance on engagements within each pillar.
+    Spend decisions and budget authority rest with each Pillar Lead and their team.
+    VER's role is to provide insight, risk evaluation, and strategic advisory support.
+  </div>
+
+  <!-- KPI TILES -->
+  <div class="stat-grid g4" style="margin-bottom:20px;">
+    <div class="stat teal">
+      <div class="stat-val" id="stat-pillars">9</div>
+      <div class="stat-lbl">DET Pillars</div>
+      <div class="stat-note">All pillars monitored by VER</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="stat-active">6</div>
+      <div class="stat-lbl">Active Advisory Scope</div>
+      <div class="stat-note">Engagements in advisory scope</div>
+    </div>
+    <div class="stat amber">
+      <div class="stat-val" id="stat-renewals">—</div>
+      <div class="stat-lbl">Renewals ≤90 Days</div>
+      <div class="stat-note">Across all pillars</div>
+    </div>
+    <div class="stat green">
+      <div class="stat-val" id="stat-savings">—</div>
+      <div class="stat-lbl">FY27 Savings Identified</div>
+      <div class="stat-note">NTT AD + Cognizant PD</div>
+    </div>
+  </div>
+
+  <!-- PORTFOLIO DISTRIBUTION -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-title">FY27 Portfolio Distribution by Pillar</div>
+    <div class="card-sub">Advisory scope spend across active DET pillars · Click any pillar card below to expand detail</div>
+    <div style="display:grid;grid-template-columns:200px 1fr;gap:24px;align-items:center;">
+      <div>
+        <div id="donut" style="width:180px;height:180px;border-radius:50%;margin:0 auto;
+          box-shadow:0 0 0 40px #fff inset;"></div>
+      </div>
+      <div id="donut-legend"></div>
+    </div>
+    <div style="margin-top:16px;font-size:8pt;color:var(--ink4);font-style:italic;">
+      ⭐ Agentic Transformation and Emerging Technology are under Presidential scope monitoring.
+      Agentforce, Slack, and AI Technology spend may be added to VER advisory scope in a future period.
+    </div>
+  </div>
+
+  <!-- FILTER TABS -->
+  <div class="section-hdr">📋 Pillar Intelligence Cards</div>
+  <div class="tab-bar">
+    <button class="tab active" onclick="filterPillars('all', this)">All Pillars (9)</button>
+    <button class="tab" onclick="filterPillars('active', this)">Active Advisory Scope</button>
+    <button class="tab" onclick="filterPillars('emerging', this)">Emerging Pillars</button>
+    <button class="tab" onclick="filterPillars('presidential', this)">⭐ Presidential Scope</button>
+  </div>
+
+  <!-- PILLAR CARDS -->
+  <div id="pillar-cards"></div>
+
+  <!-- PRESIDENTIAL SCOPE CALLOUT -->
+  <div class="callout amber" style="margin-top:8px;">
+    <strong>⭐ Presidential Scope — Agentforce, Slack & AI Technology:</strong>
+    These platforms are under the President's portfolio. VER does not currently hold advisory scope
+    for these spend areas. This section exists to signal VER's readiness to support engagement
+    governance when formally assigned. Infrastructure is in place.
+  </div>
+
+
+  <div style="margin-top:24px;padding-top:12px;border-top:1px solid var(--border);
+    font-size:7.5pt;color:var(--ink4);text-align:center;font-style:italic;">
+    VER Intelligence Hub · Vendor Engagement & Reliability · Salesforce DET ·
+    DET Portfolio Intelligence — Powered by VER · Confidential
+  </div>
+</div>
+<script>
+
+// ── REAL DATA from VER_DATA ───────────────────────────────────────
+const PILLARS = [
+  {
+    id: 'dmt',
+    name: 'Digital Marketing Technology',
+    icon: '📣',
+    color: '#7C3AED',
+    colorLight: '#F5F3FF',
+    status: 'Active',
+    fy27_spend: '$16.7M',
+    fy27_spend_num: 16.7,
+    pct_of_portfolio: '5.7%',
+    mft_scope: '$16.7M',
+    top_vendor: 'Kaltura',
+    top_vendor_spend: '$1.3M',
+    active_engagements: 8,
+    open_intakes: 0,
+    risk_level: 'Low',
+    savings_identified: '$0',
+    trend: 'stable',
+    yoy: '+2%',
+    categories: {
+      'Software / SaaS': '$14.2M',
+      'Professional Services': '$2.1M',
+      'Contingent Workforce': '$0.4M',
+    },
+    top_vendors: [
+      { name:'Kaltura', spend:'$1.3M', status:'Active' },
+      { name:'Adobe AEM', spend:'$0.9M', status:'Active' },
+      { name:'ON24', spend:'$0.9M', status:'Active' },
+      { name:'Akamai', spend:'$0.7M', status:'Active' },
+    ],
+    notes: 'Largest SaaS concentration. Kaltura FY27 renewal approved $1.31M. ON24 renewal in MFT.',
+    renewals_90d: 2,
+    ver_scope: 'Advisory',
+  },
+  {
+    id: 'data',
+    name: 'Data Solutions',
+    icon: '📊',
+    color: '#0F1E3C',
+    colorLight: '#EFF6FF',
+    status: 'Active',
+    fy27_spend: '$14.9M',
+    fy27_spend_num: 14.9,
+    pct_of_portfolio: '5.0%',
+    mft_scope: '$60.3M',
+    top_vendor: 'Snowflake',
+    top_vendor_spend: '$1.1M',
+    active_engagements: 5,
+    open_intakes: 0,
+    risk_level: 'Low',
+    savings_identified: '$0',
+    trend: 'growing',
+    yoy: '+12%',
+    categories: {
+      'Software / SaaS': '$11.2M',
+      'Professional Services': '$2.8M',
+      'Contingent Workforce': '$0.9M',
+    },
+    top_vendors: [
+      { name:'Snowflake', spend:'$1.1M', status:'Active' },
+      { name:'Tableau', spend:'$0.5M', status:'Active' },
+      { name:'Informatica (HCL)', spend:'$1.3M', status:'Active' },
+    ],
+    notes: 'MFT scope $60.3M represents full Data Solutions portfolio. Snowflake usage growing. HCL M&A engagements active.',
+    renewals_90d: 0,
+    ver_scope: 'Advisory',
+  },
+  {
+    id: 'sfos',
+    name: 'Salesforce on Salesforce Technology',
+    icon: '☁️',
+    color: '#0D9488',
+    colorLight: '#F0FDF9',
+    status: 'Active',
+    fy27_spend: '$33.1M',
+    fy27_spend_num: 33.1,
+    pct_of_portfolio: '11.2%',
+    mft_scope: '$11.8M',
+    top_vendor: 'Workday',
+    top_vendor_spend: '$23.7M',
+    active_engagements: 6,
+    open_intakes: 1,
+    risk_level: 'Medium',
+    savings_identified: '$1.236M',
+    trend: 'stable',
+    yoy: '-3%',
+    categories: {
+      'Software / SaaS': '$28.4M',
+      'Professional Services': '$4.7M',
+    },
+    top_vendors: [
+      { name:'Workday', spend:'$23.7M', status:'Expiring Soon' },
+      { name:'Cognizant (ADAMS)', spend:'$4.9M', status:'Active' },
+      { name:'Okta', spend:'$1.3M', status:'Active' },
+    ],
+    notes: 'Workday license renewal Nov 2026 — critical priority. Cognizant $1.236M savings identified via Cognizant PD termination.',
+    renewals_90d: 3,
+    ver_scope: 'Active',
+  },
+  {
+    id: 'eng',
+    name: 'Engineering Development & Delivery',
+    icon: '⚙️',
+    color: '#D97706',
+    colorLight: '#FEF3C7',
+    status: 'Active',
+    fy27_spend: '$20.5M',
+    fy27_spend_num: 20.5,
+    pct_of_portfolio: '6.9%',
+    mft_scope: '$4.8M',
+    top_vendor: 'NTT Data',
+    top_vendor_spend: '$10.0M',
+    active_engagements: 7,
+    open_intakes: 1,
+    risk_level: 'Low',
+    savings_identified: '$9.0M',
+    trend: 'declining',
+    yoy: '-18%',
+    categories: {
+      'Professional Services': '$12.1M',
+      'Contingent Workforce': '$6.8M',
+      'Software / SaaS': '$1.6M',
+    },
+    top_vendors: [
+      { name:'NTT Data (AD)', spend:'$10.0M', status:'Active' },
+      { name:'Deloitte', spend:'$9.1M', status:'Active' },
+    ],
+    notes: 'NTT AD restructure complete Apr 2026 — $9.0M savings realized. 24 individual POs replacing master. ~140 resources.',
+    renewals_90d: 1,
+    ver_scope: 'Active',
+  },
+  {
+    id: 'asset',
+    name: 'Delivery Assurance & Operations',
+    icon: '🛡️',
+    color: '#059669',
+    colorLight: '#D1FAE5',
+    status: 'Active',
+    fy27_spend: '$158.1M',
+    fy27_spend_num: 158.1,
+    pct_of_portfolio: '53.5%',
+    mft_scope: '$0',
+    top_vendor: 'AWS',
+    top_vendor_spend: '$17.2M',
+    active_engagements: 12,
+    open_intakes: 0,
+    risk_level: 'Medium',
+    savings_identified: '$0',
+    trend: 'stable',
+    yoy: '+1%',
+    categories: {
+      'Cloud & Managed Services': '$45.2M',
+      'Software / SaaS': '$68.4M',
+      'Professional Services': '$32.1M',
+      'Hardware & Infrastructure': '$12.4M',
+    },
+    top_vendors: [
+      { name:'AWS', spend:'$17.2M', status:'Active' },
+      { name:'NTT AMS', spend:'$22.8M', status:'Active' },
+      { name:'IBM', spend:'$14.3M', status:'Active' },
+      { name:'Google Cloud', spend:'$14.0M', status:'Active' },
+      { name:'Tech Mahindra', spend:'$6.5M', status:'Under Review' },
+    ],
+    notes: 'Largest pillar by spend. IBM renewal Aug 2026 in active review. Tech Mahindra Tier 2 performance remediation underway.',
+    renewals_90d: 4,
+    ver_scope: 'Active',
+  },
+  {
+    id: 'techsvc',
+    name: 'IT',
+    icon: '💻',
+    color: '#2563EB',
+    colorLight: '#EFF6FF',
+    status: 'Active',
+    fy27_spend: '$47.7M',
+    fy27_spend_num: 47.7,
+    pct_of_portfolio: '16.1%',
+    mft_scope: '$1.2M',
+    top_vendor: 'Microsoft',
+    top_vendor_spend: '$1.4M',
+    active_engagements: 4,
+    open_intakes: 0,
+    risk_level: 'Low',
+    savings_identified: '$0',
+    trend: 'stable',
+    yoy: '0%',
+    categories: {
+      'Software / SaaS': '$38.2M',
+      'Hardware & Infrastructure': '$7.1M',
+      'Professional Services': '$2.4M',
+    },
+    top_vendors: [
+      { name:'Microsoft (M365)', spend:'$1.4M', status:'Active' },
+      { name:'Insight Direct', spend:'$3.2M', status:'Active' },
+      { name:'Dell Technologies', spend:'$2.1M', status:'Active' },
+    ],
+    notes: 'Microsoft renewal Jun 2026. Hardware procurement primarily through Insight Direct. IT infrastructure stable.',
+    renewals_90d: 2,
+    ver_scope: 'Advisory',
+  },
+  {
+    id: 'agentic',
+    name: 'Agentic Transformation',
+    icon: '🤖',
+    color: '#7C3AED',
+    colorLight: '#F5F3FF',
+    status: 'Emerging',
+    fy27_spend: '$0.5M',
+    fy27_spend_num: 0.5,
+    pct_of_portfolio: '<1%',
+    mft_scope: '$0',
+    top_vendor: 'Anthropic (Claude)',
+    top_vendor_spend: '$0.5M',
+    active_engagements: 1,
+    open_intakes: 0,
+    risk_level: 'Low',
+    savings_identified: '$0',
+    trend: 'growing',
+    yoy: 'New',
+    categories: {
+      'Software / SaaS': '$0.5M',
+    },
+    top_vendors: [
+      { name:'Anthropic (Claude)', spend:'$0.5M', status:'Active' },
+    ],
+    notes: 'Strategic AI partnership. VER Intelligence Hub built on Claude API. Agentforce, Slack, AI Technology under Presidential scope — pipeline anticipated.',
+    renewals_90d: 0,
+    ver_scope: 'Advisory',
+    presidential_scope: true,
+  },
+  {
+    id: 'cdo',
+    name: 'Office of the CDO',
+    icon: '🎯',
+    color: '#0F1E3C',
+    colorLight: '#EFF6FF',
+    status: 'Emerging',
+    fy27_spend: '$0',
+    fy27_spend_num: 0,
+    pct_of_portfolio: '—',
+    mft_scope: '$0',
+    top_vendor: '—',
+    top_vendor_spend: '—',
+    active_engagements: 0,
+    open_intakes: 0,
+    risk_level: 'Low',
+    savings_identified: '$0',
+    trend: 'new',
+    yoy: 'New',
+    categories: {},
+    top_vendors: [],
+    notes: 'No current VER advisory scope spend. Pillar is active and VER is positioned to support when engagements are initiated.',
+    renewals_90d: 0,
+    ver_scope: 'Monitoring',
+  },
+  {
+    id: 'emerging',
+    name: 'Emerging Technology',
+    icon: '🚀',
+    color: '#EA580C',
+    colorLight: '#FFF7ED',
+    status: 'Emerging',
+    fy27_spend: '$0',
+    fy27_spend_num: 0,
+    pct_of_portfolio: '—',
+    mft_scope: '$0',
+    top_vendor: '—',
+    top_vendor_spend: '—',
+    active_engagements: 0,
+    open_intakes: 0,
+    risk_level: 'Low',
+    savings_identified: '$0',
+    trend: 'new',
+    yoy: 'New',
+    categories: {},
+    top_vendors: [],
+    notes: 'No current VER advisory scope spend. Agentforce and AI Technology may transition into this pillar. VER positioned and ready.',
+    renewals_90d: 0,
+    ver_scope: 'Monitoring',
+    presidential_scope: true,
+  },
+];
+
+// ── UTILITY ───────────────────────────────────────────────────────
+const RISK_META = {
+  Low:    { cls:'b-green',  dot:'#059669', label:'Low Risk' },
+  Medium: { cls:'b-amber',  dot:'#D97706', label:'Medium Risk' },
+  High:   { cls:'b-red',    dot:'#DC2626', label:'High Risk' },
+};
+const TREND_ICON = {
+  growing:'↑', stable:'→', declining:'↓', new:'★'
+};
+const SCOPE_META = {
+  Active:    { cls:'b-teal',   label:'Active Advisory Scope' },
+  Advisory:  { cls:'b-navy',   label:'Advisory & Monitoring' },
+  Monitoring:{ cls:'b-gray',   label:'Monitoring — No Current Spend' },
+};
+
+function fmtSpend(n) {
+  if (!n || n === 0) return '—';
+  if (n >= 1000) return '$' + (n/1000).toFixed(1) + 'B';
+  return '$' + n.toFixed(1) + 'M';
+}
+
+function progressColor(pct) {
+  if (pct < 61) return '#059669';
+  if (pct < 81) return '#D97706';
+  if (pct < 91) return '#EA580C';
+  return '#DC2626';
+}
+
+// ── CURRENT VIEW ──────────────────────────────────────────────────
+let currentFilter = 'all';
+let selectedPillar = null;
+
+function init() {
+  renderSummaryStats();
+  renderDonut();
+  renderPillarCards('all');
+}
+
+function renderSummaryStats() {
+  const active = PILLARS.filter(p => p.status === 'Active');
+  const totalSpend = PILLARS.reduce((s,p) => s + p.fy27_spend_num, 0);
+  const totalSavings = 10.236; // from VER_DATA
+  const renewals = PILLARS.reduce((s,p) => s + p.renewals_90d, 0);
+  const medRisk = PILLARS.filter(p => p.risk_level === 'Medium' || p.risk_level === 'High').length;
+
+  document.getElementById('stat-pillars').textContent = PILLARS.length;
+  document.getElementById('stat-active').textContent = active.length;
+  document.getElementById('stat-renewals').textContent = renewals;
+  document.getElementById('stat-savings').textContent = '$10.2M';
+}
+
+function renderDonut() {
+  // Build a visual donut using conic-gradient
+  const activePillars = PILLARS.filter(p => p.fy27_spend_num > 0);
+  const total = activePillars.reduce((s,p) => s + p.fy27_spend_num, 0);
+  let cumulativePct = 0;
+  const segments = activePillars.map(p => {
+    const pct = (p.fy27_spend_num / total) * 100;
+    const seg = { color: p.color, start: cumulativePct, end: cumulativePct + pct, name: p.name, pct };
+    cumulativePct += pct;
+    return seg;
+  });
+
+  const gradient = segments.map(s =>
+    `${s.color} ${s.start.toFixed(1)}% ${s.end.toFixed(1)}%`
+  ).join(', ');
+
+  document.getElementById('donut').style.background =
+    `conic-gradient(${gradient})`;
+
+  // Legend
+  document.getElementById('donut-legend').innerHTML = activePillars.map(p => {
+    const pct = ((p.fy27_spend_num / total) * 100).toFixed(1);
+    return `<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:8pt;">
+      <div style="width:10px;height:10px;border-radius:2px;background:${p.color};flex-shrink:0;"></div>
+      <span style="flex:1;color:var(--ink2)">${p.name}</span>
+      <span style="font-weight:700;color:var(--ink2)">${p.fy27_spend}</span>
+      <span style="color:var(--ink4)">(${pct}%)</span>
+    </div>`;
+  }).join('');
+}
+
+function filterPillars(filter, el) {
+  currentFilter = filter;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderPillarCards(filter);
+}
+
+function renderPillarCards(filter) {
+  let pillars = PILLARS;
+  if (filter === 'active') pillars = PILLARS.filter(p => p.status === 'Active');
+  if (filter === 'emerging') pillars = PILLARS.filter(p => p.status === 'Emerging');
+  if (filter === 'presidential') pillars = PILLARS.filter(p => p.presidential_scope);
+
+  const container = document.getElementById('pillar-cards');
+  container.innerHTML = pillars.map(p => {
+    const risk = RISK_META[p.risk_level] || RISK_META.Low;
+    const scope = SCOPE_META[p.ver_scope] || SCOPE_META.Advisory;
+    const trend = TREND_ICON[p.trend] || '→';
+    const trendColor = p.trend === 'growing' ? '#059669' : p.trend === 'declining' ? '#DC2626' : '#D97706';
+    const isEmerging = p.status === 'Emerging';
+
+    // Category bars
+    const catEntries = Object.entries(p.categories);
+    const maxCatSpend = Math.max(...catEntries.map(([,v]) => parseFloat(v.replace(/[$,M]/g,'')) || 0));
+
+    const catBars = catEntries.length > 0 ? catEntries.map(([cat, spend]) => {
+      const val = parseFloat(spend.replace(/[$,M]/g,'')) || 0;
+      const pct = maxCatSpend > 0 ? (val / maxCatSpend) * 100 : 0;
+      return `<div style="margin-bottom:6px;">
+        <div style="display:flex;justify-content:space-between;font-size:7.5pt;margin-bottom:2px;">
+          <span style="color:var(--ink4)">${cat}</span>
+          <span style="font-weight:600;color:var(--ink2)">${spend}</span>
+        </div>
+        <div class="prog-wrap" style="height:6px;">
+          <div class="prog-bar" style="width:${pct}%;background:${p.color};"></div>
+        </div>
+      </div>`;
+    }).join('') : `<div style="font-size:8pt;color:var(--ink4);font-style:italic;padding:8px 0;">
+      VER is monitoring this pillar. No current advisory scope spend.</div>`;
+
+    // Top vendors
+    const vendorRows = p.top_vendors.length > 0 ? p.top_vendors.slice(0,3).map(v => {
+      const vStatus = v.status === 'Active' ? 'b-teal' :
+                      v.status === 'Expiring Soon' ? 'b-red' : 'b-amber';
+      return `<div style="display:flex;justify-content:space-between;align-items:center;
+        padding:5px 0;border-bottom:1px solid var(--gray2);font-size:8pt;">
+        <span style="font-weight:600;color:var(--ink2)">${v.name}</span>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="color:var(--ink4)">${v.spend}</span>
+          <span class="badge ${vStatus}">${v.status}</span>
+        </div>
+      </div>`;
+    }).join('') : '';
+
+    // Presidential scope badge
+    const presTag = p.presidential_scope ?
+      `<span class="badge b-purple" style="margin-left:6px;">⭐ Presidential Scope</span>` : '';
+
+    return `<div class="card" style="border-top:3px solid ${p.color};cursor:pointer;transition:box-shadow 0.15s;"
+      onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.10)'"
+      onmouseout="this.style.boxShadow='none'"
+      onclick="toggleDetail('${p.id}')">
+
+      <!-- PILLAR HEADER -->
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:36px;height:36px;border-radius:8px;background:${p.colorLight};
+            display:flex;align-items:center;justify-content:center;font-size:18pt;flex-shrink:0;">${p.icon}</div>
+          <div>
+            <div style="font-size:9.5pt;font-weight:800;color:var(--navy);">${p.name}${presTag}</div>
+            <div style="display:flex;gap:5px;margin-top:4px;flex-wrap:wrap;">
+              <span class="badge ${scope.cls}">${scope.label}</span>
+              <span class="badge ${risk.cls}"><span class="badge-dot" style="background:${risk.dot}"></span>${risk.label}</span>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:16pt;font-weight:900;color:${p.color};">${p.fy27_spend}</div>
+          <div style="font-size:7.5pt;color:var(--ink4);">FY27 Advisory Scope</div>
+          <div style="font-size:8pt;font-weight:700;color:${trendColor};">${trend} ${p.yoy} YoY</div>
+        </div>
+      </div>
+
+      <!-- QUICK STATS -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;">
+        ${[
+          ['Active Engagements', p.active_engagements || '—'],
+          ['Renewals ≤90d', p.renewals_90d || '0'],
+          ['Savings Identified', p.savings_identified],
+          ['Open Intakes', p.open_intakes || '0'],
+        ].map(([lbl,val]) => `
+          <div style="background:var(--gray);border-radius:6px;padding:7px 8px;text-align:center;">
+            <div style="font-size:11pt;font-weight:900;color:${p.color};">${val}</div>
+            <div style="font-size:7pt;color:var(--ink4);text-transform:uppercase;letter-spacing:0.04em;">${lbl}</div>
+          </div>`).join('')}
+      </div>
+
+      <!-- DETAIL SECTION (collapsible) -->
+      <div id="detail-${p.id}" style="display:none;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px;">
+          <!-- Category breakdown -->
+          <div>
+            <div style="font-size:8pt;font-weight:700;color:var(--ink4);text-transform:uppercase;
+              letter-spacing:0.06em;margin-bottom:8px;">Spend by Category</div>
+            ${catBars}
+          </div>
+          <!-- Top vendors -->
+          <div>
+            <div style="font-size:8pt;font-weight:700;color:var(--ink4);text-transform:uppercase;
+              letter-spacing:0.06em;margin-bottom:8px;">Top Vendors</div>
+            ${vendorRows || `<div style="font-size:8pt;color:var(--ink4);font-style:italic;">No active vendors in VER advisory scope</div>`}
+          </div>
+        </div>
+
+        <!-- Notes -->
+        ${p.notes ? `<div style="background:${p.colorLight};border-radius:6px;padding:10px 12px;
+          font-size:8.5pt;color:var(--ink2);line-height:1.6;border-left:3px solid ${p.color};">
+          <strong>VER Notes:</strong> ${p.notes}</div>` : ''}
+      </div>
+
+      <!-- EXPAND INDICATOR -->
+      <div style="text-align:center;margin-top:8px;font-size:7.5pt;color:var(--ink4);" id="expand-${p.id}">
+        ▾ Click to expand pillar detail
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleDetail(id) {
+  const detail = document.getElementById('detail-' + id);
+  const expand = document.getElementById('expand-' + id);
+  const isOpen = detail.style.display !== 'none';
+  detail.style.display = isOpen ? 'none' : 'block';
+  expand.textContent = isOpen ? '▾ Click to expand pillar detail' : '▴ Click to collapse';
+}
+
+document.addEventListener('DOMContentLoaded', init);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Market Intelligence · VER Intelligence Hub</title>
+<style>
+:root{
+  --navy:#0F1E3C;--navy2:#1E3A5F;--navy3:#EFF6FF;
+  --teal:#0D9488;--teal2:#0F766E;--teal3:#F0FDF9;
+  --green:#059669;--green2:#065F46;--green3:#D1FAE5;
+  --amber:#D97706;--amber2:#78350F;--amber3:#FEF3C7;
+  --red:#DC2626;--red2:#7F1D1D;--red3:#FEE2E2;
+  --purple:#7C3AED;--purple3:#F5F3FF;
+  --orange:#EA580C;--orange3:#FFF7ED;
+  --blue:#2563EB;--blue3:#EFF6FF;
+  --ink:#111827;--ink2:#1F2937;--ink3:#374151;--ink4:#6B7280;
+  --gray:#F9FAFB;--gray2:#F3F4F6;--gray3:#E5E7EB;
+  --border:#E5E7EB;--border2:#D1D5DB;--white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gray);color:var(--ink2);font-size:9pt;}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 28px;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--border);}
+.back{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;
+  border-radius:6px;background:var(--gray2);border:1px solid var(--border2);
+  color:var(--ink3);font-size:8pt;font-weight:600;text-decoration:none;
+  cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.back:hover{background:var(--navy);color:#fff;}
+.pg-title{font-size:15pt;font-weight:900;color:var(--navy);}
+.pg-sub{font-size:8.5pt;color:var(--ink4);margin-top:2px;}
+.card{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.card-title{font-size:9.5pt;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.card-sub{font-size:8pt;color:var(--ink4);margin-bottom:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.stat{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;border-top:3px solid var(--navy);}
+.stat.teal{border-top-color:var(--teal);}
+.stat.green{border-top-color:var(--green);}
+.stat.amber{border-top-color:var(--amber);}
+.stat.red{border-top-color:var(--red);}
+.stat.purple{border-top-color:var(--purple);}
+.stat.blue{border-top-color:var(--blue);}
+.stat-val{font-size:20pt;font-weight:900;color:var(--navy);line-height:1;margin-bottom:3px;}
+.stat.teal .stat-val{color:var(--teal);}
+.stat.green .stat-val{color:var(--green);}
+.stat.amber .stat-val{color:var(--amber);}
+.stat.red .stat-val{color:var(--red);}
+.stat.purple .stat-val{color:var(--purple);}
+.stat.blue .stat-val{color:var(--blue);}
+.stat-lbl{font-size:7.5pt;font-weight:600;color:var(--ink4);text-transform:uppercase;letter-spacing:0.06em;}
+.stat-note{font-size:7pt;color:var(--ink4);margin-top:4px;}
+.prog{background:var(--gray2);border-radius:4px;height:10px;overflow:hidden;}
+.prog-bar{height:10px;border-radius:4px;transition:width 0.8s;}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:7pt;font-weight:700;
+  padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.bg{background:var(--green3);color:var(--green2);}
+.ba{background:var(--amber3);color:var(--amber2);}
+.br{background:var(--red3);color:var(--red2);}
+.bn{background:var(--navy3);color:var(--navy2);}
+.bt{background:var(--teal3);color:var(--teal2);}
+.bp{background:var(--purple3);color:var(--purple);}
+.bz{background:var(--gray2);color:var(--ink4);}
+.bo{background:var(--orange3);color:var(--orange);}
+.bb{background:var(--blue3);color:var(--blue);}
+.vt{width:100%;border-collapse:collapse;font-size:8.5pt;}
+.vt th{background:var(--navy);color:#fff;padding:8px 12px;text-align:left;
+  font-size:7.5pt;font-weight:700;letter-spacing:0.03em;}
+.vt td{padding:9px 12px;border-bottom:1px solid var(--gray2);vertical-align:middle;}
+.vt tr:hover td{background:var(--gray);}
+.vt tr:last-child td{border-bottom:none;}
+.callout{border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:16px;
+  border-left:4px solid;font-size:8.5pt;line-height:1.6;}
+.c-info{background:var(--navy3);border-color:var(--navy2);color:var(--navy2);}
+.c-teal{background:var(--teal3);border-color:var(--teal);color:var(--green2);}
+.c-amber{background:var(--amber3);border-color:var(--amber);color:var(--amber2);}
+.shdr{font-size:10pt;font-weight:800;color:var(--navy);margin:20px 0 10px;
+  display:flex;align-items:center;gap:8px;padding-bottom:8px;
+  border-bottom:2px solid var(--gray3);}
+.tab-bar{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.tab{font-size:8pt;padding:6px 14px;border-radius:20px;cursor:pointer;
+  border:1.5px solid var(--border2);background:#fff;font-family:inherit;
+  transition:all 0.15s;font-weight:600;color:var(--ink4);}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab:hover:not(.active){border-color:var(--navy);color:var(--navy);}
+.footer{margin-top:24px;padding-top:12px;border-top:1px solid var(--border);
+  font-size:7.5pt;color:var(--ink4);text-align:center;font-style:italic;}
+@media print{.back,.tab-bar{display:none!important;}.wrap{padding:12px!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <div>
+      <button class="back" onclick="history.back()">← Back to Hub</button>
+      <div style="margin-top:8px;">
+        <div class="pg-title">Market Intelligence</div>
+        <div class="pg-sub">Rate benchmarks · Market trends · Peer comparisons · VER advisory intelligence</div>
+      </div>
+    </div>
+    <div style="text-align:right;font-size:7.5pt;color:var(--ink4);">
+      DET Portfolio Intelligence — Powered by VER<br>
+      <span style="font-size:7pt;">Updated: May 2026 · Salesforce DET · Confidential</span>
+    </div>
+  </div>
+
+  <div class="callout c-info">
+    <strong>Market Intelligence — Powered by VER.</strong>
+    VER monitors external market conditions, rate benchmarks, and peer data to ensure
+    DET engagements are priced competitively and structured appropriately.
+    All rate data sourced from Insight Global negotiated rate cards, Gartner research,
+    and third-party benchmarking. Advisory guidance only — sourcing decisions rest with Procurement.
+  </div>
+
+  <!-- RATE BENCHMARKING -->
+  <div class="shdr">💰 Rate Benchmarking — Market vs DET Portfolio</div>
+  <div class="card" style="overflow-x:auto;padding:0;">
+    <table class="vt">
+      <thead><tr>
+        <th>Role / Engagement Type</th><th>Region</th><th>Market Range</th>
+        <th>DET Rate / Value</th><th>Status</th><th>VER Notes</th>
+      </tr></thead>
+      <tbody id="rate-tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="callout c-amber">
+    <strong>🚨 Rate Overpayment Alert — Poland Resources (ITECH):</strong>
+    VER rate benchmarking identified ITECH charging US-equivalent rates ($112–$200/hr)
+    for Poland-based resources where the IG Poland market rate is $60–$130/hr.
+    VP Data Science role: ITECH $200/hr vs market $90–$130/hr.
+    VER has flagged for engagement review and potential rate renegotiation.
+  </div>
+
+  <!-- MARKET TRENDS -->
+  <div class="shdr">📈 Market Trends — What VER Is Watching</div>
+  <div id="trends-list"></div>
+
+  <!-- PEER BENCHMARKS -->
+  <div class="shdr">🏢 Peer Benchmarks — DET vs Industry</div>
+  <div class="card" style="overflow-x:auto;padding:0;">
+    <table class="vt">
+      <thead><tr>
+        <th>Benchmark Metric</th>
+        <th style="text-align:center;">Peer Average</th>
+        <th style="text-align:center;">DET Portfolio</th>
+        <th style="text-align:center;">Status</th>
+      </tr></thead>
+      <tbody id="peer-tbody"></tbody>
+    </table>
+  </div>
+  <div style="font-size:7.5pt;color:var(--ink4);font-style:italic;margin-top:6px;">
+    Sources: Gartner IT Key Metrics Data 2025 · Insight Global 2026 Rate Cards · Internal VER analysis.
+    Peer benchmarks based on technology companies with comparable IT footprint ($1B+ revenue).
+  </div>
+
+  <div class="footer">VER Intelligence Hub · Vendor Engagement &amp; Reliability · Salesforce DET · DET Portfolio Intelligence — Powered by VER</div>
+</div>
+<script>
+const MARKET_DATA = {
+  rate_insights: [
+    { category:'Contingent Workforce', role:'Software Engineer (Senior)', region:'AMER',
+      market_low:'$130', market_high:'$165', our_rate:'$113-$150', status:'Aligned',
+      source:'Insight Global AMER Rate Card 2026', notes:'IG negotiated rates within market. Senior SWE onshore.' },
+    { category:'Contingent Workforce', role:'Lead Software Developer', region:'EMEA (Poland)',
+      market_low:'$87', market_high:'$102', our_rate:'$112-$200', status:'Overpaying',
+      source:'IG Poland Rate Card + Poland Benchmark Analysis',
+      notes:'⚠️ ITECH charging US-equivalent rates for Poland resources. Market rate $60-$130. VER flagged for review.' },
+    { category:'Contingent Workforce', role:'VP Data Science / ML (Poland)',
+      market_low:'$90', market_high:'$130', our_rate:'$200', status:'Significantly Overpaying',
+      source:'Poland Benchmark Analysis 2026', region:'EMEA (Poland)',
+      notes:'🚨 ITECH charging $200/hr vs market $90-$130. US rate applied to Poland resource. $70-$110/hr overpayment per resource.' },
+    { category:'Contingent Workforce', role:'Software Developer', region:'APAC (India)',
+      market_low:'$18', market_high:'$49', our_rate:'$35-$55', status:'Aligned',
+      source:'IG India Rate Card 2026', notes:'NTT/Cognizant offshore rates within IG India market benchmark.' },
+    { category:'Professional Services', role:'Big 4 Consulting (Manager)', region:'AMER',
+      market_low:'$2,800', market_high:'$4,200', our_rate:'Deloitte $9.1M total', status:'Aligned',
+      source:'Big 4 market benchmarks + Deloitte SOW confirmed', notes:'Deloitte rates within Tier 1 consulting market norms.' },
+    { category:'Software / SaaS', role:'Enterprise HCM Platform (Workday)', region:'Global',
+      market_low:'$20M', market_high:'$28M', our_rate:'$23.7M', status:'Aligned',
+      source:'Gartner Magic Quadrant + peer benchmarks', notes:'Workday at market midpoint. Renewal Nov 2026 — negotiate toward lower bound.' },
+    { category:'Cloud & Managed Services', role:'AWS Cloud Committed Spend (EDP)', region:'Global',
+      market_low:'10% discount', market_high:'25% discount', our_rate:'EDP in place', status:'Aligned',
+      source:'AWS EDP market benchmarks', notes:'EDP committed spend provides volume discount. Within market norm for DET scale.' },
+    { category:'Professional Services', role:'AMS/AD Offshore (Onshore equivalent)', region:'AMER',
+      market_low:'$100', market_high:'$140', our_rate:'NTT $113-$150', status:'Aligned',
+      source:'IG AMER Rate Card + NTT SOW analysis', notes:'Post-restructure NTT AD rates align to market. AMS rates actively being reviewed.' },
+  ],
+
+  market_trends: [
+    { trend:'AI/GenAI Talent Premium', direction:'up', pct:'+18-25%', impact:'High',
+      desc:'Demand for AI/ML engineers driving 18-25% rate premium over general SWE rates. Relevant for Agentic Transformation pillar staffing.' },
+    { trend:'Offshore Rate Inflation (India)', direction:'up', pct:'+8-12%', impact:'Medium',
+      desc:'India resource rates increasing 8-12% YoY due to demand and currency shifts. Current IG card reflects 2026 rates — monitor for 2027 renewal.' },
+    { trend:'Poland Market Maturation', direction:'up', pct:'+5-8%', impact:'Medium',
+      desc:'Poland becoming premium nearshore market. Rates approaching Western Europe levels for senior talent. ITECH overpayment issue understates this trend.' },
+    { trend:'SaaS Enterprise Pricing Normalization', direction:'down', pct:'-3-8%', impact:'Medium',
+      desc:'Post-2021-2023 SaaS bubble deflating. Enterprise software vendors offering more flexibility on multi-year renewals. Opportunity at Workday renewal.' },
+    { trend:'Consulting Rate Pressure', direction:'stable', pct:'±2%', impact:'Low',
+      desc:'Big 4 and boutique consulting rates stable. BCG escalation may indicate scope/value misalignment more than market rate issue.' },
+  ],
+
+  peer_benchmarks: [
+    { metric:'Technology Company CWF as % of IT spend', peer_avg:'28-32%', ver_portfolio:'29.5%', status:'Aligned' },
+    { metric:'Software licensing as % of IT spend', peer_avg:'48-55%', ver_portfolio:'52.5%', status:'Aligned' },
+    { metric:'Hardware as % of IT spend', peer_avg:'8-14%', ver_portfolio:'11.5%', status:'Aligned' },
+    { metric:'Offshore/Nearshore ratio (CWF)', peer_avg:'40-60%', ver_portfolio:'Majority offshore', status:'Monitor' },
+    { metric:'Single-vendor concentration (top vendor % of total)', peer_avg:'<15%', ver_portfolio:'8% (Workday)', status:'Aligned' },
+    { metric:'Active renewals in 12-month window (% of portfolio)', peer_avg:'20-30%', ver_portfolio:'~25%', status:'Aligned' },
+  ],
+};
+
+function init() {
+  // Rate insights table
+  document.getElementById('rate-tbody').innerHTML = MARKET_DATA.rate_insights.map(r => {
+    const sc = r.status === 'Aligned' ? 'bg' :
+               r.status === 'Overpaying' ? 'ba' : 'br';
+    return `<tr>
+      <td><strong>${r.role}</strong><div style="font-size:7.5pt;color:var(--ink4);">${r.category}</div></td>
+      <td>${r.region}</td>
+      <td style="color:var(--green);font-weight:600;">${r.market_low} – ${r.market_high}</td>
+      <td style="font-weight:600;color:var(--navy);">${r.our_rate}</td>
+      <td><span class="badge ${sc}">${r.status}</span></td>
+      <td style="font-size:8pt;color:var(--ink3);max-width:220px;line-height:1.5;">${r.notes}</td>
+    </tr>`;
+  }).join('');
+
+  // Market trends
+  document.getElementById('trends-list').innerHTML = MARKET_DATA.market_trends.map(t => {
+    const arrow = t.direction === 'up' ? '↑' : t.direction === 'down' ? '↓' : '→';
+    const color = t.direction === 'up' ? '#DC2626' : t.direction === 'down' ? '#059669' : '#D97706';
+    const impCls = t.impact === 'High' ? 'br' : t.impact === 'Medium' ? 'ba' : 'bg';
+    return `<div class="card" style="margin-bottom:10px;">
+      <div style="display:flex;align-items:flex-start;gap:12px;">
+        <div style="font-size:20pt;color:${color};font-weight:900;flex-shrink:0;width:36px;text-align:center;">${arrow}</div>
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <div style="font-size:9pt;font-weight:800;color:var(--navy);">${t.trend}</div>
+            <span class="badge ${impCls}">${t.impact} Impact</span>
+            <span style="font-size:9pt;font-weight:800;color:${color};">${t.pct}</span>
+          </div>
+          <div style="font-size:8.5pt;color:var(--ink3);line-height:1.6;">${t.desc}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Peer benchmarks table
+  document.getElementById('peer-tbody').innerHTML = MARKET_DATA.peer_benchmarks.map((b,i) => {
+    const sc = b.status === 'Aligned' ? 'bg' : 'ba';
+    return `<tr style="background:${i%2===0?'var(--gray)':'#fff'}">
+      <td>${b.metric}</td>
+      <td style="color:var(--teal);font-weight:600;text-align:center;">${b.peer_avg}</td>
+      <td style="color:var(--navy);font-weight:700;text-align:center;">${b.ver_portfolio}</td>
+      <td style="text-align:center;"><span class="badge ${sc}">${b.status}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
