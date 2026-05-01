@@ -258,8 +258,7 @@ const VP = {
     const reasons = [];
     if (capMatch.length > 0) reasons.push(`strong capability alignment (${capMatch.join(', ')})`);
     if (vendor.risk_score <= 33) reasons.push(`a low risk profile (${vendor.risk_score}/100)`);
-    if (vendor.sla_score >= 95) reasons.push(`consistently high SLA performance (${vendor.sla_score}%)`);
-    if (vendor.tier === 1) reasons.push(`Tier 1 strategic status within the DET portfolio`);
+    if (vendor.sla_score >= 90) reasons.push(`consistently high SLA performance (${vendor.sla_score}%)`);
     text += reasons.join(', ') + '. ';
     text += `${tier.desc.toLowerCase()}.`;
     return text;
