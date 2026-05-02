@@ -1,0 +1,132 @@
+# ══════════════════════════════════════════════════════════════════
+# VER Vendor Platform — Automated Data Sync
+# GitHub Actions Workflow
+#
+# WHAT THIS DOES:
+#   Automatically exports your Google Sheet tabs as CSV files
+#   and commits them to the /data folder in this repo.
+#   The platform fetches fresh data on every page load.
+#
+# HOW TO SET UP:
+#   1. Create a Google Cloud project and enable the Sheets API
+#   2. Create a Service Account and download the JSON key
+#   3. Share your Google Sheet with the service account email
+#   4. In GitHub: Settings → Secrets → New repository secret
+#      - GOOGLE_SHEETS_CREDENTIALS  (paste the full JSON key)
+#      - GOOGLE_SHEET_ID  (the ID from your Sheet URL:
+#        https://docs.google.com/spreadsheets/d/[THIS_PART]/edit)
+#
+# TRIGGERS:
+#   - Manual: GitHub → Actions → Update Vendor Data → Run workflow
+#   - Scheduled: Every Monday at 8am ET (adjust cron as needed)
+#   - On push to main (optional — uncomment below)
+# ══════════════════════════════════════════════════════════════════
+
+name: Update Vendor Data
+
+on:
+  # Manual trigger — run anytime from GitHub Actions tab
+  workflow_dispatch:
+
+  # Scheduled — every Monday at 8am ET (13:00 UTC)
+  schedule:
+    - cron: '0 13 * * 1'
+
+  # Uncomment to also run on every push to main:
+  # push:
+  #   branches: [ main ]
+  #   paths:
+  #     - '.github/workflows/update-vendor-data.yml'
+
+jobs:
+  sync-data:
+    runs-on: ubuntu-latest
+    name: Export Google Sheets to CSV
+
+    steps:
+      # ── Step 1: Check out the repository ──────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── Step 2: Set up Python ─────────────────────────────────
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # ── Step 3: Install dependencies ─────────────────────────
+      - name: Install dependencies
+        run: |
+          pip install google-auth google-auth-oauthlib google-api-python-client
+
+      # ── Step 4: Export each tab as CSV ────────────────────────
+      - name: Export Google Sheets to CSV
+        env:
+          GOOGLE_SHEETS_CREDENTIALS: ${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}
+          GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+        run: |
+          python3 << 'PYEOF'
+          import os, csv, json
+          from google.oauth2.service_account import Credentials
+          from googleapiclient.discovery import build
+
+          # Auth
+          creds_json = json.loads(os.environ['GOOGLE_SHEETS_CREDENTIALS'])
+          creds = Credentials.from_service_account_info(
+              creds_json,
+              scopes=['https://www.googleapis.com/auth/spreadsheets.readonly']
+          )
+          service = build('sheets', 'v4', credentials=creds)
+          sheet_id = os.environ['GOOGLE_SHEET_ID']
+
+          # Tab name → output filename mapping
+          # IMPORTANT: These MUST match your exact Google Sheet tab names
+          TABS = {
+              'VENDORS':     'data/vendors.csv',
+              'ENGAGEMENTS': 'data/engagements.csv',
+              'RISK_SCORES': 'data/risk_scores.csv',
+              'RATE_CARDS':  'data/rate_cards.csv',
+              'INTAKE':      'data/intake.csv',
+          }
+
+          os.makedirs('data', exist_ok=True)
+
+          for tab_name, output_path in TABS.items():
+              print(f'Exporting {tab_name}...')
+              try:
+                  result = service.spreadsheets().values().get(
+                      spreadsheetId=sheet_id,
+                      range=tab_name
+                  ).execute()
+                  rows = result.get('values', [])
+                  if not rows:
+                      print(f'  WARNING: {tab_name} is empty — skipping')
+                      continue
+                  with open(output_path, 'w', newline='', encoding='utf-8') as f:
+                      writer = csv.writer(f)
+                      writer.writerows(rows)
+                  print(f'  ✓ {output_path} — {len(rows)-1} data rows')
+              except Exception as e:
+                  print(f'  ERROR exporting {tab_name}: {e}')
+                  raise
+
+          print('\nAll tabs exported successfully.')
+          PYEOF
+
+      # ── Step 5: Commit and push if files changed ──────────────
+      - name: Commit updated CSV files
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "VER Data Sync"
+          git add data/
+          # Only commit if there are actual changes
+          if git diff --staged --quiet; then
+            echo "No data changes detected — nothing to commit."
+          else
+            TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M UTC')
+            git commit -m "data: auto-sync from Google Sheets [${TIMESTAMP}]"
+            git push
+            echo "Data files updated and pushed."
+          fi
