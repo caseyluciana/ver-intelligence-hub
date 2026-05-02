@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>M&amp;A Vendor Transition &middot; VER Intelligence Hub</title>
+<style>
+:root{
+  --navy:#0F1E3C;--navy2:#1E3A5F;--navy3:#EFF6FF;
+  --teal:#0D9488;--teal2:#0F766E;--teal3:#F0FDF9;
+  --green:#059669;--green2:#065F46;--green3:#D1FAE5;
+  --amber:#D97706;--amber2:#78350F;--amber3:#FEF3C7;
+  --red:#DC2626;--red2:#7F1D1D;--red3:#FEE2E2;
+  --purple:#7C3AED;--purple3:#F5F3FF;
+  --orange:#EA580C;--orange3:#FFF7ED;
+  --blue:#2563EB;--blue3:#EFF6FF;
+  --ink:#111827;--ink2:#1F2937;--ink3:#374151;--ink4:#6B7280;
+  --gray:#F9FAFB;--gray2:#F3F4F6;--gray3:#E5E7EB;
+  --border:#E5E7EB;--border2:#D1D5DB;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gray);
+  color:var(--ink2);font-size:9pt;-webkit-print-color-adjust:exact;}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 28px;}
+
+/* TOP BAR */
+.top-bar{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--border);}
+.back{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;
+  border-radius:6px;background:var(--gray2);border:1px solid var(--border2);
+  color:var(--ink3);font-size:8pt;font-weight:600;cursor:pointer;
+  font-family:inherit;transition:all 0.15s;border:none;}
+.back:hover{background:var(--navy);color:#fff;}
+.pg-title{font-size:15pt;font-weight:900;color:var(--navy);}
+.pg-sub{font-size:8.5pt;color:var(--ink4);margin-top:2px;}
+.print-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;
+  border-radius:6px;background:var(--gray2);border:1px solid var(--border2);
+  color:var(--ink3);font-size:8pt;font-weight:600;cursor:pointer;
+  font-family:inherit;transition:all 0.15s;}
+.print-btn:hover{background:var(--navy);color:#fff;}
+
+/* CARDS */
+.card{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:16px 18px;margin-bottom:14px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.card-title{font-size:9.5pt;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.card-sub{font-size:8pt;color:var(--ink4);margin-bottom:12px;}
+
+/* STAT TILES */
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.stat{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;border-top:3px solid var(--navy);}
+.stat.teal{border-top-color:var(--teal);}
+.stat.amber{border-top-color:var(--amber);}
+.stat.green{border-top-color:var(--green);}
+.stat.red{border-top-color:var(--red);}
+.stat.purple{border-top-color:var(--purple);}
+.stat-val{font-size:20pt;font-weight:900;color:var(--navy);line-height:1;margin-bottom:3px;}
+.stat.teal .stat-val{color:var(--teal);}
+.stat.amber .stat-val{color:var(--amber);}
+.stat.green .stat-val{color:var(--green);}
+.stat.red .stat-val{color:var(--red);}
+.stat.purple .stat-val{color:var(--purple);}
+.stat-lbl{font-size:7.5pt;font-weight:600;color:var(--ink4);
+  text-transform:uppercase;letter-spacing:0.06em;}
+.stat-note{font-size:7pt;color:var(--ink4);margin-top:4px;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:7pt;
+  font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.bg{background:var(--green3);color:var(--green2);}
+.ba{background:var(--amber3);color:var(--amber2);}
+.br{background:var(--red3);color:var(--red2);}
+.bn{background:var(--navy3);color:var(--navy2);}
+.bt{background:var(--teal3);color:var(--teal2);}
+.bp{background:var(--purple3);color:var(--purple);}
+.bz{background:var(--gray2);color:var(--ink4);}
+.bo{background:var(--orange3);color:var(--orange);}
+
+/* SECTION HEADER */
+.shdr{font-size:10pt;font-weight:800;color:var(--navy);margin:20px 0 10px;
+  display:flex;align-items:center;gap:8px;padding-bottom:8px;
+  border-bottom:2px solid var(--gray3);}
+
+/* CALLOUT */
+.callout{border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:16px;
+  border-left:4px solid;font-size:8.5pt;line-height:1.6;}
+.c-info{background:var(--navy3);border-color:var(--navy2);color:var(--navy2);}
+.c-teal{background:var(--teal3);border-color:var(--teal);color:var(--green2);}
+.c-amber{background:var(--amber3);border-color:var(--amber);color:var(--amber2);}
+.c-red{background:var(--red3);border-color:var(--red);color:var(--red2);}
+
+/* TIMELINE */
+.timeline-wrap{position:relative;padding:8px 0 8px 0;overflow-x:auto;}
+.timeline-track{position:relative;height:6px;background:var(--gray3);
+  border-radius:3px;margin:32px 0 12px;min-width:600px;}
+.timeline-bar{position:absolute;height:6px;border-radius:3px;top:0;}
+.timeline-label{position:absolute;font-size:7pt;font-weight:700;
+  white-space:nowrap;top:-22px;transform:translateX(-50%);}
+.timeline-dot{position:absolute;width:14px;height:14px;border-radius:50%;
+  top:-4px;transform:translateX(-50%);border:2px solid #fff;
+  box-shadow:0 1px 4px rgba(0,0,0,0.2);}
+.timeline-milestone{position:absolute;top:14px;font-size:7pt;
+  white-space:nowrap;transform:translateX(-50%);color:var(--ink4);}
+
+/* ENGAGEMENT CARDS */
+.eng-card{background:#fff;border:1px solid var(--border);border-radius:10px;
+  margin-bottom:12px;overflow:hidden;
+  box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:box-shadow 0.15s;}
+.eng-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.10);}
+.eng-header{padding:14px 18px;display:flex;align-items:flex-start;
+  justify-content:space-between;gap:12px;cursor:pointer;}
+.eng-body{padding:0 18px 14px;border-top:1px solid var(--gray2);}
+.eng-body.collapsed{display:none;}
+
+/* DECISION REGISTER */
+.decision-card{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:14px 18px;margin-bottom:10px;
+  display:flex;align-items:flex-start;gap:14px;}
+
+/* DONUT */
+.donut-wrap{position:relative;width:160px;height:160px;flex-shrink:0;}
+.donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  text-align:center;}
+
+/* PROGRESS */
+.prog{background:var(--gray2);border-radius:4px;height:8px;overflow:hidden;}
+.prog-bar{height:8px;border-radius:4px;}
+
+/* FOOTER */
+.footer{margin-top:24px;padding-top:12px;border-top:1px solid var(--border);
+  font-size:7.5pt;color:var(--ink4);text-align:center;font-style:italic;}
+
+@media print{
+  .back,.print-btn{display:none!important;}
+  .wrap{padding:12px!important;max-width:100%!important;}
+  .eng-body.collapsed{display:block!important;}
+  body{background:#fff!important;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div>
+      <button class="back" onclick="history.back()">&#8592; Back to Hub</button>
+      <div style="margin-top:8px;">
+        <div class="pg-title">M&amp;A Vendor Transition Tracker</div>
+        <div class="pg-sub">Inherited vendor engagements &middot; Informatica acquisition &middot; VER advisory oversight</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="print-btn" onclick="window.print()">Print</button>
+      <div style="text-align:right;font-size:7.5pt;color:var(--ink4);">
+        DET Portfolio Intelligence &mdash; Powered by VER<br>
+        <span style="font-size:7pt;">Updated: May 2026 &middot; Salesforce DET &middot; Confidential</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALLOUT -->
+  <div class="callout c-info">
+    <strong>M&amp;A Vendor Governance &mdash; VER Advisory Scope.</strong>
+    VER monitors inherited vendor engagements from the Informatica acquisition to ensure
+    continuity, risk visibility, and timely decision-making. GSA re-assignment is underway
+    for active engagements. Spend and contract decisions rest with Pillar Leads and Procurement.
+  </div>
+
+  <!-- KPI TILES -->
+  <div class="g4">
+    <div class="stat teal">
+      <div class="stat-val">1</div>
+      <div class="stat-lbl">Acquisition Event</div>
+      <div class="stat-note">Informatica &middot; Closed FY26</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val">5</div>
+      <div class="stat-lbl">Inherited Engagements</div>
+      <div class="stat-note">2 vendors &middot; 5 SOW lines</div>
+    </div>
+    <div class="stat green">
+      <div class="stat-val">$2.2M</div>
+      <div class="stat-lbl">Annual Inherited Spend</div>
+      <div class="stat-note">Active engagements only</div>
+    </div>
+    <div class="stat amber">
+      <div class="stat-val">1</div>
+      <div class="stat-lbl">Open Decisions</div>
+      <div class="stat-note">Sonata SF Support &mdash; TBD</div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW: DONUT + ACQUISITION SUMMARY -->
+  <div class="card" style="margin-bottom:20px;">
+    <div style="display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:center;">
+
+      <!-- Donut chart -->
+      <div style="text-align:center;">
+        <div class="donut-wrap" style="margin:0 auto;">
+          <svg viewBox="0 0 160 160" width="160" height="160">
+            <!-- Background ring -->
+            <circle cx="80" cy="80" r="60" fill="none" stroke="var(--gray2)" stroke-width="28"/>
+            <!-- HCL segment: $1.59M of $2.17M = 73% = 274deg -->
+            <circle cx="80" cy="80" r="60" fill="none" stroke="#0F1E3C" stroke-width="28"
+              stroke-dasharray="273.7 113.2" stroke-dashoffset="0"
+              transform="rotate(-90 80 80)"/>
+            <!-- Sonata segment: $0.61M = 28% = 103deg -->
+            <circle cx="80" cy="80" r="60" fill="none" stroke="#0D9488" stroke-width="28"
+              stroke-dasharray="103.2 283.7" stroke-dashoffset="-273.7"
+              transform="rotate(-90 80 80)"/>
+            <!-- ServiceBerry: wind-down, show as thin slice -->
+            <circle cx="80" cy="80" r="60" fill="none" stroke="#D1D5DB" stroke-width="28"
+              stroke-dasharray="6 380.9" stroke-dashoffset="-376.9"
+              transform="rotate(-90 80 80)"/>
+            <!-- Inner white circle for donut effect -->
+            <circle cx="80" cy="80" r="44" fill="white"/>
+          </svg>
+          <div class="donut-center">
+            <div style="font-size:12pt;font-weight:900;color:var(--navy);">$2.2M</div>
+            <div style="font-size:7pt;color:var(--ink4);line-height:1.3;">Annual<br>Inherited</div>
+          </div>
+        </div>
+        <!-- Legend -->
+        <div style="margin-top:10px;text-align:left;padding:0 8px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:7.5pt;">
+            <div style="width:10px;height:10px;border-radius:2px;background:#0F1E3C;flex-shrink:0;"></div>
+            <span style="color:var(--ink2);">HCL Technologies</span>
+            <span style="font-weight:700;color:var(--ink2);margin-left:auto;">$1.59M</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:7.5pt;">
+            <div style="width:10px;height:10px;border-radius:2px;background:#0D9488;flex-shrink:0;"></div>
+            <span style="color:var(--ink2);">Sonata Software</span>
+            <span style="font-weight:700;color:var(--ink2);margin-left:auto;">$0.61M</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;font-size:7.5pt;">
+            <div style="width:10px;height:10px;border-radius:2px;background:#D1D5DB;flex-shrink:0;"></div>
+            <span style="color:var(--ink4);">ServiceBerry (Wind-down)</span>
+            <span style="font-weight:700;color:var(--ink4);margin-left:auto;">$0.37M TCV</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Acquisition details -->
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <div style="width:40px;height:40px;border-radius:8px;background:var(--navy);
+            display:flex;align-items:center;justify-content:center;font-size:16pt;color:#fff;">
+            &#128202;
+          </div>
+          <div>
+            <div style="font-size:11pt;font-weight:900;color:var(--navy);">Informatica Acquisition</div>
+            <div style="font-size:8pt;color:var(--ink4);">Closed FY26 &middot; Vendor relationships inherited by DET</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+          <div style="background:var(--gray);border-radius:8px;padding:10px 12px;">
+            <div style="font-size:7.5pt;color:var(--ink4);margin-bottom:2px;">Active Vendors</div>
+            <div style="font-size:13pt;font-weight:900;color:var(--navy);">2</div>
+            <div style="font-size:7.5pt;color:var(--ink3);">HCL Technologies &middot; Sonata Software</div>
+          </div>
+          <div style="background:var(--gray);border-radius:8px;padding:10px 12px;">
+            <div style="font-size:7.5pt;color:var(--ink4);margin-bottom:2px;">Wind-Down</div>
+            <div style="font-size:13pt;font-weight:900;color:var(--ink4);">1</div>
+            <div style="font-size:7.5pt;color:var(--ink3);">ServiceBerry Technologies &middot; Natural expiry</div>
+          </div>
+          <div style="background:var(--gray);border-radius:8px;padding:10px 12px;">
+            <div style="font-size:7.5pt;color:var(--ink4);margin-bottom:2px;">GSA Status</div>
+            <div style="font-size:13pt;font-weight:900;color:var(--amber);">In Progress</div>
+            <div style="font-size:7.5pt;color:var(--ink3);">Re-assignment underway &middot; Both HCL SOWs</div>
+          </div>
+          <div style="background:var(--gray);border-radius:8px;padding:10px 12px;">
+            <div style="font-size:7.5pt;color:var(--ink4);margin-bottom:2px;">Latest Expiry</div>
+            <div style="font-size:13pt;font-weight:900;color:var(--navy);">Jul 2028</div>
+            <div style="font-size:7.5pt;color:var(--ink3);">Sonata Oracle Cloud L2 Support</div>
+          </div>
+        </div>
+
+        <div class="callout c-amber" style="margin:0;">
+          <strong>Open Decision Required:</strong> Sonata Software &mdash; Salesforce instance support
+          SOW expires May 15, 2026 (Year 3 end). VER and Procurement need a renewal or
+          wind-down decision immediately. 30-day notice period.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 24-MONTH TIMELINE -->
+  <div class="shdr">&#128197; 24-Month Transition Timeline</div>
+  <div class="card">
+    <div class="card-sub">Inherited engagement expiry dates &middot; May 2026 &ndash; Jul 2028</div>
+    <div class="timeline-wrap">
+      <div style="min-width:700px;padding:0 20px;">
+
+        <!-- Month labels -->
+        <div style="display:flex;justify-content:space-between;font-size:7pt;
+          color:var(--ink4);margin-bottom:4px;font-weight:600;">
+          <span>May 2026</span><span>Nov 2026</span><span>May 2027</span>
+          <span>Nov 2027</span><span>Jul 2028</span>
+        </div>
+
+        <!-- Timeline track -->
+        <div style="position:relative;height:8px;background:var(--gray3);
+          border-radius:4px;margin:8px 0 40px;">
+
+          <!-- Today marker: May 2026 = 0% -->
+          <div style="position:absolute;left:0%;top:-20px;
+            transform:translateX(-50%);text-align:center;">
+            <div style="width:2px;height:28px;background:var(--red);margin:0 auto;"></div>
+            <div style="font-size:7pt;font-weight:700;color:var(--red);
+              white-space:nowrap;margin-top:2px;">Today</div>
+          </div>
+
+          <!-- Sonata SF Support: May 2026 = immediate / expired -->
+          <div style="position:absolute;left:0%;top:-8px;
+            transform:translateX(-50%);">
+            <div style="width:16px;height:16px;border-radius:50%;background:var(--red);
+              border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);"></div>
+          </div>
+          <div style="position:absolute;left:0%;top:14px;
+            transform:translateX(-50%);text-align:center;width:120px;margin-left:10px;">
+            <div style="font-size:7pt;font-weight:700;color:var(--red);">Sonata SF Support</div>
+            <div style="font-size:6.5pt;color:var(--ink4);">May 15, 2026 &mdash; Decision Required</div>
+          </div>
+
+          <!-- ServiceBerry: natural expiry ~Jul 2026 = ~8% -->
+          <div style="position:absolute;left:8%;top:-8px;transform:translateX(-50%);">
+            <div style="width:16px;height:16px;border-radius:50%;background:var(--gray3);
+              border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);"></div>
+          </div>
+          <div style="position:absolute;left:8%;top:14px;
+            transform:translateX(-50%);text-align:center;width:100px;">
+            <div style="font-size:7pt;font-weight:700;color:var(--ink4);">ServiceBerry</div>
+            <div style="font-size:6.5pt;color:var(--ink4);">Natural Expiry &mdash; Wind-down</div>
+          </div>
+
+          <!-- HCL both SOWs: Dec 2027 = ~76% -->
+          <div style="position:absolute;left:76%;top:-8px;transform:translateX(-50%);">
+            <div style="width:16px;height:16px;border-radius:50%;background:var(--navy);
+              border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);"></div>
+          </div>
+          <div style="position:absolute;left:76%;top:14px;
+            transform:translateX(-50%);text-align:center;width:110px;">
+            <div style="font-size:7pt;font-weight:700;color:var(--navy);">HCL &mdash; Both SOWs</div>
+            <div style="font-size:6.5pt;color:var(--ink4);">Dec 31, 2027 &mdash; Renewal decision</div>
+          </div>
+
+          <!-- Sonata Oracle: Jul 2028 = 100% -->
+          <div style="position:absolute;left:100%;top:-8px;transform:translateX(-50%);">
+            <div style="width:16px;height:16px;border-radius:50%;background:var(--teal);
+              border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);"></div>
+          </div>
+          <div style="position:absolute;left:92%;top:14px;
+            transform:translateX(-50%);text-align:center;width:120px;">
+            <div style="font-size:7pt;font-weight:700;color:var(--teal);">Sonata Oracle Cloud</div>
+            <div style="font-size:6.5pt;color:var(--ink4);">Jul 14, 2028 &mdash; Yr 1 of 3</div>
+          </div>
+
+          <!-- Progress fill from today to HCL (active span indicator) -->
+          <div style="position:absolute;left:0;top:0;width:76%;height:8px;
+            background:linear-gradient(90deg,var(--navy) 0%,var(--teal) 100%);
+            border-radius:4px;opacity:0.35;"></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:4px;font-size:7.5pt;">
+      <div style="display:flex;align-items:center;gap:5px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--red);"></div>
+        <span>Decision Required</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:5px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--navy);"></div>
+        <span>Active &mdash; Keep</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:5px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--teal);"></div>
+        <span>Active &mdash; Monitoring</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:5px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:var(--gray3);"></div>
+        <span>Wind-down</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENGAGEMENT DETAIL CARDS -->
+  <div class="shdr">&#128203; Inherited Engagement Detail</div>
+
+  <!-- HCL Technologies -->
+  <div style="margin-bottom:14px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <div style="width:32px;height:32px;border-radius:6px;background:#0F1E3C;
+        display:flex;align-items:center;justify-content:center;
+        font-size:12pt;font-weight:900;color:#fff;font-family:Arial;">HC</div>
+      <div>
+        <div style="font-size:10pt;font-weight:800;color:var(--navy);">HCL Technologies</div>
+        <div style="font-size:8pt;color:var(--ink4);">2 inherited SOWs &middot; Both expiring Dec 31, 2027 &middot; GSA re-assignment in progress</div>
+      </div>
+      <span class="badge bg" style="margin-left:auto;">Keep &mdash; Both Engagements</span>
+    </div>
+
+    <!-- HCL SOW 1 -->
+    <div class="eng-card" style="border-left:4px solid var(--navy);">
+      <div class="eng-header" onclick="toggleEng(this)">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+            <div style="font-size:9pt;font-weight:700;color:var(--navy);">
+              GDC Managed Service &mdash; L1/L2 Service Desk &amp; Infrastructure Ops
+            </div>
+            <span class="badge bn">SOW 1</span>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge bg"><span class="dot" style="background:#059669;"></span>Keep</span>
+            <span class="badge ba">GSA Re-assignment In Progress</span>
+            <span class="badge bz">24x7 Coverage</span>
+            <span class="badge bz">Year 2 of 3</span>
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:14pt;font-weight:900;color:var(--navy);">$1.16M<span style="font-size:8pt;font-weight:400;color:var(--ink4);">/yr</span></div>
+          <div style="font-size:7.5pt;color:var(--ink4);">Expires Dec 31, 2027</div>
+          <div style="font-size:7.5pt;color:var(--ink4);">60-day notice</div>
+        </div>
+        <div style="font-size:14pt;color:var(--ink4);margin-left:8px;transition:transform 0.25s;"
+          class="eng-chevron">&#8964;</div>
+      </div>
+      <div class="eng-body collapsed">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:12px 0;">
+          <div>
+            <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);
+              text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Scope</div>
+            <div style="font-size:8.5pt;color:var(--ink3);line-height:1.6;">
+              L1/L2 Service Desk support for Informatica-inherited systems.
+              24x7 monitoring and infrastructure operations.
+              Mission-critical workloads requiring continuous coverage.
+            </div>
+          </div>
+          <div>
+            <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);
+              text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Contract Details</div>
+            <div style="font-size:8.5pt;line-height:1.8;">
+              <div><span style="color:var(--ink4);">TCV:</span> <strong>$3.48M</strong> (3yr)</div>
+              <div><span style="color:var(--ink4);">Annual:</span> <strong>$1.16M</strong></div>
+              <div><span style="color:var(--ink4);">Term:</span> <strong>Jan 2025 &mdash; Dec 2027</strong></div>
+              <div><span style="color:var(--ink4);">Notice:</span> <strong>60 days</strong></div>
+              <div><span style="color:var(--ink4);">Year:</span> <strong>2 of 3</strong></div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);
+              text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">VER Notes</div>
+            <div style="font-size:8.5pt;color:var(--ink3);line-height:1.6;">
+              GSA re-assignment in progress. Mission-critical engagement &mdash;
+              no disruption recommended during transition period.
+              Renewal decision required by Q4 FY27.
+            </div>
+          </div>
+        </div>
+        <!-- Risk bars -->
+        <div style="background:var(--gray);border-radius:8px;padding:10px 12px;">
+          <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);
+            text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;">Risk Profile</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+            <div>
+              <div style="display:flex;justify-content:space-between;
+                font-size:7.5pt;margin-bottom:3px;">
+                <span style="color:var(--ink4);">Concentration</span>
+                <span style="font-weight:700;color:#D97706;">40</span>
+              </div>
+              <div class="prog"><div class="prog-bar" style="width:40%;background:#D97706;"></div></div>
+            </div><div>
+              <div style="display:flex;justify-content:space-between;
+                font-size:7.5pt;margin-bottom:3px;">
+                <span style="color:var(--ink4);">Financial</span>
+                <span style="font-weight:700;color:#059669;">25</span>
+              </div>
+              <div class="prog"><div class="prog-bar" style="width:25%;background:#059669;"></div></div>
+            </div><div>
+              <div style="display:flex;justify-content:space-between;
+                font-size:7.5pt;margin-bottom:3px;">
+                <span style="color:var(--ink4);">Delivery</span>
+                <span style="font-weight:700;color:#059669;">30</span>
+              </div>
+              <div class="prog"><div class="prog-bar" style="width:30%;background:#059669;"></div></div>
+            </div><div>
+              <div style="display:flex;justify-content:space-between;
+                font-size:7.5pt;margin-bottom:3px;">
+                <span style="color:var(--ink4);">Compliance</span>
+                <span style="font-weight:700;color:#059669;">20</span>
+              </div>
+              <div class="prog"><div class="prog-bar" style="width:20%;background:#059669;"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HCL SOW 2 -->
+    <div class="eng-card" style="border-left:4px solid var(--navy);">
+      <div class="eng-header" onclick="toggleEng(this)">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+            <div style="font-size:9pt;font-weight:700;color:var(--navy);">
+              EDO Support Platform &amp; Enhancement
+            </div>
+            <span class="badge bn">SOW 2</span>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge bg"><span class="dot" style="background:#059669;"></span>Keep</span>
+            <span class="badge ba">GSA Re-assignment In Progress</span>
+            <span class="badge bz">L2 Support + QA</span>
+            <span class="badge bz">Year 2 of 3</span>
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:14pt;font-weight:900;color:var(--navy);">$433K<span style="font-size:8pt;font-weight:400;color:var(--ink4);">/yr</span></div>
+          <div style="font-size:7.5pt;color:var(--ink4);">Expires Dec 31, 2027</div>
+          <div style="font-size:7.5pt;color:var(--ink4);">60-day notice</div>
+        </div>
+        <div style="font-size:14pt;color:var(--ink4);margin-left:8px;transition:transform 0.25s;"
+          class="eng-chevron">&#8964;</div>
+      </div>
+      <div class="eng-body collapsed">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:12px 0;">
+          <div>
+            <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);
+              text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Scope</div>
+            <div style="font-size:8.5pt;color:var(--ink3);line-height:1.6;">
+              EDO platform L2 support and enhancement services.
+              QA testing for Informatica-inherited EDO workloads.
+              Enhancement work within existing capacity.
+            </div>
+          </div>
+          <div>
+            <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);
+              text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Contract Details</div>
+            <div style="font-size:8.5pt;line-height:1.8;">
+              <div><span style="color:var(--ink4);">TCV:</span> <strong>$1.34M</strong> (3yr)</div>
+              <div><span style="color:var(--ink4);">Annual:</span> <strong>$433K</strong></div>
+              <div><span style="color:var(--ink4);">Term:</span> <strong>Jan 2025 &mdash; Dec 2027</strong></div>
+              <div><span style="color:var(--ink4);">Notice:</span> <strong>60 days</strong></div>
+              <div><span style="color:var(--ink4);">Year:</span> <strong>2 of 3</strong></div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);
+              text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">VER Notes</div>
+            <div style="font-size:8.5pt;color:var(--ink3);line-height:1.6;">
+              Mission-critical QA coverage for EDO systems.
+              GSA re-assignment in progress alongside SOW 1.
+              Both HCL engagements being managed as a paired unit.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sonata Software -->
+  <div style="margin-bottom:14px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <div style="width:32px;height:32px;border-radius:6px;background:var(--teal);
+        display:flex;align-items:center;justify-content:center;
+        font-size:12pt;font-weight:900;color:#fff;font-family:Arial;">SO</div>
+      <div>
+        <div style="font-size:10pt;font-weight:800;color:var(--navy);">Sonata Software</div>
+        <div style="font-size:8pt;color:var(--ink4);">2 inherited SOWs &middot; GSA establishment in progress &middot; 1 decision pending</div>
+      </div>
+      <span class="badge ba" style="margin-left:auto;">1 Decision Required</span>
+    </div>
+
+    <!-- Sonata SOW 1: Oracle Cloud -->
+    <div class="eng-card" style="border-left:4px solid var(--teal);">
+      <div class="eng-header" onclick="toggleEng(this)">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+            <div style="font-size:9pt;font-weight:700;color:var(--navy);">
+              Oracle Cloud L2 Support + Test Automation
+            </div>
+            <span class="badge bt">SOW 1</span>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge bg"><span class="dot" style="background:#059669;"></span>Keep</span>
+            <span class="badge ba">GSA Establishment In Progress</span>
+            <span class="badge bz">Year 1 of 3</span>
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:14pt;font-weight:900;color:var(--teal);">$613K<span style="font-size:8pt;font-weight:400;color:var(--ink4);">/yr</span></div>
+          <div style="font-size:7.5pt;color:var(--ink4);">Expires Jul 14, 2028</div>
+          <div style="font-size:7.5pt;color:var(--ink4);">30-day notice</div>
+        </div>
+        <div style="font-size:14pt;color:var(--ink4);margin-left:8px;" class="eng-chevron">&#8964;</div>
+      </div>
+      <div class="eng-body collapsed">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:12px 0;">
+          <div>
+            <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);
+              text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Scope</div>
+            <div style="font-size:8.5pt;color:var(--ink3);line-height:1.6;">
+              Oracle Cloud Applications L2 support for IT workloads.
+              Automated test suite maintenance and test automation
+              services for inherited Oracle environment.
+            </div>
+          </div>
+          <div>
+            <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);
+              text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Contract Details</div>
+            <div style="font-size:8.5pt;line-height:1.8;">
+              <div><span style="color:var(--ink4);">TCV:</span> <strong>$1.45M</strong> (3yr)</div>
+              <div><span style="color:var(--ink4);">Annual:</span> <strong>$613K</strong></div>
+              <div><span style="color:var(--ink4);">Term:</span> <strong>Jul 2025 &mdash; Jul 2028</strong></div>
+              <div><span style="color:var(--ink4);">Notice:</span> <strong>30 days</strong></div>
+              <div><span style="color:var(--ink4);">Year:</span> <strong>1 of 3</strong></div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);
+              text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">VER Notes</div>
+            <div style="font-size:8.5pt;color:var(--ink3);line-height:1.6;">
+              Sonata GSA establishment underway. Longest-dated
+              inherited engagement &mdash; year 1 of 3. Stable and
+              performing to scope. No near-term decisions required.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sonata SOW 2: SF Support — DECISION REQUIRED -->
+    <div class="eng-card" style="border-left:4px solid var(--red);">
+      <div class="eng-header" onclick="toggleEng(this)">
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+            <div style="font-size:9pt;font-weight:700;color:var(--red);">
+              Salesforce Instance Support &mdash; Informatica SF Org
+            </div>
+            <span class="badge br">SOW 2</span>
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge br"><span class="dot" style="background:#DC2626;"></span>Decision Required</span>
+            <span class="badge ba">Year 3 End &mdash; May 15, 2026</span>
+            <span class="badge bz">TCV $1.77M</span>
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:14pt;font-weight:900;color:var(--red);">Expired</div>
+          <div style="font-size:7.5pt;color:var(--ink4);">May 15, 2026 &mdash; Year 3 End</div>
+          <div style="font-size:7.5pt;color:var(--ink4);">30-day notice period</div>
+        </div>
+        <div style="font-size:14pt;color:var(--ink4);margin-left:8px;" class="eng-chevron">&#8964;</div>
+      </div>
+      <div class="eng-body collapsed">
+        <div class="callout c-red" style="margin:12px 0 0;">
+          <strong>&#9888; Decision Required Immediately.</strong>
+          This SOW reached the end of Year 3 on May 15, 2026. A Renew or Wind-Down decision
+          is required. 30-day notice period applies. VER recommends aligning with
+          Procurement and the responsible Pillar Lead before any extension is executed.
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:12px 0 0;">
+          <div>
+            <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);
+              text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Scope</div>
+            <div style="font-size:8.5pt;color:var(--ink3);line-height:1.6;">
+              Production support for the Informatica Salesforce org instance.
+              L2 support and maintenance for inherited SF environment.
+            </div>
+          </div>
+          <div>
+            <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);
+              text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Contract Details</div>
+            <div style="font-size:8.5pt;line-height:1.8;">
+              <div><span style="color:var(--ink4);">TCV:</span> <strong>$1.77M</strong> (3yr)</div>
+              <div><span style="color:var(--ink4);">Year 3 End:</span> <strong>May 15, 2026</strong></div>
+              <div><span style="color:var(--ink4);">Notice:</span> <strong>30 days</strong></div>
+              <div><span style="color:var(--ink4);">Decision:</span> <strong style="color:var(--red);">TBD &mdash; Pending</strong></div>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);
+              text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">Options</div>
+            <div style="font-size:8.5pt;color:var(--ink3);line-height:1.8;">
+              <div>&#10003; <strong>Renew</strong> &mdash; Extend with Sonata for defined period</div>
+              <div>&#10003; <strong>Transition</strong> &mdash; Move to existing SF vendor</div>
+              <div>&#10003; <strong>Wind-down</strong> &mdash; Discontinue SF org support</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ServiceBerry -->
+  <div style="margin-bottom:20px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <div style="width:32px;height:32px;border-radius:6px;background:var(--ink4);
+        display:flex;align-items:center;justify-content:center;
+        font-size:12pt;font-weight:900;color:#fff;font-family:Arial;">SB</div>
+      <div>
+        <div style="font-size:10pt;font-weight:800;color:var(--ink4);">ServiceBerry Technologies</div>
+        <div style="font-size:8pt;color:var(--ink4);">ServiceNow administration &amp; development &middot; Wind-down confirmed &middot; No new agreement</div>
+      </div>
+      <span class="badge bz" style="margin-left:auto;">Discontinue &mdash; Wind-down</span>
+    </div>
+    <div class="eng-card" style="border-left:4px solid var(--gray3);opacity:0.85;">
+      <div class="eng-header" style="cursor:default;">
+        <div style="flex:1;">
+          <div style="font-size:9pt;font-weight:700;color:var(--ink4);margin-bottom:5px;">
+            ServiceNow Platform Administration &amp; Development
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <span class="badge bz">Wind-down Confirmed</span>
+            <span class="badge bz">No New Agreement</span>
+            <span class="badge bz">Natural Expiry</span>
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:14pt;font-weight:900;color:var(--ink4);">$365K<span style="font-size:8pt;font-weight:400;"> TCV</span></div>
+          <div style="font-size:7.5pt;color:var(--ink4);">Natural expiry &mdash; winding down</div>
+          <div style="font-size:7.5pt;color:var(--ink4);">30-day notice</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DECISION REGISTER -->
+  <div class="shdr">&#9989; Decision Register</div>
+  <div class="card">
+    <div class="card-sub">Open decisions requiring action &middot; All inherited engagements</div>
+
+    <!-- Open decision -->
+    <div class="decision-card" style="border-left:4px solid var(--red);border-radius:0 8px 8px 0;
+      background:var(--red3);margin-bottom:10px;">
+      <div style="font-size:22pt;">&#9888;</div>
+      <div style="flex:1;">
+        <div style="font-size:9.5pt;font-weight:800;color:var(--red2);margin-bottom:4px;">
+          Sonata SF Support &mdash; Renew or Wind-down Decision
+        </div>
+        <div style="font-size:8.5pt;color:var(--ink3);line-height:1.6;margin-bottom:8px;">
+          SOW reached Year 3 end May 15, 2026. Decision required to either renew the engagement,
+          transition the SF org support to an existing vendor, or wind down.
+          30-day notice period applies from decision date.
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="badge br">Immediate Action</span>
+          <span class="badge bz">Owner: VER + Procurement + Pillar Lead</span>
+          <span class="badge bz">Vendor: Sonata Software</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming decisions -->
+    <div style="font-size:8pt;font-weight:700;color:var(--ink4);
+      text-transform:uppercase;letter-spacing:0.06em;margin:14px 0 8px;">
+      Upcoming Decisions &mdash; Required Before Expiry
+    </div>
+
+    <div class="decision-card" style="border-left:4px solid var(--navy);">
+      <div style="font-size:22pt;">&#128197;</div>
+      <div style="flex:1;">
+        <div style="font-size:9pt;font-weight:700;color:var(--navy);margin-bottom:3px;">
+          HCL Technologies &mdash; Both SOWs Renewal
+        </div>
+        <div style="font-size:8.5pt;color:var(--ink3);line-height:1.5;margin-bottom:6px;">
+          Both HCL engagements expire Dec 31, 2027. 60-day notice required.
+          Renewal strategy needed by Q3 FY27 to allow proper preparation.
+          GSA re-assignment must be complete before renewal terms can be finalized.
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="badge bn">Decision by Q3 FY27</span>
+          <span class="badge bz">$1.59M annual combined</span>
+          <span class="badge bz">60-day notice</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="decision-card" style="border-left:4px solid var(--teal);">
+      <div style="font-size:22pt;">&#128197;</div>
+      <div style="flex:1;">
+        <div style="font-size:9pt;font-weight:700;color:var(--teal);margin-bottom:3px;">
+          Sonata Software &mdash; Oracle Cloud Support Renewal
+        </div>
+        <div style="font-size:8.5pt;color:var(--ink3);line-height:1.5;margin-bottom:6px;">
+          Year 1 of 3. No near-term action required. Renewal planning should begin
+          in FY29 ahead of Jul 2028 expiry. VER will flag at the 12-month mark.
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <span class="badge bt">Decision by Q2 FY29</span>
+          <span class="badge bz">$613K annual</span>
+          <span class="badge bz">30-day notice</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FUTURE M&A NOTE -->
+  <div class="callout c-teal" style="margin-top:4px;">
+    <strong>Future M&amp;A Visibility:</strong>
+    This tracker is designed to expand as additional acquisition events occur.
+    Each new acquisition will appear as a separate section with its own
+    donut share, timeline markers, and engagement cards.
+    VER is positioned to onboard inherited vendor relationships quickly
+    and provide governance continuity from day one.
+  </div>
+
+  <div class="footer">
+    VER Intelligence Hub &middot; M&amp;A Vendor Transition Tracker &middot;
+    Informatica Acquisition FY26 &middot; DET Portfolio Intelligence &mdash; Powered by VER &middot; Confidential
+  </div>
+</div>
+
+<script>
+function toggleEng(header) {
+  var card  = header.closest('.eng-card');
+  var body  = card.querySelector('.eng-body');
+  var chev  = header.querySelector('.eng-chevron');
+  var open  = !body.classList.contains('collapsed');
+  body.classList.toggle('collapsed');
+  if (chev) chev.style.transform = open ? '' : 'rotate(180deg)';
+}
+</script>
+</body>
+</html>
