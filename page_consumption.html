@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Consumption Monitoring · VER Intelligence Hub</title>
+<style>
+:root{
+  --navy:#0F1E3C;--navy2:#1E3A5F;--navy3:#EFF6FF;
+  --teal:#0D9488;--teal2:#0F766E;--teal3:#F0FDF9;
+  --green:#059669;--green2:#065F46;--green3:#D1FAE5;
+  --amber:#D97706;--amber2:#78350F;--amber3:#FEF3C7;
+  --red:#DC2626;--red2:#7F1D1D;--red3:#FEE2E2;
+  --purple:#7C3AED;--purple3:#F5F3FF;
+  --orange:#EA580C;--orange3:#FFF7ED;
+  --ink:#111827;--ink2:#1F2937;--ink3:#374151;--ink4:#6B7280;
+  --gray:#F9FAFB;--gray2:#F3F4F6;--gray3:#E5E7EB;
+  --border:#E5E7EB;--border2:#D1D5DB;--white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gray);color:var(--ink2);font-size:9pt;}
+.page-wrap{max-width:1100px;margin:0 auto;padding:24px 28px;}
+
+/* TOP BAR */
+.top-bar{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.top-bar-left{display:flex;align-items:center;gap:12px;}
+.back-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;
+  border-radius:6px;background:var(--gray2);border:1px solid var(--border2);
+  color:var(--ink3);font-size:8pt;font-weight:600;text-decoration:none;cursor:pointer;
+  font-family:inherit;transition:all 0.15s;}
+.back-btn:hover{background:var(--navy);color:#fff;}
+.page-title{font-size:15pt;font-weight:900;color:var(--navy);}
+.page-sub{font-size:8.5pt;color:var(--ink4);margin-top:2px;}
+
+/* CARDS */
+.card{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.card-title{font-size:9.5pt;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.card-sub{font-size:8pt;color:var(--ink4);margin-bottom:12px;}
+
+/* STAT TILES */
+.stat-grid{display:grid;gap:12px;margin-bottom:20px;}
+.stat-grid.g4{grid-template-columns:repeat(4,1fr);}
+.stat-grid.g3{grid-template-columns:repeat(3,1fr);}
+.stat{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;border-top:3px solid var(--navy);}
+.stat.teal{border-top-color:var(--teal);}
+.stat.green{border-top-color:var(--green);}
+.stat.amber{border-top-color:var(--amber);}
+.stat.red{border-top-color:var(--red);}
+.stat.purple{border-top-color:var(--purple);}
+.stat-val{font-size:20pt;font-weight:900;color:var(--navy);line-height:1;margin-bottom:3px;}
+.stat.teal .stat-val{color:var(--teal);}
+.stat.green .stat-val{color:var(--green);}
+.stat.amber .stat-val{color:var(--amber);}
+.stat.red .stat-val{color:var(--red);}
+.stat.purple .stat-val{color:var(--purple);}
+.stat-lbl{font-size:7.5pt;font-weight:600;color:var(--ink4);text-transform:uppercase;letter-spacing:0.06em;}
+.stat-note{font-size:7pt;color:var(--ink4);margin-top:4px;}
+
+/* PROGRESS BAR */
+.prog-wrap{background:var(--gray2);border-radius:4px;height:10px;margin:4px 0;overflow:hidden;}
+.prog-bar{height:10px;border-radius:4px;transition:width 0.8s ease;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:7pt;font-weight:700;
+  padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.badge-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.b-green{background:var(--green3);color:var(--green2);}
+.b-amber{background:var(--amber3);color:var(--amber2);}
+.b-red{background:var(--red3);color:var(--red2);}
+.b-navy{background:var(--navy3);color:var(--navy2);}
+.b-teal{background:var(--teal3);color:var(--teal2);}
+.b-purple{background:var(--purple3);color:var(--purple);}
+.b-gray{background:var(--gray2);color:var(--ink4);}
+.b-orange{background:var(--orange3);color:var(--orange);}
+
+/* TABLE */
+.vp-table{width:100%;border-collapse:collapse;font-size:8.5pt;}
+.vp-table th{background:var(--navy);color:#fff;padding:8px 12px;text-align:left;
+  font-size:7.5pt;font-weight:700;letter-spacing:0.03em;position:sticky;top:0;}
+.vp-table td{padding:9px 12px;border-bottom:1px solid var(--gray2);vertical-align:middle;}
+.vp-table tr:hover td{background:var(--gray);}
+.vp-table tr:last-child td{border-bottom:none;}
+
+/* CALLOUT */
+.callout{border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:16px;
+  border-left:4px solid;font-size:8.5pt;line-height:1.6;}
+.callout.info{background:var(--navy3);border-color:var(--navy2);color:var(--navy2);}
+.callout.teal{background:var(--teal3);border-color:var(--teal);color:var(--green2);}
+.callout.amber{background:var(--amber3);border-color:var(--amber);color:var(--amber2);}
+
+/* SECTION HEADER */
+.section-hdr{font-size:10pt;font-weight:800;color:var(--navy);margin:20px 0 10px;
+  display:flex;align-items:center;gap:8px;padding-bottom:8px;
+  border-bottom:2px solid var(--gray3);}
+
+/* PILL TABS */
+.tab-bar{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.tab{font-size:8pt;padding:6px 14px;border-radius:20px;cursor:pointer;
+  border:1.5px solid var(--border2);background:#fff;font-family:inherit;
+  transition:all 0.15s;font-weight:600;color:var(--ink4);}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab:hover:not(.active){border-color:var(--navy);color:var(--navy);}
+
+/* PIE CHART (CSS-only) */
+.pie-wrap{position:relative;width:160px;height:160px;margin:0 auto;}
+.pie-legend{margin-top:12px;}
+.pie-legend-item{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:8pt;}
+.pie-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+
+/* PRINT */
+@media print{
+  .back-btn,.tab-bar{display:none!important;}
+  .page-wrap{padding:12px;}
+}
+
+
+.b-orange { background: #FFF7ED; color: #EA580C; }
+
+
+/* ── Badge classes (hub + platform shared) ── */
+.bg{background:#D1FAE5;color:#065F46;}
+.ba{background:#FEF3C7;color:#78350F;}
+.br{background:#FEE2E2;color:#7F1D1D;}
+.bn{background:#EFF6FF;color:#1E3A5F;}
+.bt{background:#F0FDF9;color:#0F766E;}
+.bp{background:#F5F3FF;color:#7C3AED;}
+.bz{background:#F3F4F6;color:#6B7280;}
+.bo{background:#FFF7ED;color:#EA580C;}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:7pt;
+  font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;display:inline-block;}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <button class="back-btn" onclick="history.back()">← Back to Hub</button>
+      <div>
+        <div class="page-title">Consumption Monitoring</div>
+        <div class="page-sub">VER Intelligence Hub · Salesforce DET · FY Current</div>
+      </div>
+    </div>
+    <div style="font-size:7.5pt;color:var(--ink4);text-align:right;">
+      DET Portfolio Intelligence — Powered by VER<br>
+      <span id="last-updated" style="font-size:7pt;">Last updated: April 2026</span>
+    </div>
+  </div>
+
+
+  <!-- AUTHORITY CALLOUT -->
+  <div class="callout amber" style="margin-bottom:16px;">
+    <strong>Visibility & Monitoring — Not Advisory Scope.</strong>
+    VER provides active consumption monitoring for the items below to support
+    proactive planning across DET. Items marked <strong>Monitoring Only</strong>
+    are not within VER advisory scope — spend and usage decisions rest with the
+    respective Pillar Lead and team. Items marked <strong>VER Managed</strong>
+    are within VER engagement governance support scope.
+  </div>
+
+  <!-- RISK CLASSIFICATION LEGEND -->
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-title">Risk Level Classification</div>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:6px;">
+      <div style="display:flex;align-items:center;gap:6px;font-size:8.5pt;">
+        <span class="badge b-green">🟢 Nominal</span>
+        <span style="color:var(--ink4);">0–60% — Healthy headroom</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:8.5pt;">
+        <span class="badge b-amber">🟡 Monitor</span>
+        <span style="color:var(--ink4);">61–80% — Active monitoring, flag at QBR</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:8.5pt;">
+        <span class="badge b-orange">🟠 Elevated</span>
+        <span style="color:var(--ink4);">81–90% — Proactive conversation needed</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:8.5pt;">
+        <span class="badge b-red">🔴 Critical</span>
+        <span style="color:var(--ink4);">91–99% — Immediate action required</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:8.5pt;">
+        <span class="badge b-red">🚨 Exceeded</span>
+        <span style="color:var(--ink4);">100%+ — Cap breached, escalation required</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI TILES -->
+  <div class="stat-grid g4" style="margin-bottom:20px;">
+    <div class="stat teal">
+      <div class="stat-val" id="stat-total">—</div>
+      <div class="stat-lbl">Tools Monitored</div>
+      <div class="stat-note">Licenses &amp; subscriptions tracked</div>
+    </div>
+    <div class="stat red">
+      <div class="stat-val" id="stat-critical">—</div>
+      <div class="stat-lbl">Elevated or Critical</div>
+      <div class="stat-note">&gt;80% cap utilization</div>
+    </div>
+    <div class="stat amber">
+      <div class="stat-val" id="stat-approaching">—</div>
+      <div class="stat-lbl">Monitor Zone</div>
+      <div class="stat-note">61–80% cap utilization</div>
+    </div>
+    <div class="stat green">
+      <div class="stat-val" id="stat-managed">—</div>
+      <div class="stat-lbl">VER Managed</div>
+      <div class="stat-note">Within VER advisory scope</div>
+    </div>
+  </div>
+
+  <!-- FILTER TABS -->
+  <div class="tab-bar">
+    <button class="tab active" onclick="filterTable('all',this)">All Items</button>
+    <button class="tab" onclick="filterTable('critical',this)">🔴 Elevated / Critical</button>
+    <button class="tab" onclick="filterTable('growing',this)">↑ Growing Trend</button>
+    <button class="tab" onclick="filterTable('managed',this)">VER Managed</button>
+    <button class="tab" onclick="filterTable('monitoring',this)">Monitoring Only</button>
+    <span id="cons-count" style="font-size:8pt;color:var(--ink4);margin-left:auto;align-self:center;"></span>
+  </div>
+
+  <!-- CONSUMPTION TABLE -->
+  <div class="card" style="overflow-x:auto;padding:0;">
+    <table class="vp-table">
+      <thead>
+        <tr>
+          <th>Vendor</th>
+          <th>VER Role</th>
+          <th>Licensed Cap</th>
+          <th>Current Usage</th>
+          <th style="min-width:160px;">Utilization</th>
+          <th>Risk Level</th>
+          <th>Trend</th>
+          <th>Team Owner</th>
+          <th>Pillar</th>
+          <th style="min-width:200px;">Notes</th>
+        </tr>
+      </thead>
+      <tbody id="cons-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- FOOTER NOTE -->
+  <div class="callout teal" style="margin-top:14px;">
+    <strong>Data currency:</strong> Consumption data is updated monthly by the 5th business day.
+    Team owners are responsible for providing usage figures to VER for Monitoring Only items.
+    VER updates Managed item data directly from vendor portals and contract documentation.
+  </div>
+
+
+  <div style="margin-top:24px;padding-top:12px;border-top:1px solid var(--border);
+    font-size:7.5pt;color:var(--ink4);text-align:center;font-style:italic;">
+    VER Intelligence Hub · Vendor Engagement & Reliability · Salesforce DET ·
+    DET Portfolio Intelligence — Powered by VER · Confidential
+  </div>
+</div>
+<script>
+
+// ── CONSUMPTION DATA (from VER_DATA + expanded) ───────────────────
+const CONSUMPTION_ITEMS = [
+  {
+    id: 'gartner',
+    vendor: 'Gartner',
+    domain: 'gartner.com',
+    type: 'Seat License',
+    cap_label: '15 seats',
+    cap_num: 15,
+    usage_label: '13 active',
+    usage_num: 13,
+    pct: 87,
+    team_owner: 'Research & Advisory',
+    pillar: 'Multiple',
+    ver_role: 'Managed',
+    annual_value: '$1.2M',
+    renewal_date: '2026-09-30',
+    notes: 'VER manages this engagement. 2 seats available. Review seat count and utilization before renewal. Consider consolidation.',
+    trend: 'stable',
+    last_updated: 'Apr 2026',
+  },
+  {
+    id: 'conviva',
+    vendor: 'Conviva',
+    domain: 'conviva.com',
+    type: 'Data License',
+    cap_label: '500 TB/month',
+    cap_num: 500,
+    usage_label: '420 TB/month',
+    usage_num: 420,
+    pct: 84,
+    team_owner: 'Digital Marketing Technology',
+    pillar: 'Digital Marketing Technology',
+    ver_role: 'Monitoring',
+    annual_value: '$0.8M',
+    renewal_date: '2026-10-15',
+    notes: 'Monitoring only — not within VER advisory scope. Usage at 84% of contracted cap. Trend: growing +3% MoM. Proactive conversation with DMT team recommended before Q3.',
+    trend: 'growing',
+    last_updated: 'Apr 2026',
+  },
+  {
+    id: 'claude',
+    vendor: 'Claude (Anthropic)',
+    domain: 'anthropic.com',
+    type: 'API / Seat License',
+    cap_label: 'Enterprise plan',
+    cap_num: 100,
+    usage_label: 'Active usage',
+    usage_num: 40,
+    pct: 40,
+    team_owner: 'VER / DET',
+    pillar: 'Agentic Transformation',
+    ver_role: 'Monitoring',
+    annual_value: '$0.5M',
+    renewal_date: '2026-12-31',
+    notes: 'Monitoring only. VER Intelligence Hub primary use case. DET usage growing as Agentforce and AI enablement expands. Monitor token consumption monthly.',
+    trend: 'growing',
+    last_updated: 'Apr 2026',
+  },
+  {
+    id: 'newrelic',
+    vendor: 'New Relic',
+    domain: 'newrelic.com',
+    type: 'Data Ingest License',
+    cap_label: 'Contracted ingest limit',
+    cap_num: 100,
+    usage_label: 'Within limits',
+    usage_num: 55,
+    pct: 55,
+    team_owner: 'Engineering — Observability',
+    pillar: 'Engineering Development & Delivery',
+    ver_role: 'Monitoring',
+    annual_value: '$0.6M',
+    renewal_date: '2027-02-01',
+    notes: 'Monitoring only. Observability platform nominal. No concerns. Renewal Feb 2027 — no action needed at this time.',
+    trend: 'stable',
+    last_updated: 'Apr 2026',
+  },
+  {
+    id: 'sentry',
+    vendor: 'Sentry IO',
+    domain: 'sentry.io',
+    type: 'Error Volume License',
+    cap_label: 'Enterprise plan',
+    cap_num: 100,
+    usage_label: 'Nominal',
+    usage_num: 45,
+    pct: 45,
+    team_owner: 'Engineering — Platform',
+    pillar: 'Engineering Development & Delivery',
+    ver_role: 'Monitoring',
+    annual_value: '$0.3M',
+    renewal_date: '2026-07-31',
+    notes: 'Monitoring only. Error monitoring stable. Renewal Jul 2026 — coordinate with Engineering team.',
+    trend: 'stable',
+    last_updated: 'Apr 2026',
+  },
+  {
+    id: 'aws-env',
+    vendor: 'AWS Environment',
+    domain: 'aws.amazon.com',
+    type: 'Committed Spend',
+    cap_label: 'EDP committed threshold',
+    cap_num: 100,
+    usage_label: 'Within EDP envelope',
+    usage_num: 72,
+    pct: 72,
+    team_owner: 'Infrastructure — Engineering',
+    pillar: 'Delivery Assurance & Operations',
+    ver_role: 'Monitoring',
+    annual_value: '$17.2M',
+    renewal_date: '2027-03-01',
+    notes: 'Monitoring only. EDP committed spend within envelope. Usage nominal. VER monitors against committed spend threshold quarterly.',
+    trend: 'stable',
+    last_updated: 'Apr 2026',
+  },
+  {
+    id: 'okta',
+    vendor: 'Okta',
+    domain: 'okta.com',
+    type: 'User License',
+    cap_label: 'Enterprise seat license',
+    cap_num: 100,
+    usage_label: 'Active provisioning',
+    usage_num: 78,
+    pct: 78,
+    team_owner: 'IT — Identity & Access',
+    pillar: 'IT',
+    ver_role: 'Monitoring',
+    annual_value: '$0.8M',
+    renewal_date: '2026-11-30',
+    notes: 'Monitoring only. FY27 renewal $1.27M approved in MFT. User provisioning at 78% of licensed capacity. Renewal Nov 2026.',
+    trend: 'stable',
+    last_updated: 'Apr 2026',
+  },
+  {
+    id: 'snowflake',
+    vendor: 'Snowflake',
+    domain: 'snowflake.com',
+    type: 'Compute / Storage',
+    cap_label: 'Contracted capacity',
+    cap_num: 100,
+    usage_label: 'Active compute',
+    usage_num: 61,
+    pct: 61,
+    team_owner: 'Data Solutions',
+    pillar: 'Data Solutions',
+    ver_role: 'Monitoring',
+    annual_value: '$1.1M',
+    renewal_date: '2026-08-15',
+    notes: 'Monitoring only. Usage trending upward with Data Solutions growth. Renewal Aug 2026 — coordinate with Data team on capacity planning.',
+    trend: 'growing',
+    last_updated: 'Apr 2026',
+  },
+];
+
+// ── RISK CLASSIFICATION ────────────────────────────────────────────
+function getRisk(pct) {
+  if (!pct || pct === '—') return { level: 'Unknown', cls: 'b-gray', dot: '#9CA3AF', barColor: '#9CA3AF', label: 'Unknown' };
+  if (pct <= 60) return { level: 'Nominal',   cls: 'b-green',  dot: '#059669', barColor: '#059669', label: '🟢 Nominal' };
+  if (pct <= 80) return { level: 'Monitor',   cls: 'b-amber',  dot: '#D97706', barColor: '#D97706', label: '🟡 Monitor' };
+  if (pct <= 90) return { level: 'Elevated',  cls: 'b-orange', dot: '#EA580C', barColor: '#EA580C', label: '🟠 Elevated' };
+  if (pct < 100) return { level: 'Critical',  cls: 'b-red',    dot: '#DC2626', barColor: '#DC2626', label: '🔴 Critical' };
+  return              { level: 'Exceeded',  cls: 'b-red',    dot: '#7F1D1D', barColor: '#7F1D1D', label: '🚨 Exceeded' };
+}
+
+const VER_ROLE_META = {
+  Managed:    { cls: 'b-teal',   label: 'VER Managed',      note: 'VER holds advisory scope for this engagement' },
+  Monitoring: { cls: 'b-gray',   label: 'Monitoring Only',  note: 'Visibility only — not within VER advisory scope' },
+};
+
+const TREND_META = {
+  growing: { icon: '↑', color: '#DC2626', label: 'Growing' },
+  stable:  { icon: '→', color: '#6B7280', label: 'Stable' },
+  declining:{ icon: '↓', color: '#059669', label: 'Declining' },
+};
+
+// ── RENDER ────────────────────────────────────────────────────────
+let activeFilter = 'all';
+
+function init() {
+  renderStats();
+  renderTable('all');
+}
+
+function renderStats() {
+  const critical = CONSUMPTION_ITEMS.filter(i => i.pct >= 81).length;
+  const approaching = CONSUMPTION_ITEMS.filter(i => i.pct >= 61 && i.pct <= 80).length;
+  const managed = CONSUMPTION_ITEMS.filter(i => i.ver_role === 'Managed').length;
+  const monitoring = CONSUMPTION_ITEMS.filter(i => i.ver_role === 'Monitoring').length;
+  document.getElementById('stat-total').textContent = CONSUMPTION_ITEMS.length;
+  document.getElementById('stat-critical').textContent = critical;
+  document.getElementById('stat-approaching').textContent = approaching;
+  document.getElementById('stat-managed').textContent = managed;
+}
+
+function filterTable(filter, el) {
+  activeFilter = filter;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderTable(filter);
+}
+
+function renderTable(filter) {
+  let items = CONSUMPTION_ITEMS;
+  if (filter === 'critical')   items = items.filter(i => i.pct >= 81);
+  if (filter === 'monitoring') items = items.filter(i => i.ver_role === 'Monitoring');
+  if (filter === 'managed')    items = items.filter(i => i.ver_role === 'Managed');
+  if (filter === 'growing')    items = items.filter(i => i.trend === 'growing');
+
+  document.getElementById('cons-count').textContent = items.length + ' items';
+
+  const tbody = document.getElementById('cons-tbody');
+  tbody.innerHTML = items.map(item => {
+    const risk = getRisk(item.pct);
+    const role = VER_ROLE_META[item.ver_role] || VER_ROLE_META.Monitoring;
+    const trend = TREND_META[item.trend] || TREND_META.stable;
+
+    const pctDisplay = item.pct ? item.pct + '%' : '—';
+    const barWidth = item.pct || 0;
+
+    return `<tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:28px;height:28px;border-radius:6px;background:var(--gray2);
+            display:flex;align-items:center;justify-content:center;font-size:14pt;flex-shrink:0;overflow:hidden;">
+            <img src="https://logo.clearbit.com/${item.domain}" width="24" height="24"
+              style="object-fit:contain;border-radius:4px;"
+              onerror="this.parentElement.textContent='${item.vendor[0]}'">
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:9pt;">${item.vendor}</div>
+            <div style="font-size:7.5pt;color:var(--ink4);">${item.type}</div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <span class="badge ${role.cls}" title="${role.note}">${role.label}</span>
+      </td>
+      <td style="font-size:8.5pt;">${item.cap_label}</td>
+      <td style="font-size:8.5pt;font-weight:600;">${item.usage_label}</td>
+      <td style="min-width:120px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="prog-wrap" style="flex:1;height:8px;">
+            <div class="prog-bar" style="width:${barWidth}%;background:${risk.barColor};"></div>
+          </div>
+          <span style="font-size:8.5pt;font-weight:700;color:${risk.barColor};white-space:nowrap;">${pctDisplay}</span>
+        </div>
+      </td>
+      <td><span class="badge ${risk.cls}">${risk.label}</span></td>
+      <td style="font-size:8pt;color:${trend.color};font-weight:700;">${trend.icon} ${trend.label}</td>
+      <td style="font-size:8pt;">${item.team_owner}</td>
+      <td style="font-size:8pt;color:var(--ink4);">${item.pillar}</td>
+      <td style="font-size:8pt;color:var(--ink4);max-width:200px;">
+        <div style="line-height:1.5;">${item.notes}</div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+document.addEventListener('DOMContentLoaded', init);
+
+</script>
+</body>
+</html>
