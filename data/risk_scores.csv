@@ -1,0 +1,13 @@
+id,vendor_id,vendor_name,score_date,concentration_risk,financial_risk,delivery_risk,compliance_risk,overall_score,notes
+R001,V001,NTT Data,2026-04-01,85,15,20,10,40,Initial FY27 baseline
+R002,V002,Cognizant,2026-04-01,60,20,15,12,31,Initial FY27 baseline
+R003,V003,Tech Mahindra,2026-04-01,50,30,55,40,46,Initial FY27 baseline
+R004,V004,Workday,2026-04-01,90,10,10,8,38,Initial FY27 baseline
+R005,V005,AWS,2026-04-01,80,8,10,12,34,Initial FY27 baseline
+R006,V006,IBM,2026-04-01,55,35,40,30,43,Initial FY27 baseline
+R007,V007,Google,2026-04-01,65,10,12,10,30,Initial FY27 baseline
+R008,V008,Deloitte,2026-04-01,40,25,30,20,31,Initial FY27 baseline
+R009,V009,BCG,2026-04-01,30,40,70,50,47,Initial FY27 baseline
+R010,V010,Gartner,2026-04-01,15,20,18,15,17,Initial FY27 baseline
+R011,V011,Conviva,2026-04-01,20,22,25,18,22,Initial FY27 baseline
+R012,V012,New Relic,2026-04-01,15,15,12,10,13,Initial FY27 baseline

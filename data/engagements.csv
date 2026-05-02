@@ -1,0 +1,9 @@
+id,vendor_id,vendor_name,engagement_name,sow_reference,engagement_type,start_date,end_date,annual_value,total_contract_value,status,pillar,notice_period,region,notes
+E001,V001,NTT Data,AMS — Application Maintenance Services,P116793 (Bridge),AMS,2023-09-01,2028-09-01,$22.8M,$33M+,Active,Multiple,180 days,AMER,Decentralization to sub-pillar contracts underway.
+E002,V001,NTT Data,AD — Application Development (Restructured),24 individual POs,AD,2023-09-01,2026-08-12,$10.0M,$10.0M,Active,Multiple,30 days,AMER,Restructured Apr 2026. ~140 resources. 24 individual POs.
+E003,V002,Cognizant,Workday ADAMS — Enterprise Systems,P50553,AMS,2023-11-15,2027-02-14,$2.43M,$7.70M,Active,SF on SF,Per GSA,AMER,Year 3 of 3. Renewal decision needed before Feb 2027.
+E004,V002,Cognizant,Workday ADAMS — Financials,P106376,AMS,2025-02-01,2027-02-14,$3.83M,$6.49M,Active,SF on SF,Per GSA,AMER,Year 2 of 2. All SLAs meeting targets.
+E005,V003,Tech Mahindra,Techforce — Service Desk SOW,P91357,Managed Services,2026-05-01,2027-04-30,$1.08M,$1.08M,Active,Tech Services,90 days,Global,24x7 Phone Chat Basecamp. 30667 tickets/mo baseline.
+E006,V003,Tech Mahindra,Techforce — On-Site Services SOW,On-Site SOW,Managed Services,2026-05-01,2027-04-30,$5.45M,$5.45M,Active,Tech Services,90 days,Global,Techbars Deskside AV FedRAMP New Hire. $1M contingency.
+E007,V004,Workday,Enterprise License — HCM & Financials,424961,License / SaaS,2021-12-01,2026-11-30,$23.7M,$118.5M,Expiring Soon,SF on SF,90 days,Global,Renewal negotiations due Q3 FY27.
+E008,V005,AWS,Cloud Infrastructure — Committed Spend,EDP Contract,Managed Services,2024-03-01,2027-03-01,$17.2M,$51.6M,Active,Eng Engineering,90 days,Global,Enterprise Discount Program.
