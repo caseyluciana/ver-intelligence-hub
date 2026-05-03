@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Executive Snapshot &middot; VER Intelligence Hub</title>
+<style>
+:root{
+  --navy:#0F1E3C;--navy2:#1E3A5F;--navy3:#EFF6FF;
+  --teal:#0D9488;--teal2:#0F766E;--teal3:#F0FDF9;
+  --green:#059669;--green2:#065F46;--green3:#D1FAE5;
+  --amber:#D97706;--amber2:#78350F;--amber3:#FEF3C7;
+  --red:#DC2626;--red2:#7F1D1D;--red3:#FEE2E2;
+  --purple:#7C3AED;--purple3:#F5F3FF;
+  --orange:#EA580C;--orange3:#FFF7ED;
+  --ink:#111827;--ink2:#1F2937;--ink3:#374151;--ink4:#6B7280;
+  --gray:#F9FAFB;--gray2:#F3F4F6;--gray3:#E5E7EB;
+  --border:#E5E7EB;--border2:#D1D5DB;--white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gray);color:var(--ink2);font-size:9pt;}
+.page-wrap{max-width:1100px;margin:0 auto;padding:24px 28px;}
+
+/* TOP BAR */
+.top-bar{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.top-bar-left{display:flex;align-items:center;gap:12px;}
+.back-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;
+  border-radius:6px;background:var(--gray2);border:1px solid var(--border2);
+  color:var(--ink3);font-size:8pt;font-weight:600;text-decoration:none;cursor:pointer;
+  font-family:inherit;transition:all 0.15s;}
+.back-btn:hover{background:var(--navy);color:#fff;}
+.page-title{font-size:15pt;font-weight:900;color:var(--navy);}
+.page-sub{font-size:8.5pt;color:var(--ink4);margin-top:2px;}
+
+/* CARDS */
+.card{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.card-title{font-size:9.5pt;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.card-sub{font-size:8pt;color:var(--ink4);margin-bottom:12px;}
+
+/* STAT TILES */
+.stat-grid{display:grid;gap:12px;margin-bottom:20px;}
+.stat-grid.g4{grid-template-columns:repeat(4,1fr);}
+.stat-grid.g3{grid-template-columns:repeat(3,1fr);}
+.stat{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;border-top:3px solid var(--navy);}
+.stat.teal{border-top-color:var(--teal);}
+.stat.green{border-top-color:var(--green);}
+.stat.amber{border-top-color:var(--amber);}
+.stat.red{border-top-color:var(--red);}
+.stat.purple{border-top-color:var(--purple);}
+.stat-val{font-size:20pt;font-weight:900;color:var(--navy);line-height:1;margin-bottom:3px;}
+.stat.teal .stat-val{color:var(--teal);}
+.stat.green .stat-val{color:var(--green);}
+.stat.amber .stat-val{color:var(--amber);}
+.stat.red .stat-val{color:var(--red);}
+.stat.purple .stat-val{color:var(--purple);}
+.stat-lbl{font-size:7.5pt;font-weight:600;color:var(--ink4);text-transform:uppercase;letter-spacing:0.06em;}
+.stat-note{font-size:7pt;color:var(--ink4);margin-top:4px;}
+
+/* PROGRESS BAR */
+.prog-wrap{background:var(--gray2);border-radius:4px;height:10px;margin:4px 0;overflow:hidden;}
+.prog-bar{height:10px;border-radius:4px;transition:width 0.8s ease;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:7pt;font-weight:700;
+  padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.badge-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.b-green{background:var(--green3);color:var(--green2);}
+.b-amber{background:var(--amber3);color:var(--amber2);}
+.b-red{background:var(--red3);color:var(--red2);}
+.b-navy{background:var(--navy3);color:var(--navy2);}
+.b-teal{background:var(--teal3);color:var(--teal2);}
+.b-purple{background:var(--purple3);color:var(--purple);}
+.b-gray{background:var(--gray2);color:var(--ink4);}
+.b-orange{background:var(--orange3);color:var(--orange);}
+
+/* TABLE */
+.vp-table{width:100%;border-collapse:collapse;font-size:8.5pt;}
+.vp-table th{background:var(--navy);color:#fff;padding:8px 12px;text-align:left;
+  font-size:7.5pt;font-weight:700;letter-spacing:0.03em;position:sticky;top:0;}
+.vp-table td{padding:9px 12px;border-bottom:1px solid var(--gray2);vertical-align:middle;}
+.vp-table tr:hover td{background:var(--gray);}
+.vp-table tr:last-child td{border-bottom:none;}
+
+/* CALLOUT */
+.callout{border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:16px;
+  border-left:4px solid;font-size:8.5pt;line-height:1.6;}
+.callout.info{background:var(--navy3);border-color:var(--navy2);color:var(--navy2);}
+.callout.teal{background:var(--teal3);border-color:var(--teal);color:var(--green2);}
+.callout.amber{background:var(--amber3);border-color:var(--amber);color:var(--amber2);}
+
+/* SECTION HEADER */
+.section-hdr{font-size:10pt;font-weight:800;color:var(--navy);margin:20px 0 10px;
+  display:flex;align-items:center;gap:8px;padding-bottom:8px;
+  border-bottom:2px solid var(--gray3);}
+
+/* PILL TABS */
+.tab-bar{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.tab{font-size:8pt;padding:6px 14px;border-radius:20px;cursor:pointer;
+  border:1.5px solid var(--border2);background:#fff;font-family:inherit;
+  transition:all 0.15s;font-weight:600;color:var(--ink4);}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab:hover:not(.active){border-color:var(--navy);color:var(--navy);}
+
+/* PIE CHART (CSS-only) */
+.pie-wrap{position:relative;width:160px;height:160px;margin:0 auto;}
+.pie-legend{margin-top:12px;}
+.pie-legend-item{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:8pt;}
+.pie-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+
+/* PRINT */
+@media print{
+  .back-btn,.tab-bar{display:none!important;}
+  .page-wrap{padding:12px;}
+}
+
+
+
+/* ── Badge classes (hub + platform shared) ── */
+.bg{background:#D1FAE5;color:#065F46;}
+.ba{background:#FEF3C7;color:#78350F;}
+.br{background:#FEE2E2;color:#7F1D1D;}
+.bn{background:#EFF6FF;color:#1E3A5F;}
+.bt{background:#F0FDF9;color:#0F766E;}
+.bp{background:#F5F3FF;color:#7C3AED;}
+.bz{background:#F3F4F6;color:#6B7280;}
+.bo{background:#FFF7ED;color:#EA580C;}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:7pt;
+  font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;display:inline-block;}
+
+/* ── Exec page specific ── */
+.page-wrap{max-width:1100px;margin:0 auto;padding:24px 28px;}
+.section-h{font-size:10pt;font-weight:800;color:var(--navy);margin:20px 0 10px;
+  display:flex;align-items:center;gap:8px;padding-bottom:8px;
+  border-bottom:2px solid var(--gray3);}
+.eng-card{background:#fff;border:1px solid var(--border);border-radius:10px;
+  margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  transition:box-shadow 0.15s;}
+.eng-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.10);}
+.eng-header{padding:12px 16px;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;cursor:pointer;}
+.eng-body-wrap{overflow:hidden;transition:max-height 0.35s ease;}
+.eng-body-wrap.collapsed{max-height:0!important;}
+.eng-toggle-btn{background:none;border:none;cursor:pointer;font-size:13pt;
+  color:var(--ink4);padding:0 4px;transition:transform 0.25s;line-height:1;flex-shrink:0;}
+.eng-toggle-btn.open{transform:rotate(180deg);}
+.blocker-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;
+  background:#fff;border:1px solid var(--border);border-radius:8px;margin-bottom:8px;}
+.prog{background:var(--gray2);border-radius:4px;height:8px;overflow:hidden;}
+.prog-bar{height:8px;border-radius:4px;}
+.footer{margin-top:24px;padding-top:12px;border-top:1px solid var(--border);
+  font-size:7.5pt;color:var(--ink4);text-align:center;font-style:italic;}
+@media print{
+  .back-btn,.print-btn{display:none!important;}
+  .eng-body-wrap.collapsed{max-height:none!important;}
+  body{background:#fff!important;}
+}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <button class="back-btn" onclick="history.back()">&#8592; Back to Hub</button>
+      <div>
+        <div class="page-title">Executive Snapshot &mdash; FY27</div>
+        <div class="page-sub">DET Portfolio Intelligence &middot; VER Intelligence Hub &middot; Salesforce DET</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <button onclick="window.print()"
+        style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;
+        border-radius:6px;background:var(--gray2);border:1px solid var(--border2);
+        color:var(--ink3);font-size:8pt;font-weight:600;cursor:pointer;font-family:inherit;
+        transition:all 0.15s;"
+        onmouseover="this.style.background='var(--navy)';this.style.color='#fff'"
+        onmouseout="this.style.background='var(--gray2)';this.style.color='var(--ink3)'">Print</button>
+      <div style="text-align:right;font-size:7.5pt;color:var(--ink4);">
+        DET Portfolio Intelligence &mdash; Powered by VER<br>
+        <span style="font-size:7pt;">Updated: May 2026 &middot; Salesforce DET &middot; Confidential</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PORTFOLIO KPIs ═══ -->
+  <div class="section-h">&#127775; Portfolio Overview</div>
+  <div class="g4" style="margin-bottom:20px;">
+    <div class="stat">
+      <div class="stat-val">$295M</div>
+      <div class="stat-lbl">Total Portfolio</div>
+      <div class="stat-note">Active FY27 advisory scope</div>
+    </div>
+    <div class="stat teal">
+      <div class="stat-val">$155M</div>
+      <div class="stat-lbl">Software &amp; SaaS</div>
+      <div class="stat-note">52.5% of total</div>
+    </div>
+    <div class="stat" style="border-top-color:var(--purple);">
+      <div class="stat-val" style="color:var(--purple);">$87M</div>
+      <div class="stat-lbl">Contingent Workforce</div>
+      <div class="stat-note">29.5% of total</div>
+    </div>
+    <div class="stat green">
+      <div class="stat-val">$10.0M</div>
+      <div class="stat-lbl">Savings Realized</div>
+      <div class="stat-note">NTT AD restructure &middot; FY27</div>
+    </div>
+  </div>
+
+  <!-- ═══ KEY ENGAGEMENTS ═══ -->
+  <div class="section-h">&#128203; Key Engagement Insights
+    <span style="font-size:7.5pt;font-weight:400;color:var(--ink4);margin-left:8px;">
+      SOW-visible engagements &middot; Click to expand</span>
+  </div>
+
+  <!-- NTT Data AMS -->
+  <div class="eng-card" style="border-left:4px solid var(--navy);">
+    <div class="eng-header" onclick="if(window.toggleCard)window.toggleCard(this.querySelector('.eng-toggle-btn'))">
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);">NTT Data &mdash; AMS Application Maintenance Services</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="badge b-green">Active</span>
+          <span class="badge b-navy">Multiple Pillars</span>
+          <span class="badge b-gray">Expires Sep 2028</span>
+          <span class="badge b-amber">GSA Re-assignment In Progress</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;margin-right:8px;">
+        <div style="font-size:16pt;font-weight:900;color:var(--navy);">$22.8M</div>
+        <div style="font-size:7.5pt;color:var(--ink4);">annual value</div>
+      </div>
+      <button class="eng-toggle-btn" onclick="if(window.toggleCard)window.toggleCard(this)" title="Expand">&#8964;</button>
+    </div>
+    <div class="eng-body-wrap collapsed" style="max-height:0;">
+      <div style="padding:14px 16px;border-top:1px solid var(--gray2);
+        display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:8.5pt;">
+        <div>
+          <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);text-transform:uppercase;
+            letter-spacing:0.05em;margin-bottom:6px;">Contract</div>
+          <div style="line-height:1.8;">
+            <div><span style="color:var(--ink4);">TCV:</span> <strong>$33M+</strong></div>
+            <div><span style="color:var(--ink4);">Term:</span> <strong>Sep 2023 &ndash; Sep 2028</strong></div>
+            <div><span style="color:var(--ink4);">Notice:</span> <strong>180 days</strong></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);text-transform:uppercase;
+            letter-spacing:0.05em;margin-bottom:6px;">Scope</div>
+          <div style="color:var(--ink3);line-height:1.6;">L1/L2/L3 application maintenance across DET pillars.
+            5-year bridge contract. Decentralization to sub-pillar contracts underway.</div>
+        </div>
+        <div>
+          <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);text-transform:uppercase;
+            letter-spacing:0.05em;margin-bottom:6px;">VER Notes</div>
+          <div style="color:var(--ink3);line-height:1.6;">Budget owner: Delivery Assurance &amp; Operations.
+            Mission-critical — no disruption during GSA transition. Renewal decision by Q4 FY27.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NTT Data AD -->
+  <div class="eng-card" style="border-left:4px solid var(--teal);">
+    <div class="eng-header" onclick="if(window.toggleCard)window.toggleCard(this.querySelector('.eng-toggle-btn'))">
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);">NTT Data &mdash; AD Application Development (Restructured)</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="badge b-green">Active</span>
+          <span class="badge b-navy">Multiple Pillars</span>
+          <span class="badge" style="background:var(--red3);color:var(--red2);">Expires Aug 2026 &mdash; 102 days</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;margin-right:8px;">
+        <div style="font-size:16pt;font-weight:900;color:var(--teal);">$10.0M</div>
+        <div style="font-size:7.5pt;color:var(--ink4);">annual value &middot; $9.0M saved</div>
+      </div>
+      <button class="eng-toggle-btn" onclick="if(window.toggleCard)window.toggleCard(this)" title="Expand">&#8964;</button>
+    </div>
+    <div class="eng-body-wrap collapsed" style="max-height:0;">
+      <div style="padding:14px 16px;border-top:1px solid var(--gray2);
+        display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;font-size:8.5pt;">
+        <div>
+          <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);text-transform:uppercase;
+            letter-spacing:0.05em;margin-bottom:6px;">Contract</div>
+          <div style="line-height:1.8;">
+            <div><span style="color:var(--ink4);">Structure:</span> <strong>24 individual POs</strong></div>
+            <div><span style="color:var(--ink4);">Expires:</span> <strong style="color:var(--red);">Aug 12, 2026</strong></div>
+            <div><span style="color:var(--ink4);">Notice:</span> <strong>30 days</strong></div>
+            <div><span style="color:var(--ink4);">Resources:</span> <strong>~140</strong></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);text-transform:uppercase;
+            letter-spacing:0.05em;margin-bottom:6px;">Savings</div>
+          <div style="color:var(--green2);font-weight:700;font-size:12pt;">$9.0M</div>
+          <div style="color:var(--ink3);font-size:8pt;line-height:1.5;">Restructured Apr 2026.
+            Reduced from legacy AMS contract rate to individual PO structure.</div>
+        </div>
+        <div>
+          <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);text-transform:uppercase;
+            letter-spacing:0.05em;margin-bottom:6px;">VER Notes</div>
+          <div style="color:var(--ink3);line-height:1.6;">Renewal decision required before
+            Aug 2026. 30-day notice window is tight. VER advising on renewal structure.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cognizant ADAMS ES -->
+  <div class="eng-card" style="border-left:4px solid var(--teal);">
+    <div class="eng-header" onclick="if(window.toggleCard)window.toggleCard(this.querySelector('.eng-toggle-btn'))">
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);">Cognizant &mdash; Workday ADAMS Enterprise Systems</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="badge b-green">Active</span>
+          <span class="badge b-teal">SF on SF</span>
+          <span class="badge b-gray">Year 3 of 3</span>
+          <span class="badge b-amber">Renewal Decision by FY28</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;margin-right:8px;">
+        <div style="font-size:16pt;font-weight:900;color:var(--teal);">$2.43M</div>
+        <div style="font-size:7.5pt;color:var(--ink4);">annual value</div>
+      </div>
+      <button class="eng-toggle-btn" onclick="if(window.toggleCard)window.toggleCard(this)" title="Expand">&#8964;</button>
+    </div>
+    <div class="eng-body-wrap collapsed" style="max-height:0;">
+      <div style="padding:14px 16px;border-top:1px solid var(--gray2);font-size:8.5pt;color:var(--ink3);">
+        Year 3 of 3 &middot; Expires Feb 14, 2027 &middot; Per GSA notice &middot; All SLAs meeting targets.
+        Renewal decision needed before FY28. Workday ADAMS L2 + L3 support scope.
+      </div>
+    </div>
+  </div>
+
+  <!-- Cognizant ADAMS FINS -->
+  <div class="eng-card" style="border-left:4px solid var(--teal);">
+    <div class="eng-header" onclick="if(window.toggleCard)window.toggleCard(this.querySelector('.eng-toggle-btn'))">
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);">Cognizant &mdash; Workday ADAMS Financials</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="badge b-green">Active</span>
+          <span class="badge b-teal">SF on SF</span>
+          <span class="badge b-gray">Year 2 of 2</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;margin-right:8px;">
+        <div style="font-size:16pt;font-weight:900;color:var(--teal);">$3.83M</div>
+        <div style="font-size:7.5pt;color:var(--ink4);">annual value</div>
+      </div>
+      <button class="eng-toggle-btn" onclick="if(window.toggleCard)window.toggleCard(this)" title="Expand">&#8964;</button>
+    </div>
+    <div class="eng-body-wrap collapsed" style="max-height:0;">
+      <div style="padding:14px 16px;border-top:1px solid var(--gray2);font-size:8.5pt;color:var(--ink3);">
+        Year 2 of 2 &middot; Expires Feb 14, 2027 &middot; Per GSA notice &middot;
+        L2 + L3 AMS support performing to scope. Renewal decision before FY28.
+      </div>
+    </div>
+  </div>
+
+  <!-- Workday -->
+  <div class="eng-card" style="border-left:4px solid var(--red);">
+    <div class="eng-header" onclick="if(window.toggleCard)window.toggleCard(this.querySelector('.eng-toggle-btn'))">
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);">Workday &mdash; Enterprise License HCM &amp; Financials</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="badge b-green">Active</span>
+          <span class="badge b-teal">SF on SF</span>
+          <span class="badge" style="background:var(--red3);color:var(--red2);">Renews Nov 2026 &mdash; Critical</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;margin-right:8px;">
+        <div style="font-size:16pt;font-weight:900;color:var(--red);">$23.7M</div>
+        <div style="font-size:7.5pt;color:var(--ink4);">annual value &middot; largest engagement</div>
+      </div>
+      <button class="eng-toggle-btn" onclick="if(window.toggleCard)window.toggleCard(this)" title="Expand">&#8964;</button>
+    </div>
+    <div class="eng-body-wrap collapsed" style="max-height:0;">
+      <div style="padding:14px 16px;border-top:1px solid var(--gray2);font-size:8.5pt;color:var(--ink3);">
+        Critical renewal Nov 30, 2026 &middot; 90-day notice &middot; Rate benchmarking in progress.
+        Largest SF on Salesforce spend item. VER monitoring negotiation timeline closely.
+        Renewal strategy to Pillar Lead and Procurement by Q2 FY27.
+      </div>
+    </div>
+  </div>
+
+  <!-- Tech Mahindra -->
+  <div class="eng-card" style="border-left:4px solid var(--navy);">
+    <div class="eng-header" onclick="if(window.toggleCard)window.toggleCard(this.querySelector('.eng-toggle-btn'))">
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);">Tech Mahindra &mdash; Techforce (Service Desk &amp; On-Site)</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="badge b-green">Active</span>
+          <span class="badge b-navy">IT</span>
+          <span class="badge b-gray">Expires Apr 2027</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;margin-right:8px;">
+        <div style="font-size:16pt;font-weight:900;color:var(--navy);">$6.5M</div>
+        <div style="font-size:7.5pt;color:var(--ink4);">combined annual value</div>
+      </div>
+      <button class="eng-toggle-btn" onclick="if(window.toggleCard)window.toggleCard(this)" title="Expand">&#8964;</button>
+    </div>
+    <div class="eng-body-wrap collapsed" style="max-height:0;">
+      <div style="padding:14px 16px;border-top:1px solid var(--gray2);font-size:8.5pt;color:var(--ink3);">
+        Service Desk $1.08M + On-Site Services $5.45M &middot; Both expire Apr 30, 2027 &middot;
+        90-day notice required &middot; 24x7 managed service &middot; ~30K tickets/mo.
+        VER monitoring via SOW data.
+      </div>
+    </div>
+  </div>
+
+  <!-- AWS -->
+  <div class="eng-card" style="border-left:4px solid var(--teal);">
+    <div class="eng-header" onclick="if(window.toggleCard)window.toggleCard(this.querySelector('.eng-toggle-btn'))">
+      <div style="flex:1;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <div style="font-size:9pt;font-weight:700;color:var(--navy);">AWS &mdash; Cloud Infrastructure Committed Spend (EDP)</div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="badge b-green">Active</span>
+          <span class="badge b-teal">Engineering Dev &amp; Delivery</span>
+          <span class="badge b-gray">Expires Mar 2027</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;margin-right:8px;">
+        <div style="font-size:16pt;font-weight:900;color:var(--teal);">$17.2M</div>
+        <div style="font-size:7.5pt;color:var(--ink4);">committed annual spend</div>
+      </div>
+      <button class="eng-toggle-btn" onclick="if(window.toggleCard)window.toggleCard(this)" title="Expand">&#8964;</button>
+    </div>
+    <div class="eng-body-wrap collapsed" style="max-height:0;">
+      <div style="padding:14px 16px;border-top:1px solid var(--gray2);font-size:8.5pt;color:var(--ink3);">
+        Enterprise Discount Program (EDP) committed spend &middot; Expires Mar 1, 2027 &middot;
+        90-day notice &middot; Usage within EDP envelope on track.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SOW & MFT SUMMARY TILES ═══ -->
+  <div class="section-h">&#128202; SOW &amp; MFT Intelligence
+    <span style="font-size:7.5pt;font-weight:400;color:var(--ink4);margin-left:8px;">
+      Click below to view full detail pages</span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;">
+
+    <!-- SOW summary -->
+    <div class="card" style="padding:16px;cursor:pointer;transition:box-shadow 0.15s;"
+      onclick="window.location.href='page_sow.html'"
+      onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.10)'"
+      onmouseout="this.style.boxShadow='none'">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <div style="font-size:22pt;">&#128203;</div>
+        <div>
+          <div style="font-size:9.5pt;font-weight:800;color:var(--navy);">SOW &amp; PO Expiry Tracker</div>
+          <div style="font-size:8pt;color:var(--ink4);">885 POs &middot; $177.8M &middot; FY27</div>
+        </div>
+        <div style="margin-left:auto;font-size:8.5pt;color:var(--teal);font-weight:700;">
+          View full &#8594;
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+        <div style="text-align:center;padding:8px;background:var(--red3);border-radius:6px;">
+          <div style="font-size:14pt;font-weight:900;color:var(--red);">356</div>
+          <div style="font-size:7pt;color:var(--red2);font-weight:700;">Q1</div>
+          <div style="font-size:7pt;color:var(--ink4);">$27.0M</div>
+        </div>
+        <div style="text-align:center;padding:8px;background:var(--amber3);border-radius:6px;">
+          <div style="font-size:14pt;font-weight:900;color:var(--amber);">174</div>
+          <div style="font-size:7pt;color:var(--amber2);font-weight:700;">Q2</div>
+          <div style="font-size:7pt;color:var(--ink4);">$40.8M</div>
+        </div>
+        <div style="text-align:center;padding:8px;background:var(--green3);border-radius:6px;">
+          <div style="font-size:14pt;font-weight:900;color:var(--green);">134</div>
+          <div style="font-size:7pt;color:var(--green2);font-weight:700;">Q3</div>
+          <div style="font-size:7pt;color:var(--ink4);">$27.5M</div>
+        </div>
+        <div style="text-align:center;padding:8px;background:var(--navy3);border-radius:6px;">
+          <div style="font-size:14pt;font-weight:900;color:var(--navy);">221</div>
+          <div style="font-size:7pt;color:var(--navy2);font-weight:700;">Q4</div>
+          <div style="font-size:7pt;color:var(--ink4);">$82.5M</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MFT summary -->
+    <div class="card" style="padding:16px;cursor:pointer;transition:box-shadow 0.15s;"
+      onclick="window.location.href='page_mft.html'"
+      onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.10)'"
+      onmouseout="this.style.boxShadow='none'">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <div style="font-size:22pt;">&#128200;</div>
+        <div>
+          <div style="font-size:9.5pt;font-weight:800;color:var(--navy);">MFT Forecasted Spend</div>
+          <div style="font-size:8pt;color:var(--ink4);">$94.8M &middot; 373 items &middot; FY27</div>
+        </div>
+        <div style="margin-left:auto;font-size:8.5pt;color:var(--teal);font-weight:700;">
+          View full &#8594;
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+        <div style="padding:8px;background:var(--green3);border-radius:6px;">
+          <div style="font-size:12pt;font-weight:900;color:var(--green);">$9.5M</div>
+          <div style="font-size:7.5pt;color:var(--green2);font-weight:700;">Approved (45 items)</div>
+        </div>
+        <div style="padding:8px;background:var(--amber3);border-radius:6px;">
+          <div style="font-size:12pt;font-weight:900;color:var(--amber);">$17.6M</div>
+          <div style="font-size:7.5pt;color:var(--amber2);font-weight:700;">In Flight (78 items)</div>
+        </div>
+      </div>
+      <div style="background:var(--gray2);border-radius:4px;height:10px;overflow:hidden;display:flex;">
+        <div style="width:10%;background:var(--green);height:10px;"></div>
+        <div style="width:11%;background:#6366F1;height:10px;"></div>
+        <div style="width:8%;background:var(--amber);height:10px;"></div>
+        <div style="width:71%;background:var(--gray3);height:10px;"></div>
+      </div>
+      <div style="font-size:7pt;color:var(--ink4);margin-top:4px;">
+        10% approved &middot; 11% new &middot; 8% under review &middot; 71% pipeline
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ OPEN ITEMS ═══ -->
+  <div class="section-h" id="open-items-section">&#128680; Open Items
+    <span class="badge b-red" style="margin-left:4px;">1 Open</span>
+  </div>
+
+  <div class="blocker-item">
+    <div style="font-size:20pt;flex-shrink:0;">&#9888;</div>
+    <div style="flex:1;">
+      <div style="font-size:9pt;font-weight:700;color:var(--navy);margin-bottom:4px;">
+        Sonata Software &mdash; SF Support SOW Renewal Decision Required
+      </div>
+      <div style="font-size:8.5pt;color:var(--ink3);line-height:1.6;margin-bottom:8px;">
+        Year 3 of Sonata SF Support SOW ended May 15, 2026. Immediate Renew or Wind-Down
+        decision required. 30-day notice period. VER recommends aligning with Procurement
+        and responsible Pillar Lead before any extension is executed.
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <span class="badge b-red">Immediate Action</span>
+        <span class="badge b-gray">Owner: VER + Procurement + Pillar Lead</span>
+        <span class="badge b-gray">M&amp;A Inherited &middot; Informatica</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    VER Intelligence Hub &middot; Executive Snapshot &middot; FY27 &middot;
+    DET Portfolio Intelligence &mdash; Powered by VER &middot; Confidential
+  </div>
+</div>
+
+<script>
+// ── Toggle engagement card expand/collapse ────────────────────────
+window.toggleCard = function(btn) {
+  var card = btn.closest('.eng-card');
+  var wrap = card ? card.querySelector('.eng-body-wrap') : null;
+  if (!wrap) return;
+  var isOpen = !wrap.classList.contains('collapsed');
+  if (isOpen) {
+    wrap.style.maxHeight = wrap.scrollHeight + 'px';
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        wrap.style.maxHeight = '0';
+        wrap.classList.add('collapsed');
+      });
+    });
+  } else {
+    wrap.classList.remove('collapsed');
+    wrap.style.maxHeight = '3000px';
+    setTimeout(function() { wrap.style.maxHeight = 'none'; }, 400);
+  }
+  btn.classList.toggle('open', !isOpen);
+};
+
+// ── Safe DOMContentLoaded init ────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  // Ensure all engagement bodies start collapsed
+  document.querySelectorAll('.eng-body-wrap').forEach(function(w) {
+    w.classList.add('collapsed');
+    w.style.maxHeight = '0';
+  });
+  document.querySelectorAll('.eng-toggle-btn').forEach(function(b) {
+    b.classList.remove('open');
+  });
+});
+</script>
+</body>
+</html>
