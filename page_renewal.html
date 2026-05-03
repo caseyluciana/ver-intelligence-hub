@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Renewal Calendar · VER Intelligence Hub</title>
+<style>
+:root{
+  --navy:#0F1E3C;--navy2:#1E3A5F;--navy3:#EFF6FF;
+  --teal:#0D9488;--teal2:#0F766E;--teal3:#F0FDF9;
+  --green:#059669;--green2:#065F46;--green3:#D1FAE5;
+  --amber:#D97706;--amber2:#78350F;--amber3:#FEF3C7;
+  --red:#DC2626;--red2:#7F1D1D;--red3:#FEE2E2;
+  --purple:#7C3AED;--purple3:#F5F3FF;
+  --orange:#EA580C;--orange3:#FFF7ED;
+  --blue:#2563EB;--blue3:#EFF6FF;
+  --ink:#111827;--ink2:#1F2937;--ink3:#374151;--ink4:#6B7280;
+  --gray:#F9FAFB;--gray2:#F3F4F6;--gray3:#E5E7EB;
+  --border:#E5E7EB;--border2:#D1D5DB;--white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gray);color:var(--ink2);font-size:9pt;}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 28px;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--border);}
+.back{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;
+  border-radius:6px;background:var(--gray2);border:1px solid var(--border2);
+  color:var(--ink3);font-size:8pt;font-weight:600;text-decoration:none;
+  cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.back:hover{background:var(--navy);color:#fff;}
+.pg-title{font-size:15pt;font-weight:900;color:var(--navy);}
+.pg-sub{font-size:8.5pt;color:var(--ink4);margin-top:2px;}
+.card{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.card-title{font-size:9.5pt;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.card-sub{font-size:8pt;color:var(--ink4);margin-bottom:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.stat{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;border-top:3px solid var(--navy);}
+.stat.teal{border-top-color:var(--teal);}
+.stat.green{border-top-color:var(--green);}
+.stat.amber{border-top-color:var(--amber);}
+.stat.red{border-top-color:var(--red);}
+.stat.purple{border-top-color:var(--purple);}
+.stat.blue{border-top-color:var(--blue);}
+.stat-val{font-size:20pt;font-weight:900;color:var(--navy);line-height:1;margin-bottom:3px;}
+.stat.teal .stat-val{color:var(--teal);}
+.stat.green .stat-val{color:var(--green);}
+.stat.amber .stat-val{color:var(--amber);}
+.stat.red .stat-val{color:var(--red);}
+.stat.purple .stat-val{color:var(--purple);}
+.stat.blue .stat-val{color:var(--blue);}
+.stat-lbl{font-size:7.5pt;font-weight:600;color:var(--ink4);text-transform:uppercase;letter-spacing:0.06em;}
+.stat-note{font-size:7pt;color:var(--ink4);margin-top:4px;}
+.prog{background:var(--gray2);border-radius:4px;height:10px;overflow:hidden;}
+.prog-bar{height:10px;border-radius:4px;transition:width 0.8s;}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:7pt;font-weight:700;
+  padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.bg{background:var(--green3);color:var(--green2);}
+.ba{background:var(--amber3);color:var(--amber2);}
+.br{background:var(--red3);color:var(--red2);}
+.bn{background:var(--navy3);color:var(--navy2);}
+.bt{background:var(--teal3);color:var(--teal2);}
+.bp{background:var(--purple3);color:var(--purple);}
+.bz{background:var(--gray2);color:var(--ink4);}
+.bo{background:var(--orange3);color:var(--orange);}
+.bb{background:var(--blue3);color:var(--blue);}
+.vt{width:100%;border-collapse:collapse;font-size:8.5pt;}
+.vt th{background:var(--navy);color:#fff;padding:8px 12px;text-align:left;
+  font-size:7.5pt;font-weight:700;letter-spacing:0.03em;}
+.vt td{padding:9px 12px;border-bottom:1px solid var(--gray2);vertical-align:middle;}
+.vt tr:hover td{background:var(--gray);}
+.vt tr:last-child td{border-bottom:none;}
+.callout{border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:16px;
+  border-left:4px solid;font-size:8.5pt;line-height:1.6;}
+.c-info{background:var(--navy3);border-color:var(--navy2);color:var(--navy2);}
+.c-teal{background:var(--teal3);border-color:var(--teal);color:var(--green2);}
+.c-amber{background:var(--amber3);border-color:var(--amber);color:var(--amber2);}
+.shdr{font-size:10pt;font-weight:800;color:var(--navy);margin:20px 0 10px;
+  display:flex;align-items:center;gap:8px;padding-bottom:8px;
+  border-bottom:2px solid var(--gray3);}
+.tab-bar{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.tab{font-size:8pt;padding:6px 14px;border-radius:20px;cursor:pointer;
+  border:1.5px solid var(--border2);background:#fff;font-family:inherit;
+  transition:all 0.15s;font-weight:600;color:var(--ink4);}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab:hover:not(.active){border-color:var(--navy);color:var(--navy);}
+.footer{margin-top:24px;padding-top:12px;border-top:1px solid var(--border);
+  font-size:7.5pt;color:var(--ink4);text-align:center;font-style:italic;}
+@media print{.back,.tab-bar{display:none!important;}.wrap{padding:12px!important;}}
+
+/* ── Badge color classes ── */
+.b-green { background:#D1FAE5; color:#065F46; }
+.b-amber { background:#FEF3C7; color:#78350F; }
+.b-red   { background:#FEE2E2; color:#7F1D1D; }
+.b-teal  { background:#F0FDF9; color:#0F766E; }
+.b-navy  { background:#EFF6FF; color:#1E3A5F; }
+.b-gray  { background:#F3F4F6; color:#6B7280; }
+.b-purple{ background:#F5F3FF; color:#6D28D9; }
+.badge-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; display:inline-block; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <div>
+      <button class="back" onclick="history.back()">← Back to Hub</button>
+      <div style="margin-top:8px;">
+        <div class="pg-title">Renewal Calendar</div>
+        <div class="pg-sub">12-month forward view · All DET portfolio renewals · VER advisory scope</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+    <button onclick="window.print()" title="Print this page"
+      style="display:inline-flex;align-items:center;gap:5px;padding:6px 14px;
+      border-radius:6px;background:var(--gray2);border:1px solid var(--border2);
+      color:var(--ink3);font-size:8pt;font-weight:600;cursor:pointer;font-family:inherit;
+      transition:all 0.15s;" onmouseover="this.style.background='var(--navy)';this.style.color='#fff'"
+      onmouseout="this.style.background='var(--gray2)';this.style.color='var(--ink3)'">
+      Print
+    </button>
+    <div style="text-align:right;font-size:7.5pt;color:var(--ink4);">
+      DET Portfolio Intelligence — Powered by VER<br>
+      <span style="font-size:7pt;">Updated: May 2026 &middot; Salesforce DET &middot; Confidential</span>
+    </div>
+  </div>
+  </div>
+
+  <div class="callout c-amber">
+    <strong>Proactive Renewal Intelligence.</strong>
+    VER monitors upcoming renewals across the DET portfolio to ensure Pillar Leads and
+    Procurement have the advisory analysis needed to act before deadlines — not after.
+    Renewal decisions rest with Pillar Leads, Procurement, and Finance.
+  </div>
+
+  <div class="g4">
+    <div class="stat red">
+      <div class="stat-val" id="r-urgent">—</div>
+      <div class="stat-lbl">Urgent (&lt;60d)</div>
+      <div class="stat-note">Immediate action required</div>
+    </div>
+    <div class="stat amber">
+      <div class="stat-val" id="r-action90">—</div>
+      <div class="stat-lbl">Within 90 Days</div>
+      <div class="stat-note">Active planning needed</div>
+    </div>
+    <div class="stat teal">
+      <div class="stat-val" id="r-planning">—</div>
+      <div class="stat-lbl">Planning Phase</div>
+      <div class="stat-note">&gt;180 days — strategy time</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="r-total">—</div>
+      <div class="stat-lbl">Total Tracked</div>
+      <div class="stat-note">12-month forward view</div>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab active" onclick="filterRenewals('all',this)">All Renewals</button>
+    <button class="tab" onclick="filterRenewals('urgent',this)">🔴 Urgent (&lt;90d)</button>
+    <button class="tab" onclick="filterRenewals('action',this)">🟡 Within 180d</button>
+    <button class="tab" onclick="filterRenewals('planning',this)">Planning Phase</button>
+    <button class="tab" onclick="filterRenewals('t1',this)">Tier 1 Only</button>
+    <span id="renewal-count" style="font-size:8pt;color:var(--ink4);margin-left:auto;align-self:center;"></span>
+  </div>
+
+  <div class="card" style="overflow-x:auto;padding:0;">
+    <table class="vt">
+      <thead><tr>
+        <th>Vendor</th><th>Status</th><th>Days Out</th><th>Renewal Date</th>
+        <th>Est. Value</th><th>Pillar</th><th>Recommended Action</th><th>VER Contact</th>
+      </tr></thead>
+      <tbody id="renewal-tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="callout c-teal" style="margin-top:14px;">
+    <strong>VER Renewal Support:</strong> For any renewal requiring advisory analysis, rate benchmarking,
+    or engagement terms review — submit a VER Intake Request via the
+    <a href="vendor_intake.html" style="color:var(--teal2);font-weight:700;">VER Vendor Platform</a>.
+  </div>
+
+  <div class="footer">VER Intelligence Hub · Vendor Engagement &amp; Reliability · Salesforce DET · DET Portfolio Intelligence — Powered by VER</div>
+</div>
+<script>
+const RENEWALS = [
+  { vendor:'Workday', category:'Software / SaaS', pillar:'SF on Salesforce',
+    value:'$23.7M', renewal:'2026-11-30', days_out:214, status:'Critical',
+    action:'Renewal negotiation — VER advisory support required. Rate benchmark in progress.',
+    tier:1, contact:'VER Team', risk:'High Concentration', icon:'⚠️' },
+  { vendor:'BCG', category:'Professional Services', pillar:'Multiple',
+    value:'$6.0M', renewal:'2026-06-30', days_out:60, status:'Urgent',
+    action:'Renewal decision required. Renewal decision pending escalation resolution.',
+    tier:2, contact:'VER Director', risk:'Rate Review', icon:'🔴' },
+  { vendor:'IBM', category:'Professional Services', pillar:'IT / Tech Services',
+    value:'$14.3M', renewal:'2026-08-01', days_out:92, status:'Action Required',
+    action:'Rate benchmarking underway. VER advisory support to Procurement on renewal terms.',
+    tier:2, contact:'VER Team', risk:'Rate Review', icon:'📋' },
+  { vendor:'Gartner', category:'Software / SaaS', pillar:'Multiple',
+    value:'$1.2M', renewal:'2026-09-30', days_out:152, status:'Monitor',
+    action:'Seat utilization review before renewal. 13/15 seats active — consider consolidation.',
+    tier:3, contact:'VER Team', risk:'Seat Efficiency', icon:'💺' },
+  { vendor:'Conviva', category:'Software / SaaS', pillar:'Digital Marketing',
+    value:'$0.8M', renewal:'2026-10-15', days_out:167, status:'Monitor',
+    action:'Usage at 84% of cap. Coordinate with DMT team on capacity planning before renewal.',
+    tier:3, contact:'VER Team', risk:'Cap Approaching', icon:'📈' },
+  { vendor:'Sentry IO', category:'Software / SaaS', pillar:'Engineering',
+    value:'$0.3M', renewal:'2026-07-31', days_out:91, status:'Action Required',
+    action:'Coordinate with Engineering team. Standard renewal expected.',
+    tier:3, contact:'VER Team', risk:'Low', icon:'✅' },
+  { vendor:'Microsoft (M365)', category:'Software / SaaS', pillar:'IT',
+    value:'$1.4M', renewal:'2026-06-30', days_out:60, status:'Urgent',
+    action:'M365 enterprise renewal. Coordinate with IT team. Standard renewal expected.',
+    tier:1, contact:'VER Team', risk:'Low', icon:'✅' },
+  { vendor:'ON24', category:'Software / SaaS', pillar:'Digital Marketing',
+    value:'$0.9M', renewal:'2026-11-30', days_out:214, status:'Planning',
+    action:'Annual webinar platform renewal. Review usage and scope before renewing.',
+    tier:3, contact:'VER Team', risk:'Low', icon:'📊' },
+  { vendor:'NTT AMS', category:'Professional Services', pillar:'Multiple',
+    value:'$33M+', renewal:'2028-09-01', days_out:853, status:'Long Range',
+    action:'5-year contract through 2028. VER monitoring. 180-day notice required.',
+    tier:1, contact:'VER Team', risk:'High Concentration', icon:'🗓️' },
+  { vendor:'Cognizant ADAMS ES', category:'Professional Services', pillar:'SF on Salesforce',
+    value:'$7.7M', renewal:'2027-02-14', days_out:290, status:'Planning',
+    action:'Year 3 of 3 — final year. Renewal decision required before Feb 2027.',
+    tier:1, contact:'VER Team', risk:'Contract End', icon:'⏰' },
+  { vendor:'Cognizant ADAMS FINS', category:'Professional Services', pillar:'SF on Salesforce',
+    value:'$6.5M', renewal:'2027-02-14', days_out:290, status:'Planning',
+    action:'Year 2 of 2. All SLAs meeting targets. Standard renewal expected.',
+    tier:1, contact:'VER Team', risk:'Low', icon:'✅' },
+  { vendor:'Okta', category:'Software / SaaS', pillar:'IT',
+    value:'$0.8M', renewal:'2026-11-30', days_out:214, status:'Planning',
+    action:'FY27 renewal $1.27M already approved in MFT. Coordinate with IT.',
+    tier:2, contact:'VER Team', risk:'Low', icon:'✅' },
+];
+
+const STATUS_META = {
+  'Urgent':         { cls:'br', barColor:'#DC2626', priority:1 },
+  'Critical':       { cls:'br', barColor:'#DC2626', priority:2 },
+  'Action Required':{ cls:'ba', barColor:'#D97706', priority:3 },
+  'Monitor':        { cls:'ba', barColor:'#D97706', priority:4 },
+  'Planning':       { cls:'bn', barColor:'#1E3A5F', priority:5 },
+  'Long Range':     { cls:'bz', barColor:'#9CA3AF', priority:6 },
+};
+
+function getDaysColor(days) {
+  if (days < 60)  return '#DC2626';
+  if (days < 90)  return '#EA580C';
+  if (days < 180) return '#D97706';
+  if (days < 365) return '#1E3A5F';
+  return '#9CA3AF';
+}
+
+let activeFilter = 'all';
+
+function init() {
+  const urgent    = RENEWALS.filter(r => ['Urgent','Critical'].includes(r.status)).length;
+  const action90  = RENEWALS.filter(r => r.days_out <= 90).length;
+  const planning  = RENEWALS.filter(r => r.status === 'Planning').length;
+  const totalVal  = '$67M+';
+  document.getElementById('r-urgent').textContent    = urgent;
+  document.getElementById('r-action90').textContent  = action90;
+  document.getElementById('r-planning').textContent  = planning;
+  document.getElementById('r-total').textContent     = RENEWALS.length;
+  renderRenewals('all');
+}
+
+function filterRenewals(f, el) {
+  activeFilter = f;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderRenewals(f);
+}
+
+function renderRenewals(filter) {
+  let items = [...RENEWALS].sort((a,b) => a.days_out - b.days_out);
+  if (filter === 'urgent')   items = items.filter(r => r.days_out <= 90);
+  if (filter === 'action')   items = items.filter(r => r.days_out <= 180);
+  if (filter === 'planning') items = items.filter(r => r.days_out > 180);
+  if (filter === 't1')       items = items.filter(r => r.tier === 1);
+
+  document.getElementById('renewal-count').textContent = items.length + ' renewals';
+
+  document.getElementById('renewal-tbody').innerHTML = items.map(r => {
+    const meta = STATUS_META[r.status] || STATUS_META['Planning'];
+    const dColor = getDaysColor(r.days_out);
+    return `<tr>
+      <td>
+        <div style="font-weight:700;font-size:9pt;">${r.icon} ${r.vendor}</div>
+        <div style="font-size:7.5pt;color:var(--ink4);">${r.category}</div>
+      </td>
+      <td><span class="badge ${meta.cls}">${r.status}</span></td>
+      <td style="font-weight:700;font-size:9pt;color:${dColor};">${r.days_out}d</td>
+      <td style="font-size:8.5pt;">${r.renewal}</td>
+      <td style="font-weight:700;color:var(--navy);">${r.value}</td>
+      <td style="font-size:8pt;">${r.pillar}</td>
+      <td style="font-size:8pt;color:var(--ink3);max-width:240px;">
+        <div style="line-height:1.5;">${r.action}</div>
+        ${r.risk !== 'Low' ? `<span class="badge ba" style="margin-top:4px;display:inline-flex;">${r.risk}</span>` : ''}
+      </td>
+      <td style="font-size:8pt;">${r.contact}</td>
+    </tr>`;
+  }).join('');
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
