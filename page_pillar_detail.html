@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Pillar Detail &middot; VER Intelligence Hub</title>
+<style>
+:root{
+  --navy:#0F1E3C;--navy2:#1E3A5F;--navy3:#EFF6FF;
+  --teal:#0D9488;--teal2:#0F766E;--teal3:#F0FDF9;
+  --green:#059669;--green2:#065F46;--green3:#D1FAE5;
+  --amber:#D97706;--amber2:#78350F;--amber3:#FEF3C7;
+  --red:#DC2626;--red2:#7F1D1D;--red3:#FEE2E2;
+  --purple:#7C3AED;--purple3:#F5F3FF;
+  --orange:#EA580C;--orange3:#FFF7ED;
+  --ink:#111827;--ink2:#1F2937;--ink3:#374151;--ink4:#6B7280;
+  --gray:#F9FAFB;--gray2:#F3F4F6;--gray3:#E5E7EB;
+  --border:#E5E7EB;--border2:#D1D5DB;--white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gray);color:var(--ink2);font-size:9pt;}
+.page-wrap{max-width:1100px;margin:0 auto;padding:24px 28px;}
+
+/* TOP BAR */
+.top-bar{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+.top-bar-left{display:flex;align-items:center;gap:12px;}
+.back-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;
+  border-radius:6px;background:var(--gray2);border:1px solid var(--border2);
+  color:var(--ink3);font-size:8pt;font-weight:600;text-decoration:none;cursor:pointer;
+  font-family:inherit;transition:all 0.15s;}
+.back-btn:hover{background:var(--navy);color:#fff;}
+.page-title{font-size:15pt;font-weight:900;color:var(--navy);}
+.page-sub{font-size:8.5pt;color:var(--ink4);margin-top:2px;}
+
+/* CARDS */
+.card{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.card-title{font-size:9.5pt;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.card-sub{font-size:8pt;color:var(--ink4);margin-bottom:12px;}
+
+/* STAT TILES */
+.stat-grid{display:grid;gap:12px;margin-bottom:20px;}
+.stat-grid.g4{grid-template-columns:repeat(4,1fr);}
+.stat-grid.g3{grid-template-columns:repeat(3,1fr);}
+.stat{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;border-top:3px solid var(--navy);}
+.stat.teal{border-top-color:var(--teal);}
+.stat.green{border-top-color:var(--green);}
+.stat.amber{border-top-color:var(--amber);}
+.stat.red{border-top-color:var(--red);}
+.stat.purple{border-top-color:var(--purple);}
+.stat-val{font-size:20pt;font-weight:900;color:var(--navy);line-height:1;margin-bottom:3px;}
+.stat.teal .stat-val{color:var(--teal);}
+.stat.green .stat-val{color:var(--green);}
+.stat.amber .stat-val{color:var(--amber);}
+.stat.red .stat-val{color:var(--red);}
+.stat.purple .stat-val{color:var(--purple);}
+.stat-lbl{font-size:7.5pt;font-weight:600;color:var(--ink4);text-transform:uppercase;letter-spacing:0.06em;}
+.stat-note{font-size:7pt;color:var(--ink4);margin-top:4px;}
+
+/* PROGRESS BAR */
+.prog-wrap{background:var(--gray2);border-radius:4px;height:10px;margin:4px 0;overflow:hidden;}
+.prog-bar{height:10px;border-radius:4px;transition:width 0.8s ease;}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:7pt;font-weight:700;
+  padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.badge-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.b-green{background:var(--green3);color:var(--green2);}
+.b-amber{background:var(--amber3);color:var(--amber2);}
+.b-red{background:var(--red3);color:var(--red2);}
+.b-navy{background:var(--navy3);color:var(--navy2);}
+.b-teal{background:var(--teal3);color:var(--teal2);}
+.b-purple{background:var(--purple3);color:var(--purple);}
+.b-gray{background:var(--gray2);color:var(--ink4);}
+.b-orange{background:var(--orange3);color:var(--orange);}
+
+/* TABLE */
+.vp-table{width:100%;border-collapse:collapse;font-size:8.5pt;}
+.vp-table th{background:var(--navy);color:#fff;padding:8px 12px;text-align:left;
+  font-size:7.5pt;font-weight:700;letter-spacing:0.03em;position:sticky;top:0;}
+.vp-table td{padding:9px 12px;border-bottom:1px solid var(--gray2);vertical-align:middle;}
+.vp-table tr:hover td{background:var(--gray);}
+.vp-table tr:last-child td{border-bottom:none;}
+
+/* CALLOUT */
+.callout{border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:16px;
+  border-left:4px solid;font-size:8.5pt;line-height:1.6;}
+.callout.info{background:var(--navy3);border-color:var(--navy2);color:var(--navy2);}
+.callout.teal{background:var(--teal3);border-color:var(--teal);color:var(--green2);}
+.callout.amber{background:var(--amber3);border-color:var(--amber);color:var(--amber2);}
+
+/* SECTION HEADER */
+.section-hdr{font-size:10pt;font-weight:800;color:var(--navy);margin:20px 0 10px;
+  display:flex;align-items:center;gap:8px;padding-bottom:8px;
+  border-bottom:2px solid var(--gray3);}
+
+/* PILL TABS */
+.tab-bar{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.tab{font-size:8pt;padding:6px 14px;border-radius:20px;cursor:pointer;
+  border:1.5px solid var(--border2);background:#fff;font-family:inherit;
+  transition:all 0.15s;font-weight:600;color:var(--ink4);}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab:hover:not(.active){border-color:var(--navy);color:var(--navy);}
+
+/* PIE CHART (CSS-only) */
+.pie-wrap{position:relative;width:160px;height:160px;margin:0 auto;}
+.pie-legend{margin-top:12px;}
+.pie-legend-item{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:8pt;}
+.pie-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+
+/* PRINT */
+@media print{
+  .back-btn,.tab-bar{display:none!important;}
+  .page-wrap{padding:12px;}
+}
+
+
+
+/* ── Badge classes (hub + platform shared) ── */
+.bg{background:#D1FAE5;color:#065F46;}
+.ba{background:#FEF3C7;color:#78350F;}
+.br{background:#FEE2E2;color:#7F1D1D;}
+.bn{background:#EFF6FF;color:#1E3A5F;}
+.bt{background:#F0FDF9;color:#0F766E;}
+.bp{background:#F5F3FF;color:#7C3AED;}
+.bz{background:#F3F4F6;color:#6B7280;}
+.bo{background:#FFF7ED;color:#EA580C;}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:7pt;
+  font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;display:inline-block;}
+</style>
+<style>
+.pd-hero {background:linear-gradient(135deg,var(--pillar-color,#0F1E3C) 0%,rgba(0,0,0,0.7) 100%);
+  border-radius:10px;padding:22px 26px;color:#fff;margin-bottom:20px;}
+.pd-hero-title {font-size:16pt;font-weight:900;margin-bottom:4px;}
+.pd-hero-sub {font-size:9pt;color:rgba(255,255,255,0.65);}
+.pd-grid {display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;}
+.pd-grid-3 {display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px;}
+.vendor-row {display:flex;align-items:center;gap:10px;padding:9px 12px;
+  border-bottom:1px solid var(--gray2);font-size:8.5pt;}
+.vendor-row:last-child {border-bottom:none;}
+.vendor-ini {width:32px;height:32px;border-radius:7px;display:flex;align-items:center;
+  justify-content:center;font-size:10pt;font-weight:800;color:#fff;flex-shrink:0;}
+@media print {.back-btn,.print-btn{display:none!important;}body{background:#fff!important;}}
+</style>
+</head>
+<body>
+<div class="page-wrap">
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <button class="back-btn" onclick="history.back()">&#8592; Back</button>
+      <div>
+        <div class="page-title" id="pd-title">Pillar Detail Report</div>
+        <div class="page-sub" id="pd-sub">FY27 &middot; VER Intelligence Hub &middot; Confidential</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <button class="print-btn" onclick="window.print()"
+        style="padding:6px 14px;border-radius:6px;background:var(--gray2);
+        border:1px solid var(--border2);color:var(--ink3);font-size:8pt;
+        font-weight:600;cursor:pointer;font-family:inherit;"
+        onmouseover="this.style.background='var(--navy)';this.style.color='#fff'"
+        onmouseout="this.style.background='var(--gray2)';this.style.color='var(--ink3)'">
+        Print</button>
+      <div style="text-align:right;font-size:7.5pt;color:var(--ink4);">
+        DET Portfolio Intelligence &mdash; Powered by VER<br>
+        <span style="font-size:7pt;">May 2026 &middot; Salesforce DET &middot; Confidential</span>
+      </div>
+    </div>
+  </div>
+  <div id="pd-content">
+    <div style="text-align:center;padding:40px;color:var(--ink4);">Loading pillar data...</div>
+  </div>
+</div>
+<script>
+var PILLARS = {"sf-on-sf": {"name": "Salesforce on Salesforce Technology", "short": "SF on SF", "lead": "SF on SF Pillar Lead", "color": "#0D9488", "emoji": "⚡", "sow_value": "$23.7M", "sow_pos": "800 POs — Q1/Q2 peak", "mft_approved": "$2.1M", "mft_total": "$8.4M", "mft_items": "38", "savings": "$0", "savings_pipeline": "$3–5M rate benchmarking in progress", "risk": "amber", "risk_note": "Critical renewal Nov 2026 — Workday ELP", "renewal_note": "Workday Enterprise License — Nov 30, 2026 · 90-day notice · $23.7M", "key_vendors": [("Workday", "Software / SaaS", "Tier 1", "$23.7M annual", "Nov 2026 — Critical renewal"), ("Salesforce", "Software / SaaS", "Tier 1", "Internal", "Ongoing platform license")], "ver_notes": "Workday renewal is the single largest and most time-sensitive engagement in this pillar. VER recommends beginning rate benchmarking and renewal strategy with Procurement no later than Q2 FY27. 90-day notice period means decision required by September 2026."}, "eng-dev": {"name": "Engineering Development & Delivery", "short": "Eng Dev & Delivery", "lead": "Engineering Pillar Lead", "color": "#0F1E3C", "emoji": "🔧", "sow_value": "$52.1M", "sow_pos": "374 POs — Q2/Q4 concentration", "mft_approved": "$3.8M", "mft_total": "$22.4M", "mft_items": "87", "savings": "$9.0M", "savings_pipeline": "Cognizant PD target pending", "risk": "green", "risk_note": "NTT AD restructure complete — monitoring transition", "renewal_note": "NTT Data AD — Aug 12, 2026 · 30-day notice · $10.0M annual", "key_vendors": [("NTT Data", "Professional Services", "Tier 1", "$22.8M annual", "Sep 2028 — AMS · Aug 2026 — AD"), ("Cognizant", "Professional Services", "Tier 1", "$9.5M annual", "Feb 2027 — ADAMS"), ("AWS", "Cloud & Managed Services", "Tier 1", "$17.2M committed", "Mar 2027 — EDP")], "ver_notes": "Largest pillar by SOW value. NTT AD restructure delivered $9.0M in savings (Apr 2026). NTT AD renewal decision required before Aug 2026 — 30-day notice. Cognizant ADAMS renewals (ES + FINS) aligned at Feb 2027. AWS EDP committed spend on track within envelope."}, "it": {"name": "IT", "short": "IT", "lead": "IT Pillar Lead", "color": "#2563EB", "emoji": "💻", "sow_value": "$38.4M", "sow_pos": "397 POs — Q3/Q4 concentration", "mft_approved": "$1.2M", "mft_total": "$18.6M", "mft_items": "72", "savings": "$0", "savings_pipeline": "Service Desk SLA renegotiation in scope", "risk": "green", "risk_note": "Techforce SLA metrics 3 below target — monitoring", "renewal_note": "Tech Mahindra Techforce — Apr 30, 2027 · 90-day notice · $6.5M combined", "key_vendors": [("Tech Mahindra", "Professional Services", "Tier 2", "$6.5M combined", "Apr 2027 — Service Desk + On-Site"), ("HCL Technologies", "Professional Services", "Tier 2", "Active", "Multiple POs"), ("Computacenter", "Hardware & Infrastructure", "Tier 2", "Active", "Hardware supply")], "ver_notes": "Tech Mahindra Techforce is the anchor IT vendor — Service Desk ($1.08M) and On-Site Services ($5.45M) both expire Apr 30, 2027. 3 SLA metrics currently below target. VER recommends SLA performance review before renewal decision. 90-day notice means decision required by January 2027."}, "da-ops": {"name": "Delivery Assurance & Operations", "short": "DA & Ops", "lead": "DA&O Pillar Lead", "color": "#DC2626", "emoji": "🎯", "sow_value": "$22.8M", "sow_pos": "Q4 concentration", "mft_approved": "$0.8M", "mft_total": "$4.2M", "mft_items": "22", "savings": "$1.0M", "savings_pipeline": "GSA re-assignment cost avoidance in progress", "risk": "amber", "risk_note": "GSA re-assignment of NTT AMS in progress — transition risk", "renewal_note": "NTT Data AMS — Sep 1, 2028 · 180-day notice · $22.8M annual", "key_vendors": [("NTT Data (AMS)", "Professional Services", "Tier 1", "$22.8M annual", "Sep 2028 — 180-day notice")], "ver_notes": "NTT AMS is mission-critical — 180 resources, L1/L2/L3 application maintenance. GSA re-assignment in progress. No disruption permitted during transition. VER monitoring closely. Renewal not until Sep 2028 but GSA change requires active oversight now."}, "dig-mkt": {"name": "Digital Marketing Technology", "short": "Dig Mkt Tech", "lead": "Digital Marketing Pillar Lead", "color": "#7C3AED", "emoji": "📣", "sow_value": "$14.2M", "sow_pos": "Q2 concentration", "mft_approved": "$0.6M", "mft_total": "$9.8M", "mft_items": "31", "savings": "$0", "savings_pipeline": "Rate card review scheduled Q3 FY27", "risk": "green", "risk_note": "No active escalations — monitoring standard cadence", "renewal_note": "Multiple SaaS renewals Q2 — Adobe, Salesforce Marketing Cloud", "key_vendors": [("Adobe", "Software / SaaS", "Tier 2", "Active", "Q2 renewal"), ("Salesforce Marketing Cloud", "Software / SaaS", "Tier 1", "Active", "Ongoing")], "ver_notes": "Primarily SaaS-driven pillar. Q2 renewal cluster requires coordination with Procurement. VER rate card review scheduled Q3 FY27 to identify optimization opportunities across SaaS licenses."}, "data": {"name": "Data Solutions", "short": "Data Solutions", "lead": "Data Pillar Lead", "color": "#059669", "emoji": "📊", "sow_value": "$18.7M", "sow_pos": "Q1/Q3 split", "mft_approved": "$0.5M", "mft_total": "$11.4M", "mft_items": "44", "savings": "$0", "savings_pipeline": "Snowflake consumption optimization in scope", "risk": "amber", "risk_note": "Q1/Q3 renewal overlap requires coordinated planning", "renewal_note": "Multiple data platform renewals across Q1 and Q3", "key_vendors": [("Snowflake", "Software / SaaS", "Tier 2", "Active", "Consumption-based"), ("Tableau", "Software / SaaS", "Tier 2", "Active", "License renewal"), ("Informatica", "Software / SaaS", "Tier 2", "Active", "M&A inherited — monitoring")], "ver_notes": "Growing pillar with $11.4M MFT forecast indicating significant planned spend. Q1 and Q3 renewal cluster requires coordinated Procurement engagement. Informatica vendor status under M&A review following acquisition. Snowflake consumption model warrants optimization review."}, "agentic": {"name": "Agentic Transformation", "short": "Agentic", "lead": "Agentic Pillar Lead", "color": "#0D9488", "emoji": "🤖", "sow_value": "$6.4M", "sow_pos": "Q3 concentration", "mft_approved": "$0.2M", "mft_total": "$3.8M", "mft_items": "18", "savings": "$0", "savings_pipeline": "New pillar — establishing baseline", "risk": "green", "risk_note": "Emerging pillar — establishing governance baseline", "renewal_note": "AI/ML platform renewals — Q3", "key_vendors": [("Anthropic (Claude)", "Software / SaaS", "Tier 2", "Active", "AI platform"), ("Google Cloud (Gemini)", "Cloud & Managed Services", "Tier 2", "Active", "AI/ML services")], "ver_notes": "Newest DET pillar with rapidly growing spend. VER is establishing advisory baseline for AI/ML vendor governance. Rate benchmarking and usage monitoring being implemented. Engagement governance framework being developed with Pillar Lead."}, "cdo": {"name": "Office of the CDO", "short": "Office of CDO", "lead": "CDO Office Lead", "color": "#D97706", "emoji": "🏛️", "sow_value": "$4.8M", "sow_pos": "Q4 concentration", "mft_approved": "$0.1M", "mft_total": "$2.6M", "mft_items": "12", "savings": "$0", "savings_pipeline": "Advisory and consulting rate review in scope", "risk": "green", "risk_note": "No active escalations — standard monitoring", "renewal_note": "Consulting engagements — Q4 renewal cluster", "key_vendors": [("McKinsey & Company", "Professional Services", "Tier 2", "Active", "Strategic advisory"), ("Deloitte", "Professional Services", "Tier 2", "Active", "Consulting engagement")], "ver_notes": "Consulting-heavy pillar. Q4 renewal concentration. VER monitoring rates against market benchmarks. Advisory and consulting spend managed through standard SOW/PO process."}, "emerging": {"name": "Emerging Technology", "short": "Emerging Tech", "lead": "Emerging Tech Pillar Lead", "color": "#7C3AED", "emoji": "🚀", "sow_value": "$8.2M", "sow_pos": "Q2/Q3 split", "mft_approved": "$0.1M", "mft_total": "$2.4M", "mft_items": "9", "savings": "$0", "savings_pipeline": "Technology evaluation vendor governance in scope", "risk": "green", "risk_note": "Standard monitoring — no active escalations", "renewal_note": "Technology evaluation and POC engagements — Q2/Q3", "key_vendors": [("Various POC vendors", "Professional Services", "Tier 3", "Project-based", "Evaluation engagements")], "ver_notes": "Pillar primarily manages technology evaluation and proof-of-concept engagements. VER monitoring ensures POC vendors transition to formal SOW/PO process before production deployment. Governance framework being established."}};
+
+function getPillarKey() {
+  var params = new URLSearchParams(window.location.search);
+  return params.get('pillar') || 'eng-dev';
+}
+
+function renderPillar(key) {
+  var p = PILLARS[key];
+  if (!p) {
+    document.getElementById('pd-content').innerHTML =
+      '<div class="callout c-warn">Pillar not found. <a href="page_pillar_pl.html">Back to P&L Report</a></div>';
+    return;
+  }
+
+  var titleEl = document.getElementById('pd-title');
+  var subEl   = document.getElementById('pd-sub');
+  if (titleEl) titleEl.textContent = p.emoji + ' ' + p.name + ' — Pillar Detail';
+  if (subEl)   subEl.textContent   = 'Advisory P&L · FY27 · VER Intelligence Hub · Confidential';
+
+  var riskColor = p.risk === 'amber' ? 'var(--amber)' : 'var(--green)';
+  var riskLabel = p.risk === 'amber' ? 'Monitor' : 'Healthy';
+
+  // Net exposure calc
+  var mftNum  = parseFloat(p.mft_total.replace('$','').replace('M',''));
+  var savNum  = parseFloat((p.savings === '$0' ? '0' : p.savings).replace('$','').replace('M',''));
+  var netExp  = '$' + (mftNum - savNum).toFixed(1) + 'M';
+
+  // Vendor rows
+  var vendorRows = (p.key_vendors || []).map(function(v) {
+    var colors = ['#0F1E3C','#0D9488','#7C3AED','#D97706','#059669'];
+    var lc = colors[v[0].length % 5];
+    var ini = v[0].split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();
+    return '<div class="vendor-row">' +
+      '<div class="vendor-ini" style="background:' + lc + ';">' + ini + '</div>' +
+      '<div style="flex:1;">' +
+        '<div style="font-weight:700;color:var(--navy);">' + v[0] + '</div>' +
+        '<div style="font-size:7.5pt;color:var(--ink4);">' + v[1] + ' &middot; ' + v[2] + '</div>' +
+      '</div>' +
+      '<div style="text-align:right;font-size:8pt;">' +
+        '<div style="font-weight:700;color:var(--navy);">' + v[3] + '</div>' +
+        '<div style="font-size:7.5pt;color:var(--ink4);">' + v[4] + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  document.getElementById('pd-content').innerHTML =
+    '<div class="pd-hero" style="--pillar-color:' + p.color + ';background:linear-gradient(135deg,' + p.color + ' 0%,#0a0a2e 100%);">' +
+      '<div class="pd-hero-title">' + p.emoji + ' ' + p.name + '</div>' +
+      '<div class="pd-hero-sub">FY27 Advisory Scope &middot; ' + p.lead + ' &middot; VER Monitored</div>' +
+      '<div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;">' +
+        '<div style="background:rgba(255,255,255,0.12);border-radius:8px;padding:8px 14px;">' +
+          '<div style="font-size:16pt;font-weight:900;color:#fff;">' + p.sow_value + '</div>' +
+          '<div style="font-size:7.5pt;color:rgba(255,255,255,0.6);">SOW &amp; PO Value</div>' +
+        '</div>' +
+        '<div style="background:rgba(255,255,255,0.12);border-radius:8px;padding:8px 14px;">' +
+          '<div style="font-size:16pt;font-weight:900;color:#fff;">' + p.mft_total + '</div>' +
+          '<div style="font-size:7.5pt;color:rgba(255,255,255,0.6);">MFT Forecast</div>' +
+        '</div>' +
+        '<div style="background:rgba(255,255,255,0.12);border-radius:8px;padding:8px 14px;">' +
+          '<div style="font-size:16pt;font-weight:900;color:' + (p.savings === "$0" ? "rgba(255,255,255,0.4)" : "#6EE7B7") + ';">' + (p.savings === '$0' ? '—' : p.savings) + '</div>' +
+          '<div style="font-size:7.5pt;color:rgba(255,255,255,0.6);">Savings Realized</div>' +
+        '</div>' +
+        '<div style="background:rgba(255,255,255,0.12);border-radius:8px;padding:8px 14px;">' +
+          '<div style="font-size:10pt;font-weight:700;color:' + riskColor + ';">' + riskLabel + '</div>' +
+          '<div style="font-size:7.5pt;color:rgba(255,255,255,0.6);">Advisory Status</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="pd-grid">' +
+      '<div class="card" style="padding:16px;">' +
+        '<div style="font-size:9pt;font-weight:800;color:var(--navy);margin-bottom:12px;">&#128202; Financial Position</div>' +
+        '<table style="width:100%;border-collapse:collapse;font-size:8.5pt;">' +
+          '<tr style="border-bottom:1px solid var(--gray2);">' +
+            '<td style="padding:6px;color:var(--ink4);">SOW &amp; PO Exposure</td>' +
+            '<td style="padding:6px;text-align:right;font-weight:700;color:var(--navy);">' + p.sow_value + '</td>' +
+          '</tr>' +
+          '<tr style="border-bottom:1px solid var(--gray2);">' +
+            '<td style="padding:6px;color:var(--ink4);">MFT Approved</td>' +
+            '<td style="padding:6px;text-align:right;font-weight:700;color:var(--green2);">' + p.mft_approved + '</td>' +
+          '</tr>' +
+          '<tr style="border-bottom:1px solid var(--gray2);">' +
+            '<td style="padding:6px;color:var(--ink4);">MFT Total Forecast</td>' +
+            '<td style="padding:6px;text-align:right;font-weight:700;">' + p.mft_total + ' <span style="font-size:7.5pt;color:var(--ink4);">(' + p.mft_items + ' items)</span></td>' +
+          '</tr>' +
+          '<tr style="border-bottom:1px solid var(--gray2);">' +
+            '<td style="padding:6px;color:var(--ink4);">Savings Realized</td>' +
+            '<td style="padding:6px;text-align:right;font-weight:700;color:' + (p.savings === '$0' ? 'var(--ink4)' : 'var(--green2)') + ';">' + (p.savings === '$0' ? '—' : p.savings) + '</td>' +
+          '</tr>' +
+          '<tr style="background:var(--gray);font-weight:800;">' +
+            '<td style="padding:6px;color:var(--navy);">Net Advisory Exposure</td>' +
+            '<td style="padding:6px;text-align:right;color:var(--navy);font-weight:900;">' + netExp + '</td>' +
+          '</tr>' +
+        '</table>' +
+      '</div>' +
+
+      '<div class="card" style="padding:16px;">' +
+        '<div style="font-size:9pt;font-weight:800;color:var(--navy);margin-bottom:12px;">&#128336; Key Dates &amp; Status</div>' +
+        '<div style="font-size:8.5pt;margin-bottom:10px;">' +
+          '<div style="font-size:7.5pt;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">SOW Concentration</div>' +
+          '<div style="color:var(--ink2);">' + p.sow_pos + '</div>' +
+        '</div>' +
+        '<div style="font-size:8.5pt;margin-bottom:10px;">' +
+          '<div style="font-size:7.5pt;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Next Renewal</div>' +
+          '<div style="color:var(--ink2);">' + p.renewal_note + '</div>' +
+        '</div>' +
+        '<div style="font-size:8.5pt;">' +
+          '<div style="font-size:7.5pt;font-weight:700;color:var(--ink4);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">Savings Pipeline</div>' +
+          '<div style="color:var(--ink2);">' + p.savings_pipeline + '</div>' +
+        '</div>' +
+        '<div style="margin-top:12px;padding:8px 10px;background:' + (p.risk === 'amber' ? 'var(--amber3)' : 'var(--green3)') + ';border-radius:6px;font-size:8pt;">' +
+          '<strong style="color:' + riskColor + ';">' + p.risk_note + '</strong>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div class="card" style="padding:16px;margin-bottom:14px;">' +
+      '<div style="font-size:9pt;font-weight:800;color:var(--navy);margin-bottom:8px;">&#127970; Key Vendors in This Pillar</div>' +
+      vendorRows +
+    '</div>' +
+
+    '<div class="card" style="padding:16px;margin-bottom:14px;border-left:4px solid ' + p.color + ';">' +
+      '<div style="font-size:9pt;font-weight:800;color:var(--navy);margin-bottom:8px;">&#128203; VER Advisory Notes</div>' +
+      '<div style="font-size:8.5pt;color:var(--ink3);line-height:1.7;">' + p.ver_notes + '</div>' +
+    '</div>' +
+
+    '<div style="text-align:center;margin-top:16px;display:flex;gap:10px;justify-content:center;">' +
+      '<a href="page_pillar_pl.html" style="padding:8px 20px;background:var(--navy);color:#fff;' +
+        'border-radius:8px;font-size:8.5pt;font-weight:700;text-decoration:none;">&#8592; Back to P&amp;L Report</a>' +
+      '<a href="page_pillar.html" style="padding:8px 20px;background:var(--gray2);color:var(--ink2);' +
+        'border:1px solid var(--border2);border-radius:8px;font-size:8.5pt;font-weight:700;text-decoration:none;">All Pillars &#8594;</a>' +
+    '</div>' +
+
+    '<div class="footer" style="margin-top:20px;">VER Intelligence Hub &middot; ' + p.name + ' Pillar Detail &middot; FY27 &middot; Confidential</div>';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  renderPillar(getPillarKey());
+});
+</script>
+</body>
+</html>
