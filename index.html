@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>VER Intelligence Hub &mdash; Salesforce DET</title>
+<style>
+:root{
+  --navy:#0F1E3C;--navy2:#1E3A5F;--navy3:#EFF6FF;
+  --teal:#0D9488;--teal2:#0F766E;--teal3:#F0FDF9;
+  --green:#059669;--green2:#065F46;--green3:#D1FAE5;
+  --amber:#D97706;--amber2:#78350F;--amber3:#FEF3C7;
+  --red:#DC2626;--red2:#7F1D1D;--red3:#FEE2E2;
+  --purple:#7C3AED;--purple3:#F5F3FF;
+  --orange:#EA580C;
+  --ink:#111827;--ink2:#1F2937;--ink3:#374151;--ink4:#6B7280;
+  --gray:#F9FAFB;--gray2:#F3F4F6;--gray3:#E5E7EB;
+  --border:#E5E7EB;--border2:#D1D5DB;--white:#FFFFFF;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--navy);color:#fff;}
+
+/* ── Cover ── */
+.cover{
+  background:linear-gradient(145deg,#0D2137 0%,#0F1E3C 35%,#0a1425 70%,#060d1a 100%);
+  position:relative;overflow:hidden;}
+.cover::before{content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 80% 20%,rgba(13,148,136,0.22) 0%,transparent 55%),
+    radial-gradient(ellipse at 15% 85%,rgba(124,58,237,0.14) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 50%,rgba(14,165,233,0.05) 0%,transparent 70%);
+  pointer-events:none;}
+.cover::after{content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(13,148,136,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(13,148,136,0.03) 1px,transparent 1px);
+  background-size:48px 48px;pointer-events:none;z-index:0;}
+
+/* ── Top nav ── */
+.top-nav{
+  max-width:1280px;margin:0 auto;width:100%;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 48px;position:relative;z-index:10;}
+.nav-brand{font-size:9pt;font-weight:800;color:rgba(255,255,255,0.9);
+  letter-spacing:0.08em;text-transform:uppercase;}
+.nav-links{display:flex;gap:4px;}
+.nav-link{padding:5px 12px;font-size:8pt;color:rgba(255,255,255,0.50);
+  text-decoration:none;border-radius:5px;transition:all 0.15s;font-weight:500;}
+.nav-link:hover{color:#fff;background:rgba(255,255,255,0.07);}
+.nav-link.primary{background:var(--teal);color:#fff;font-weight:700;}
+.nav-link.primary:hover{background:var(--teal2);}
+/* Top nav border */
+.top-nav-wrap{border-bottom:1px solid rgba(255,255,255,0.06);position:relative;z-index:10;}
+
+/* ── Hero ── */
+.hero{
+  max-width:1280px;margin:0 auto;width:100%;
+  padding:52px 48px 44px;position:relative;z-index:1;}
+.hero-accent-line{width:48px;height:3px;background:var(--teal);
+  border-radius:2px;margin-bottom:16px;opacity:0.8;}
+.hero-eyebrow{font-size:8pt;font-weight:700;color:var(--teal);
+  text-transform:uppercase;letter-spacing:0.18em;margin-bottom:14px;}
+.hero-title{font-size:44pt;font-weight:900;line-height:1.05;
+  letter-spacing:-0.03em;margin-bottom:16px;max-width:700px;}
+.hero-title .accent{color:var(--teal);}
+.hero-sub{font-size:12pt;color:rgba(255,255,255,0.55);line-height:1.65;
+  max-width:600px;margin-bottom:36px;}
+.hero-sub strong{color:rgba(255,255,255,0.80);}
+.hero-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+.hkpi{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.09);
+  border-radius:10px;padding:14px 18px;transition:all 0.2s;}
+.hkpi:hover{background:rgba(255,255,255,0.09);}
+.hkpi-val{font-size:20pt;font-weight:900;line-height:1;margin-bottom:3px;}
+.hkpi-lbl{font-size:7.5pt;font-weight:700;color:rgba(255,255,255,0.40);
+  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:2px;}
+.hkpi-note{font-size:7pt;color:rgba(255,255,255,0.28);}
+.hkpi.good .hkpi-val{color:#34D399;}
+.hkpi.warn .hkpi-val{color:#FCD34D;}
+.hkpi.std .hkpi-val{color:#fff;}
+.hero-meta{font-size:8pt;color:rgba(255,255,255,0.22);
+  margin-top:14px;letter-spacing:0.04em;}
+/* Scroll cue */
+.scroll-cue{
+  max-width:1280px;margin:0 auto;width:100%;
+  padding:16px 48px 20px;display:flex;align-items:center;gap:8px;
+  font-size:8pt;color:rgba(255,255,255,0.22);
+  border-top:1px solid rgba(255,255,255,0.05);position:relative;z-index:1;}
+.scroll-arrow{animation:bounce 2s infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
+
+/* ── Intelligence body ── */
+.intel-body{background:var(--gray);}
+.inner{max-width:1280px;margin:0 auto;padding:0 32px;}
+
+/* ── Section headers ── */
+.body-sec{padding:24px 0 12px;display:flex;align-items:baseline;gap:10px;}
+.body-sec-title{font-size:8pt;font-weight:800;color:var(--ink4);
+  text-transform:uppercase;letter-spacing:0.12em;}
+.body-sec-sub{font-size:8pt;color:var(--ink4);}
+
+/* ── Intelligence grid ── */
+.hub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.hub-card{background:var(--white);border-radius:10px;padding:16px;
+  border:1px solid var(--border);text-decoration:none;display:block;
+  transition:all 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.hub-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.10);
+  transform:translateY(-2px);}
+.hc-icon{font-size:20pt;margin-bottom:8px;}
+.hc-title{font-size:9.5pt;font-weight:800;color:var(--navy);margin-bottom:5px;}
+.hc-desc{font-size:7.5pt;color:var(--ink4);line-height:1.55;}
+
+/* ── Intelligence Series ── */
+.intel-series{background:var(--white);border-radius:10px;
+  border:1px solid var(--border);border-top:3px solid var(--teal);
+  padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.04);margin-bottom:8px;}
+.is-header{font-size:9.5pt;font-weight:800;color:var(--navy);margin-bottom:12px;}
+.is-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.is-item{border-radius:7px;padding:12px 14px;text-decoration:none;
+  display:block;transition:all 0.15s;}
+.is-item:hover{opacity:0.85;}
+.is-eyebrow{font-size:7pt;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.1em;margin-bottom:4px;}
+.is-title{font-size:9pt;font-weight:700;color:var(--navy);margin-bottom:3px;}
+.is-cta{font-size:7.5pt;color:var(--ink4);}
+
+/* ── VP hero bar ── */
+.vp-bar{background:linear-gradient(135deg,var(--navy) 0%,#1E3A5F 100%);
+  border-radius:12px;padding:20px 24px;
+  border:1px solid rgba(255,255,255,0.08);
+  display:grid;grid-template-columns:1fr repeat(4,auto);
+  align-items:center;gap:16px;transition:all 0.2s;
+  text-decoration:none;margin-bottom:8px;display:grid;}
+.vp-bar:hover{box-shadow:0 4px 24px rgba(0,0,0,0.3);}
+.vp-stat{text-align:center;padding:10px 16px;
+  background:rgba(255,255,255,0.06);border-radius:8px;}
+.vp-stat-val{font-size:14pt;font-weight:900;color:#fff;}
+.vp-stat-lbl{font-size:7.5pt;color:rgba(255,255,255,0.45);margin-top:2px;}
+.vp-cta{padding:10px 18px;background:var(--teal);
+  border-radius:8px;font-size:9pt;font-weight:700;color:#fff;
+  white-space:nowrap;}
+
+/* ── About section ── */
+.about-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+
+/* ── Advisory footer ── */
+.hub-advisory{
+  background:linear-gradient(135deg,var(--navy) 0%,#1a2f50 100%);
+  border-radius:12px;padding:20px 24px;
+  border:1px solid rgba(255,255,255,0.06);margin-bottom:32px;}
+.ha-eyebrow{font-size:7.5pt;font-weight:700;color:var(--teal);
+  text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;}
+.ha-text{font-size:9pt;color:rgba(255,255,255,0.65);line-height:1.75;}
+.ha-footer{font-size:7.5pt;color:rgba(255,255,255,0.28);
+  margin-top:12px;padding-top:12px;
+  border-top:1px solid rgba(255,255,255,0.06);}
+</style>
+</head>
+<body>
+
+<!-- ══ COVER ══════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="top-nav-wrap">
+    <div class="top-nav">
+      <div class="nav-brand">VER Intelligence Hub</div>
+      <div class="nav-links">
+        <a href="page_exec.html"          class="nav-link">Executive Snapshot</a>
+        <a href="page_pillar.html"        class="nav-link">Pillar Intelligence</a>
+        <a href="vendor_home.html"        class="nav-link">Vendor Platform</a>
+        <a href="spend_benchmarking.html" class="nav-link">Rate Benchmarking</a>
+        <a href="#intel"                  class="nav-link primary"
+          onclick="document.getElementById('intel').scrollIntoView({behavior:'smooth'});return false;">
+          Enter Hub &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-accent-line"></div>
+    <div class="hero-eyebrow">Salesforce DET &middot; FY27 &middot; Vendor Engagement &amp; Reliability</div>
+    <div class="hero-title">
+      Third-party spend<br>
+      <span class="accent">intelligence.</span>
+    </div>
+    <div class="hero-sub">
+      <strong>$10.236M in realized savings.</strong> 1,368 vendors under VER advisory.
+      9 pillars monitored. The DET third-party spend portfolio &mdash;
+      governed, benchmarked, and advised by VER.
+    </div>
+    <div class="hero-kpis">
+      <div class="hkpi std">
+        <div class="hkpi-lbl">MFT Forecast</div>
+        <div class="hkpi-val">$93.4M</div>
+        <div class="hkpi-note">Approved pipeline FY27</div>
+      </div>
+      <div class="hkpi good">
+        <div class="hkpi-lbl">Savings Realized</div>
+        <div class="hkpi-val">$10.2M</div>
+        <div class="hkpi-note">FY27 &middot; NTT AD + Cognizant</div>
+      </div>
+      <div class="hkpi std">
+        <div class="hkpi-lbl">Active SOWs</div>
+        <div class="hkpi-val">2,397</div>
+        <div class="hkpi-note">Coupa POs tracked</div>
+      </div>
+      <div class="hkpi warn">
+        <div class="hkpi-lbl">Critical Renewals</div>
+        <div class="hkpi-val">2</div>
+        <div class="hkpi-note">Within 90 days &middot; $33.7M at risk</div>
+      </div>
+      <div class="hkpi std">
+        <div class="hkpi-lbl">Pillars Monitored</div>
+        <div class="hkpi-val">9</div>
+        <div class="hkpi-note">All DET pillars under VER advisory</div>
+      </div>
+    </div>
+    <div class="hero-meta">Updated May 2026 &middot; Salesforce DET &middot; Confidential</div>
+  </div>
+
+  <div class="scroll-cue">
+    <span class="scroll-arrow">&#8595;</span>
+    <span>Intelligence &amp; tools below</span>
+  </div>
+</div>
+
+<!-- ══ INTELLIGENCE BODY ══════════════════════════════════════ -->
+<div class="intel-body" id="intel">
+  <div class="inner">
+
+    <!-- Intelligence tiles -->
+    <div class="body-sec">
+      <div class="body-sec-title">Intelligence &amp; Tools</div>
+      <div class="body-sec-sub">Click any module to enter</div>
+    </div>
+    <div class="hub-grid" style="margin-bottom:12px;">
+<a href="page_exec.html" class="hub-card" style="border-top:3px solid #0F1E3C;"><div class="hc-icon">&#128202;</div><div class="hc-title">Executive Snapshot</div><div class="hc-desc">Portfolio KPIs &middot; Key engagements &middot; Renewal alerts &middot; VER advisory position</div></a><a href="page_pillar.html" class="hub-card" style="border-top:3px solid #0D9488;"><div class="hc-icon">&#127963;</div><div class="hc-title">Pillar Intelligence &mdash; SSI</div><div class="hc-desc">All 9 DET pillars &middot; Spend &amp; Savings Intelligence &middot; VER advisory per pillar</div></a><a href="page_mft.html" class="hub-card" style="border-top:3px solid #059669;"><div class="hc-icon">&#128200;</div><div class="hc-title">MFT Forecast</div><div class="hc-desc">Medium-term forecast &middot; Approved spend pipeline &middot; FY27</div></a>
+    </div>
+    <div class="hub-grid" style="margin-bottom:12px;">
+<a href="page_sow.html" class="hub-card" style="border-top:3px solid #2563EB;"><div class="hc-icon">&#128203;</div><div class="hc-title">SOW &amp; PO Tracker</div><div class="hc-desc">Active statements of work &middot; Expiry monitoring &middot; VER scope governance</div></a><a href="page_renewal.html" class="hub-card" style="border-top:3px solid #DC2626;"><div class="hc-icon">&#128197;</div><div class="hc-title">Renewal Horizon</div><div class="hc-desc">Contract expiry calendar &middot; 30/60/90-day alerts &middot; Spend at risk</div></a><a href="page_consumption.html" class="hub-card" style="border-top:3px solid #EA580C;"><div class="hc-icon">&#9889;</div><div class="hc-title">Consumption Monitoring</div><div class="hc-desc">License utilization &middot; SaaS consumption vs contract &middot; Waste identification</div></a>
+    </div>
+    <div class="hub-grid" style="margin-bottom:12px;">
+<a href="page_ma.html" class="hub-card" style="border-top:3px solid #D97706;"><div class="hc-icon">&#128260;</div><div class="hc-title">M&amp;A Transition Tracker</div><div class="hc-desc">Acquisition impacts &middot; Contract continuity risk &middot; Vendor parent changes</div></a><a href="page_market.html" class="hub-card" style="border-top:3px solid #7C3AED;"><div class="hc-icon">&#127760;</div><div class="hc-title">Market Intelligence</div><div class="hc-desc">Vendor financial health &middot; M&amp;A watch &middot; Analyst ratings &middot; VER market signals</div></a><a href="spend_benchmarking.html" class="hub-card" style="border-top:3px solid #D97706;"><div class="hc-icon">&#128202;</div><div class="hc-title">Spend Benchmarking</div><div class="hc-desc">Rate intelligence &middot; AMER/APAC/LATAM/EMEA &middot; VER rate advisory</div></a>
+    </div>
+    <div class="hub-grid" style="margin-bottom:12px;">
+<a href="vendor_risk.html" class="hub-card" style="border-top:3px solid #7C3AED;"><div class="hc-icon">&#128268;</div><div class="hc-title">VER Risk Intelligence</div><div class="hc-desc">1,368 vendors &middot; 5-dimension scoring &middot; Live assessment engine</div></a><a href="page_governance.html" class="hub-card" style="border-top:3px solid #0D9488;"><div class="hc-icon">&#128208;</div><div class="hc-title">VER Governance</div><div class="hc-desc">SOW standards &middot; Change order policy &middot; Intake requirements &middot; Compliance</div></a><a href="page_decision.html" class="hub-card" style="border-top:3px solid #0F1E3C;"><div class="hc-icon">&#127919;</div><div class="hc-title">Decision Support</div><div class="hc-desc">Vendor selection framework &middot; Make vs buy &middot; Rate negotiation playbooks</div></a>
+    </div>
+
+    <!-- Intelligence Series -->
+    <div class="body-sec" style="padding-top:8px;">
+      <div class="body-sec-title">VER Intelligence Series</div>
+      <div class="body-sec-sub">On-demand &middot; No meeting required</div>
+    </div>
+    <div class="intel-series">
+      <div class="is-header">&#127916; On-Demand Intelligence</div>
+      <div class="is-grid">
+        <a href="Cognizant_QBR_FY26Q4_Cinematic_v2.html" target="_blank"
+          class="is-item" style="background:var(--teal3);border:1px solid var(--teal);">
+          <div class="is-eyebrow" style="color:var(--teal2);">Latest CQBR</div>
+          <div class="is-title">Cognizant &mdash; FY26 Q4</div>
+          <div class="is-cta">&#9654; Watch now &middot; On-demand &middot; No meeting required</div>
+        </a>
+        <a href="VER_Vision_Series_E1_WhoIsVER_v2.html" target="_blank"
+          class="is-item" style="background:var(--purple3);border:1px solid var(--purple);">
+          <div class="is-eyebrow" style="color:var(--purple);">Vision Series</div>
+          <div class="is-title">E1 &mdash; Who Is VER?</div>
+          <div class="is-cta">&#9654; Watch now &middot; Episode 1 of 6</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Vendor Platform hero -->
+    <div class="body-sec" style="padding-top:8px;">
+      <div class="body-sec-title">Vendor Platform</div>
+      <div class="body-sec-sub">Operational intelligence &middot; Working tool for VER and Pillar teams</div>
+    </div>
+    <a href="vendor_home.html" class="vp-bar"
+      style="grid-template-columns:1fr repeat(3,auto) auto;">
+      <div>
+        <div style="font-size:8pt;font-weight:700;color:var(--teal);
+          text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px;">
+          VER Vendor Platform</div>
+        <div style="font-size:13pt;font-weight:800;color:#fff;margin-bottom:4px;">
+          Registry &middot; Risk &middot; SOW Generator &middot; Benchmarking</div>
+        <div style="font-size:8.5pt;color:rgba(255,255,255,0.50);">
+          Vendor registry &middot; Risk intelligence &middot; SOW &amp; change order tools &middot;
+          Intake requests &middot; Supplier portal</div>
+      </div>
+      <div class="vp-stat">
+        <div class="vp-stat-val">1,368</div>
+        <div class="vp-stat-lbl">Vendors</div>
+      </div>
+      <div class="vp-stat">
+        <div class="vp-stat-val" style="color:var(--teal);">20</div>
+        <div class="vp-stat-lbl">VER Assessed</div>
+      </div>
+      <div class="vp-stat">
+        <div class="vp-stat-val" style="color:#FCD34D;">767</div>
+        <div class="vp-stat-lbl">Rate Records</div>
+      </div>
+      <div class="vp-cta">Enter Platform &rarr;</div>
+    </a>
+
+    <!-- About VER -->
+    <div class="body-sec" style="padding-top:8px;">
+      <div class="body-sec-title">About VER</div>
+      <div class="body-sec-sub">Resources &middot; What&#39;s next</div>
+    </div>
+    <div class="about-grid" style="margin-bottom:20px;">
+      <a href="VER_Manager_Guide.html" class="hub-card"
+        style="border-top:3px solid #0D9488;">
+        <div class="hc-icon">&#128218;</div>
+        <div class="hc-title">VER Manager&#39;s Guide</div>
+        <div class="hc-desc">How to work with VER &middot; SOW requirements &middot; Intake process &middot; What VER needs from you</div>
+      </a>
+      <a href="VER_Strategic_Roadmap.html" class="hub-card"
+        style="border-top:3px solid #0D9488;">
+        <div class="hc-icon">&#128506;</div>
+        <div class="hc-title">VER Strategic Roadmap</div>
+        <div class="hc-desc">VER vision &middot; Strategic direction &middot; FY27 priorities &middot; DET advisory framework</div>
+      </a>
+      <a href="page_coming.html" class="hub-card"
+        style="border-top:3px solid #7C3AED;">
+        <div class="hc-icon">&#128640;</div>
+        <div class="hc-title">Coming Soon</div>
+        <div class="hc-desc">Active development &middot; On the horizon &middot; What&#39;s next for VER Intelligence</div>
+      </a>
+    </div>
+
+    <!-- Advisory footer -->
+    <div class="hub-advisory">
+      <div class="ha-eyebrow">VER Advisory &mdash; FY27 Position</div>
+      <div class="ha-text">
+        DET&#39;s third-party spend portfolio is performing under active VER advisory.
+        $10.236M in realized savings confirmed in FY27. Two critical renewals
+        &mdash; NTT Data AD (Aug 2026) and Workday ELP (Nov 2026) &mdash;
+        represent $33.7M in combined annual spend and require Pillar Lead engagement now.
+        The portfolio is stable. VER advisory is active.
+      </div>
+      <div class="ha-footer">
+        VER Intelligence Hub &middot; Salesforce DET &middot; FY27 &middot;
+        Vendor Engagement &amp; Reliability &middot; Confidential
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  // Smooth scroll for Enter Hub
+  var enterBtn = document.querySelector('.nav-link.primary');
+  if(enterBtn){ enterBtn.addEventListener('click',function(e){
+    e.preventDefault();
+    var t=document.getElementById('intel');
+    if(t) t.scrollIntoView({behavior:'smooth'});
+  });}
+});
+</script>
+</body>
+</html>
