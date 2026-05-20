@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Executive Snapshot &mdash; VER Intelligence Hub</title>
+<style>
+:root {
+  --navy:#0F1E3C;--navy2:#1E3A5F;--navy3:#EFF6FF;
+  --teal:#0D9488;--teal2:#0F766E;--teal3:#F0FDF9;
+  --green:#059669;--green2:#065F46;--green3:#D1FAE5;
+  --amber:#D97706;--amber2:#78350F;--amber3:#FEF3C7;
+  --red:#DC2626;--red2:#7F1D1D;--red3:#FEE2E2;
+  --purple:#7C3AED;--purple3:#F5F3FF;
+  --orange:#EA580C;--orange3:#FFF7ED;
+  --ink:#111827;--ink2:#1F2937;--ink3:#374151;--ink4:#6B7280;
+  --gray:#F9FAFB;--gray2:#F3F4F6;--gray3:#E5E7EB;
+  --border:#E5E7EB;--border2:#D1D5DB;--white:#FFFFFF;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--navy);color:#fff;min-height:100vh;}
+
+/* ── Back link ── */
+.back-bar{padding:10px 28px;background:rgba(255,255,255,0.04);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  display:flex;align-items:center;justify-content:space-between;}
+.back-link{font-size:8.5pt;color:rgba(255,255,255,0.5);text-decoration:none;
+  display:flex;align-items:center;gap:6px;transition:color 0.15s;}
+.back-link:hover{color:var(--teal);}
+.back-meta{font-size:7.5pt;color:rgba(255,255,255,0.3);}
+
+/* ── Hero stage ── */
+.stage{padding:40px 48px 32px;
+  background:linear-gradient(160deg,#0F1E3C 0%,#0a1628 60%,#061020 100%);
+  border-bottom:1px solid rgba(255,255,255,0.06);position:relative;
+  overflow:hidden;}
+.stage::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 80% 50%,
+    rgba(13,148,136,0.08) 0%,transparent 65%);pointer-events:none;}
+.stage-eyebrow{font-size:7.5pt;font-weight:700;color:var(--teal);
+  text-transform:uppercase;letter-spacing:0.16em;margin-bottom:12px;}
+.stage-title{font-size:28pt;font-weight:900;color:#fff;line-height:1.1;
+  margin-bottom:10px;letter-spacing:-0.02em;}
+.stage-title span{color:var(--teal);}
+.stage-position{font-size:11pt;color:rgba(255,255,255,0.60);
+  line-height:1.6;max-width:680px;margin-bottom:28px;}
+.stage-position strong{color:rgba(255,255,255,0.85);}
+
+/* ── KPI strip ── */
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.kpi{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);
+  border-radius:10px;padding:16px 20px;
+  border-top:2px solid var(--teal);transition:all 0.2s;}
+.kpi:hover{background:rgba(255,255,255,0.08);}
+.kpi-val{font-size:22pt;font-weight:900;color:#fff;line-height:1;margin-bottom:4px;}
+.kpi-lbl{font-size:7.5pt;font-weight:700;color:rgba(255,255,255,0.45);
+  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px;}
+.kpi-note{font-size:7.5pt;color:rgba(255,255,255,0.35);}
+.kpi.good{border-top-color:var(--green);}
+.kpi.good .kpi-val{color:var(--green);}
+.kpi.warn{border-top-color:var(--amber);}
+.kpi.warn .kpi-val{color:var(--amber);}
+.kpi.risk{border-top-color:var(--red);}
+.kpi.risk .kpi-val{color:var(--red);}
+
+/* ── Main content area ── */
+.exec-body{background:var(--gray);color:var(--ink);}
+
+/* ── Section headers ── */
+.sec-hdr{padding:20px 28px 12px;display:flex;align-items:center;
+  justify-content:space-between;}
+.sec-title{font-size:8pt;font-weight:800;color:var(--ink4);
+  text-transform:uppercase;letter-spacing:0.12em;}
+.sec-action{font-size:8pt;color:var(--teal);font-weight:600;
+  text-decoration:none;transition:opacity 0.15s;}
+.sec-action:hover{opacity:0.7;}
+
+/* ── Pillar health strip ── */
+.pillar-strip{display:grid;grid-template-columns:repeat(9,1fr);
+  gap:6px;padding:0 28px 20px;}
+.p-pill{border-radius:8px;padding:10px 8px;text-align:center;
+  cursor:pointer;transition:all 0.2s;text-decoration:none;display:block;
+  border:1px solid rgba(0,0,0,0.06);}
+.p-pill:hover{transform:translateY(-2px);
+  box-shadow:0 4px 12px rgba(0,0,0,0.12);}
+.p-name{font-size:7.5pt;font-weight:700;color:#fff;margin-bottom:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.p-spend{font-size:7pt;color:rgba(255,255,255,0.65);margin-bottom:5px;}
+.p-risk{font-size:7pt;font-weight:700;padding:2px 6px;border-radius:8px;
+  display:inline-block;}
+.risk-green{background:rgba(5,150,105,0.25);color:#6EE7B7;}
+.risk-amber{background:rgba(217,119,6,0.25);color:#FCD34D;}
+.risk-red{background:rgba(220,38,38,0.25);color:#FCA5A5;}
+
+/* ── Savings story ── */
+.savings-story{margin:0 28px 20px;
+  background:linear-gradient(135deg,var(--navy) 0%,#1E3A5F 100%);
+  border-radius:12px;padding:20px 24px;
+  border:1px solid rgba(13,148,136,0.3);
+  display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.ss-left{}
+.ss-eyebrow{font-size:7.5pt;font-weight:700;color:var(--teal);
+  text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;}
+.ss-total{font-size:32pt;font-weight:900;color:#fff;line-height:1;
+  margin-bottom:4px;}
+.ss-total span{color:var(--teal);}
+.ss-desc{font-size:8.5pt;color:rgba(255,255,255,0.55);line-height:1.6;}
+.ss-right{display:flex;flex-direction:column;gap:10px;justify-content:center;}
+.ss-item{background:rgba(255,255,255,0.06);border-radius:8px;
+  padding:12px 16px;border-left:3px solid var(--teal);}
+.ss-item-val{font-size:14pt;font-weight:900;color:var(--teal);line-height:1;}
+.ss-item-lbl{font-size:8pt;color:rgba(255,255,255,0.65);margin-top:3px;}
+.ss-item.second{border-left-color:var(--green);}
+.ss-item.second .ss-item-val{color:var(--green);}
+
+/* ── Engagement cards ── */
+.eng-grid{display:grid;grid-template-columns:1fr 1fr;
+  gap:12px;padding:0 28px 20px;}
+.eng-card{background:var(--white);border-radius:10px;overflow:hidden;
+  border:1px solid var(--border);transition:all 0.2s;}
+.eng-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08);}
+.eng-signal{height:3px;}
+.eng-top{display:flex;align-items:center;gap:12px;padding:14px 16px 12px;}
+.eng-logo{width:36px;height:36px;border-radius:7px;object-fit:contain;
+  border:1px solid var(--border);background:#fff;flex-shrink:0;padding:2px;}
+.eng-logo-fb{width:36px;height:36px;border-radius:7px;background:var(--navy);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:11pt;font-weight:800;flex-shrink:0;}
+.eng-info{flex:1;min-width:0;}
+.eng-vendor{font-size:9pt;font-weight:800;color:var(--navy);margin-bottom:2px;}
+.eng-name{font-size:8pt;color:var(--ink4);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;}
+.eng-value{text-align:right;flex-shrink:0;}
+.eng-val-num{font-size:14pt;font-weight:900;line-height:1;}
+.eng-val-lbl{font-size:7.5pt;color:var(--ink4);margin-top:2px;}
+.eng-badges{padding:0 16px 10px;display:flex;gap:5px;flex-wrap:wrap;}
+.badge{font-size:7pt;padding:2px 8px;border-radius:10px;font-weight:700;}
+.b-green{background:var(--green3);color:var(--green2);}
+.b-amber{background:var(--amber3);color:var(--amber2);}
+.b-red{background:var(--red3);color:var(--red2);}
+.b-navy{background:var(--navy3);color:var(--navy);}
+.b-gray{background:var(--gray2);color:var(--ink4);}
+.b-teal{background:var(--teal3);color:var(--teal2);}
+.eng-detail{padding:0 16px 14px;font-size:8.5pt;color:var(--ink4);
+  line-height:1.6;border-top:1px solid var(--gray2);padding-top:10px;
+  display:none;}
+.eng-card.open .eng-detail{display:block;}
+.eng-expand{padding:4px 16px 10px;font-size:7.5pt;color:var(--teal);
+  font-weight:600;cursor:pointer;user-select:none;}
+.eng-expand:hover{opacity:0.7;}
+
+/* ── Intelligence panels ── */
+.intel-grid{display:grid;grid-template-columns:1fr 1fr;
+  gap:12px;padding:0 28px 20px;}
+.intel-card{background:var(--white);border-radius:10px;padding:16px;
+  border:1px solid var(--border);cursor:pointer;transition:all 0.2s;}
+.intel-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08);}
+.intel-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.intel-icon{font-size:20pt;}
+.intel-hdr-text{}
+.intel-title{font-size:9.5pt;font-weight:800;color:var(--navy);margin-bottom:2px;}
+.intel-sub{font-size:8pt;color:var(--ink4);}
+.intel-nav{margin-left:auto;font-size:8.5pt;color:var(--teal);font-weight:600;}
+.q-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.q-cell{text-align:center;padding:8px;border-radius:6px;}
+.q-num{font-size:13pt;font-weight:900;line-height:1.1;}
+.q-lbl{font-size:7pt;font-weight:700;margin-top:2px;}
+.q-val{font-size:7pt;color:var(--ink4);margin-top:1px;}
+.mft-bar{background:var(--gray2);border-radius:4px;height:8px;
+  overflow:hidden;display:flex;margin-top:10px;}
+.mft-seg{height:8px;}
+
+/* ── Open items ── */
+.open-items{padding:0 28px 20px;}
+.blocker{background:var(--white);border-radius:10px;padding:16px;
+  border:1px solid var(--border);border-left:4px solid var(--red);
+  display:flex;gap:14px;align-items:flex-start;}
+.blocker-icon{font-size:20pt;flex-shrink:0;}
+.blocker-title{font-size:9pt;font-weight:800;color:var(--navy);margin-bottom:4px;}
+.blocker-desc{font-size:8.5pt;color:var(--ink3);line-height:1.6;margin-bottom:8px;}
+
+/* ── VER advisory close ── */
+.advisory-close{margin:0 28px 28px;
+  background:linear-gradient(135deg,var(--navy) 0%,#1a2f50 100%);
+  border-radius:12px;padding:20px 24px;
+  border:1px solid rgba(255,255,255,0.06);}
+.ac-eyebrow{font-size:7.5pt;font-weight:700;color:var(--teal);
+  text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;}
+.ac-text{font-size:9pt;color:rgba(255,255,255,0.70);line-height:1.75;}
+.ac-footer{font-size:7.5pt;color:rgba(255,255,255,0.30);
+  margin-top:12px;padding-top:12px;
+  border-top:1px solid rgba(255,255,255,0.06);}
+</style>
+</head>
+<body>
+
+<!-- Back bar -->
+<div class="back-bar">
+  <a href="index.html" class="back-link">&#8592; VER Intelligence Hub</a>
+  <span class="back-meta">Executive Snapshot &middot; FY27 &middot; Salesforce DET &middot; Confidential</span>
+</div>
+
+<!-- Stage -->
+<div class="stage">
+  <div class="stage-eyebrow">VER Intelligence Hub &middot; Executive Snapshot &middot; FY27</div>
+  <div class="stage-title">DET Portfolio <span>Intelligence</span></div>
+  <div class="stage-position">
+    <strong>$10.236M in realized savings.</strong> 1,368 vendors under VER advisory.
+    Two critical renewals within 90 days. The DET third-party spend portfolio
+    is actively monitored, benchmarked, and advised by VER.
+  </div>
+  <div class="kpi-strip">
+    <div class="kpi good">
+      <div class="kpi-lbl">Savings Realized</div>
+      <div class="kpi-val">$10.2M</div>
+      <div class="kpi-note">FY27 &middot; NTT AD + Cognizant</div>
+    </div>
+    <div class="kpi warn">
+      <div class="kpi-lbl">Critical Renewals</div>
+      <div class="kpi-val">2</div>
+      <div class="kpi-note">Within 90 days &middot; $33.7M at risk</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">Active SOWs</div>
+      <div class="kpi-val">2,397</div>
+      <div class="kpi-note">Coupa POs tracked &middot; FY27</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">MFT Forecast</div>
+      <div class="kpi-val">$93.4M</div>
+      <div class="kpi-note">Approved pipeline &middot; 351 items</div>
+    </div>
+  </div>
+</div>
+
+<!-- Body -->
+<div class="exec-body">
+<div style="max-width:1280px;margin:0 auto;padding:0 48px;">
+
+  <!-- Pillar health -->
+  <div class="sec-hdr">
+    <div class="sec-title">Pillar Portfolio Health</div>
+    <a href="page_pillar.html" class="sec-action">View SSI &rarr;</a>
+  </div>
+  <div class="pillar-strip" id="pillar-strip"></div>
+
+  <!-- Savings story -->
+  <div class="sec-hdr" style="padding-bottom:8px;">
+    <div class="sec-title">Savings &amp; Value Realization</div>
+  </div>
+  <div class="savings-story">
+    <div class="ss-left">
+      <div class="ss-eyebrow">FY27 Advisory Savings</div>
+      <div class="ss-total">$10.<span>236M</span></div>
+      <div class="ss-desc">
+        Realized through VER advisory engagement in FY27.
+        Two engagements restructured or terminated, generating
+        $10.236M in confirmed savings for DET. Savings pipeline
+        of $3&ndash;5M identified for H2 FY27.
+      </div>
+    </div>
+    <div class="ss-right">
+      <div class="ss-item">
+        <div class="ss-item-val">$9.0M</div>
+        <div class="ss-item-lbl">NTT Data AD restructure &middot; DA&amp;O &middot; Apr 2026</div>
+      </div>
+      <div class="ss-item second">
+        <div class="ss-item-val">$1.236M</div>
+        <div class="ss-item-lbl">Cognizant engagement termination &middot; SF on SF &middot; FY27</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key engagements -->
+  <div class="sec-hdr">
+    <div class="sec-title">Key Engagements</div>
+    <span style="font-size:8pt;color:var(--ink4);">Click any card to expand detail</span>
+  </div>
+  <div class="eng-grid" id="eng-grid"></div>
+
+  <!-- SOW & MFT -->
+  <div class="sec-hdr">
+    <div class="sec-title">SOW &amp; MFT Intelligence</div>
+  </div>
+  <div class="intel-grid">
+    <div class="intel-card" onclick="window.location.href='page_sow.html'">
+      <div class="intel-header">
+        <div class="intel-icon">&#128203;</div>
+        <div class="intel-hdr-text">
+          <div class="intel-title">SOW &amp; PO Expiry Tracker</div>
+          <div class="intel-sub">2,397 POs &middot; FY27</div>
+        </div>
+        <div class="intel-nav">View full &rarr;</div>
+      </div>
+      <div class="q-grid">
+        <div class="q-cell" style="background:var(--red3);">
+          <div class="q-num" style="color:var(--red);">800</div>
+          <div class="q-lbl" style="color:var(--red2);">Q1</div>
+          <div class="q-val">$57.6M</div>
+        </div>
+        <div class="q-cell" style="background:var(--amber3);">
+          <div class="q-num" style="color:var(--amber);">374</div>
+          <div class="q-lbl" style="color:var(--amber2);">Q2</div>
+          <div class="q-val">$88.2M</div>
+        </div>
+        <div class="q-cell" style="background:var(--green3);">
+          <div class="q-num" style="color:var(--green);">397</div>
+          <div class="q-lbl" style="color:var(--green2);">Q3</div>
+          <div class="q-val">$56.4M</div>
+        </div>
+        <div class="q-cell" style="background:var(--navy3);">
+          <div class="q-num" style="color:var(--navy);">826</div>
+          <div class="q-lbl" style="color:var(--navy2);">Q4</div>
+          <div class="q-val">$118.2M</div>
+        </div>
+      </div>
+    </div>
+    <div class="intel-card" onclick="window.location.href='page_mft.html'">
+      <div class="intel-header">
+        <div class="intel-icon">&#128200;</div>
+        <div class="intel-hdr-text">
+          <div class="intel-title">MFT Forecasted Spend</div>
+          <div class="intel-sub">$93.4M &middot; 351 items &middot; FY27</div>
+        </div>
+        <div class="intel-nav">View full &rarr;</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+        <div style="padding:10px;background:var(--green3);border-radius:6px;">
+          <div style="font-size:13pt;font-weight:900;color:var(--green);">$9.3M</div>
+          <div style="font-size:7.5pt;color:var(--green2);font-weight:700;">Approved &middot; 45 items</div>
+        </div>
+        <div style="padding:10px;background:var(--amber3);border-radius:6px;">
+          <div style="font-size:13pt;font-weight:900;color:var(--amber);">$14.1M</div>
+          <div style="font-size:7.5pt;color:var(--amber2);font-weight:700;">In Flight &middot; 74 items</div>
+        </div>
+      </div>
+      <div class="mft-bar">
+        <div class="mft-seg" style="width:10%;background:var(--green);"></div>
+        <div class="mft-seg" style="width:8%;background:#6366F1;"></div>
+        <div class="mft-seg" style="width:7%;background:var(--amber);"></div>
+        <div class="mft-seg" style="width:75%;background:var(--gray3);"></div>
+      </div>
+      <div style="font-size:7pt;color:var(--ink4);margin-top:5px;">
+        10% approved &middot; 8% new &middot; 7% under review &middot; 75% pipeline
+      </div>
+    </div>
+  </div>
+
+  <!-- Open items -->
+  <div class="sec-hdr">
+    <div class="sec-title">Open Items</div>
+    <span class="badge b-red" style="font-size:7pt;">1 Open</span>
+  </div>
+  <div class="open-items">
+    <div class="blocker">
+      <div class="blocker-icon">&#9888;</div>
+      <div>
+        <div class="blocker-title">Sonata Software &mdash; SF Support SOW Renewal Decision Required</div>
+        <div class="blocker-desc">
+          Year 3 of Sonata SF Support SOW ended May 15, 2026. Immediate Renew or Wind-Down
+          decision required. 30-day notice period. VER recommends aligning with Procurement
+          and responsible Pillar Lead before any extension is executed.
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <span class="badge b-red">Immediate Action</span>
+          <span class="badge b-gray">Owner: VER + Procurement + Pillar Lead</span>
+          <span class="badge b-gray">M&amp;A Inherited &middot; Informatica</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VER Advisory close -->
+  <div class="advisory-close">
+    <div class="ac-eyebrow">VER Advisory Position &mdash; FY27</div>
+    <div class="ac-text">
+      DET's third-party spend portfolio is performing under active VER advisory.
+      The $10.236M in realized savings demonstrates VER's value in renegotiation
+      and engagement restructuring. The two critical renewals — NTT Data AD (Aug 2026)
+      and Workday ELP (Nov 2026) — represent $33.7M in combined annual spend and
+      require Pillar Lead engagement now. VER is monitoring the GSA re-assignment
+      of NTT AMS and the Informatica M&amp;A implications across the Data Solutions pillar.
+      The portfolio is stable. VER advisory is active.
+    </div>
+    <div class="ac-footer">
+      VER Intelligence Hub &middot; Executive Snapshot &middot; FY27 &middot;
+      Salesforce DET &middot; Powered by VER &middot; Confidential
+    </div>
+  </div>
+
+</div>
+
+<script>
+var ENGAGEMENTS = [{"vendor": "NTT Data", "domain": "nttdata.com", "name": "AMS — Application Maintenance Services", "pillar": "DA&O", "value": "$22.8M", "status": "amber", "badge": "GSA Re-assignment In Progress", "expiry": "Sep 2028", "urgency": "monitor", "detail": "TCV $33M+ · Sep 2023–Sep 2028 · 180-day notice · L1/L2/L3 application maintenance across DET pillars. Budget owner: DA&O. Mission-critical — no disruption during GSA transition."}, {"vendor": "NTT Data", "domain": "nttdata.com", "name": "AD — Application Development (Restructured)", "pillar": "DA&O", "value": "$10.0M", "status": "red", "badge": "Expires Aug 2026 — 99 days", "expiry": "Aug 2026", "urgency": "critical", "detail": "24 individual POs · Expires Aug 12, 2026 · 30-day notice · ~140 resources · Restructured Apr 2026. $9.0M savings realized. Renewal decision required before Aug 2026."}, {"vendor": "Cognizant", "domain": "cognizant.com", "name": "Workday ADAMS — Enterprise Systems", "pillar": "SF on SF", "value": "$2.43M", "status": "green", "badge": "Year 3 of 3", "expiry": "Feb 2027", "urgency": "monitor", "detail": "Year 3 of 3 · Expires Feb 14, 2027 · Per GSA notice · All SLAs meeting targets. Workday ADAMS L2 + L3 support scope. Renewal decision needed before FY28."}, {"vendor": "Cognizant", "domain": "cognizant.com", "name": "Workday ADAMS — Financials", "pillar": "SF on SF", "value": "$3.83M", "status": "green", "badge": "Year 2 of 2", "expiry": "Feb 2027", "urgency": "watch", "detail": "Year 2 of 2 · Expires Feb 14, 2027 · Per GSA notice · L2 + L3 AMS support performing to scope. Renewal decision before FY28."}, {"vendor": "Workday", "domain": "workday.com", "name": "Enterprise License — HCM & Financials", "pillar": "SF on SF", "value": "$23.7M", "status": "red", "badge": "Renews Nov 2026 — Critical", "expiry": "Nov 2026", "urgency": "critical", "detail": "Critical renewal Nov 30, 2026 · 90-day notice · Rate benchmarking in progress. Largest SF on SF spend item. Renewal strategy to Pillar Lead and Procurement by Q2 FY27."}, {"vendor": "Tech Mahindra", "domain": "techmahindra.com", "name": "Techforce — Service Desk & On-Site", "pillar": "IT", "value": "$6.5M", "status": "amber", "badge": "Expires Apr 2027", "expiry": "Apr 2027", "urgency": "watch", "detail": "Service Desk $1.08M + On-Site Services $5.45M · Both expire Apr 30, 2027 · 90-day notice · 24x7 managed service · ~30K tickets/mo."}, {"vendor": "AWS", "domain": "aws.amazon.com", "name": "Cloud Infrastructure — EDP Committed Spend", "pillar": "Engineering", "value": "$17.2M", "status": "green", "badge": "Expires Mar 2027", "expiry": "Mar 2027", "urgency": "watch", "detail": "Enterprise Discount Program (EDP) committed spend · Expires Mar 1, 2027 · 90-day notice · Usage within EDP envelope on track."}];
+var PILLARS = [{"key": "sf-on-sf", "short": "SF on SF", "color": "#0D9488", "risk": "amber", "spend": "$22.2M"}, {"key": "eng-dev", "short": "Engineering", "color": "#D97706", "risk": "amber", "spend": "$15.9M"}, {"key": "it", "short": "IT", "color": "#2563EB", "risk": "amber", "spend": "$116.8M"}, {"key": "da-ops", "short": "DA&amp;O", "color": "#059669", "risk": "amber", "spend": "$0 Coupa"}, {"key": "data", "short": "Data", "color": "#0EA5E9", "risk": "green", "spend": "$11.9M"}, {"key": "dig-mkt", "short": "Dig Mktg", "color": "#7C3AED", "risk": "green", "spend": "$4.7M"}, {"key": "agentic", "short": "Agentic", "color": "#EC4899", "risk": "green", "spend": "$0"}, {"key": "cdo", "short": "CDO", "color": "#64748B", "risk": "amber", "spend": "$6.3M"}, {"key": "emerging", "short": "Emerging", "color": "#EA580C", "risk": "green", "spend": "$0"}];
+
+var BF = '1idLxwmT7Sv6VAWJq9j';
+var STATUS_COLORS = {green:'var(--green)',amber:'var(--amber)',red:'var(--red)'};
+
+// ── Pillar strip ─────────────────────────────────────────────
+function buildPillarStrip(){
+  var el = document.getElementById('pillar-strip');
+  if(!el) return;
+  el.innerHTML = PILLARS.map(function(p){
+    var rc = 'risk-'+p.risk;
+    var rl = p.risk==='green'?'Healthy':p.risk==='amber'?'Monitor':'Action';
+    return '<a href="page_pillar_detail.html?pillar='+p.key+'" class="p-pill" '
+      +'style="background:linear-gradient(160deg,'+p.color+' 0%,'+p.color+'cc 100%);">'
+      +'<div class="p-name">'+p.short+'</div>'
+      +'<div class="p-spend">'+p.spend+'</div>'
+      +'<span class="p-risk '+rc+'">'+rl+'</span>'
+      +'</a>';
+  }).join('');
+}
+
+// ── Engagement cards ─────────────────────────────────────────
+function buildEngGrid(){
+  var el = document.getElementById('eng-grid');
+  if(!el) return;
+  var statusColors = {
+    green:'var(--green)',amber:'var(--amber)',red:'var(--red)'
+  };
+  var badgeClass = {
+    green:'b-green',amber:'b-amber',red:'b-red'
+  };
+  el.innerHTML = ENGAGEMENTS.map(function(e,i){
+    var sc = statusColors[e.status] || 'var(--navy)';
+    var bc = badgeClass[e.status] || 'b-gray';
+    var logoHtml = '<img class="eng-logo" '
+      +'src="https://cdn.brandfetch.io/'+e.domain+'?c='+BF+'" '
+      +'onerror="this.style.display=\'none\'" alt="">';
+    return '<div class="eng-card" id="eng-'+i+'">'
+      +'<div class="eng-signal" style="background:'+sc+';"></div>'
+      +'<div class="eng-top">'
+        +logoHtml
+        +'<div class="eng-info">'
+          +'<div class="eng-vendor">'+e.vendor+'</div>'
+          +'<div class="eng-name">'+e.name+'</div>'
+        +'</div>'
+        +'<div class="eng-value">'
+          +'<div class="eng-val-num" style="color:'+sc+';">'+e.value+'</div>'
+          +'<div class="eng-val-lbl">annual value</div>'
+        +'</div>'
+      +'</div>'
+      +'<div class="eng-badges">'
+        +'<span class="badge b-gray">'+e.pillar+'</span>'
+        +'<span class="badge '+bc+'">'+e.badge+'</span>'
+        +'<span class="badge b-gray">'+e.expiry+'</span>'
+      +'</div>'
+      +'<div class="eng-expand" onclick="toggleEng('+i+')" id="exp-'+i+'">&#9660; Show detail</div>'
+      +'<div class="eng-detail" id="det-'+i+'">'+e.detail+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function toggleEng(i){
+  var card = document.getElementById('eng-'+i);
+  var det  = document.getElementById('det-'+i);
+  var exp  = document.getElementById('exp-'+i);
+  var open = card.classList.toggle('open');
+  det.style.display = open ? 'block' : 'none';
+  exp.innerHTML = open ? '&#9650; Hide detail' : '&#9660; Show detail';
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  buildPillarStrip();
+  buildEngGrid();
+});
+</script>
+</div>
+</body>
+</html>
