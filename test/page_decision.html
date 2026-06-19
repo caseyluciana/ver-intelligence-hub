@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Decision Support Center · VER Intelligence Hub</title>
+<style>
+:root{
+  --navy:#0F1E3C;--navy2:#1E3A5F;--navy3:#EFF6FF;
+  --teal:#0D9488;--teal2:#0F766E;--teal3:#F0FDF9;
+  --green:#059669;--green2:#065F46;--green3:#D1FAE5;
+  --amber:#D97706;--amber2:#78350F;--amber3:#FEF3C7;
+  --red:#DC2626;--red2:#7F1D1D;--red3:#FEE2E2;
+  --purple:#7C3AED;--purple3:#F5F3FF;
+  --orange:#EA580C;--orange3:#FFF7ED;
+  --blue:#2563EB;--blue3:#EFF6FF;
+  --ink:#111827;--ink2:#1F2937;--ink3:#374151;--ink4:#6B7280;
+  --gray:#F9FAFB;--gray2:#F3F4F6;--gray3:#E5E7EB;
+  --border:#E5E7EB;--border2:#D1D5DB;--white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--gray);color:var(--ink2);font-size:9pt;}
+.wrap{max-width:1100px;margin:0 auto;padding:28px 48px;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--border);}
+.back{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;
+  border-radius:6px;background:var(--gray2);border:1px solid var(--border2);
+  color:var(--ink3);font-size:8pt;font-weight:600;text-decoration:none;
+  cursor:pointer;font-family:inherit;transition:all 0.15s;}
+.back:hover{background:var(--navy);color:#fff;}
+.pg-title{font-size:15pt;font-weight:900;color:var(--navy);}
+.pg-sub{font-size:8.5pt;color:var(--ink4);margin-top:2px;}
+.card{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.card-title{font-size:9.5pt;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.card-sub{font-size:8pt;color:var(--ink4);margin-bottom:12px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.stat{background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:14px 16px;border-top:3px solid var(--navy);}
+.stat.teal{border-top-color:var(--teal);}
+.stat.green{border-top-color:var(--green);}
+.stat.amber{border-top-color:var(--amber);}
+.stat.red{border-top-color:var(--red);}
+.stat.purple{border-top-color:var(--purple);}
+.stat.blue{border-top-color:var(--blue);}
+.stat-val{font-size:20pt;font-weight:900;color:var(--navy);line-height:1;margin-bottom:3px;}
+.stat.teal .stat-val{color:var(--teal);}
+.stat.green .stat-val{color:var(--green);}
+.stat.amber .stat-val{color:var(--amber);}
+.stat.red .stat-val{color:var(--red);}
+.stat.purple .stat-val{color:var(--purple);}
+.stat.blue .stat-val{color:var(--blue);}
+.stat-lbl{font-size:7.5pt;font-weight:600;color:var(--ink4);text-transform:uppercase;letter-spacing:0.06em;}
+.stat-note{font-size:7pt;color:var(--ink4);margin-top:4px;}
+.prog{background:var(--gray2);border-radius:4px;height:10px;overflow:hidden;}
+.prog-bar{height:10px;border-radius:4px;transition:width 0.8s;}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:7pt;font-weight:700;
+  padding:2px 8px;border-radius:10px;white-space:nowrap;}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.bg{background:var(--green3);color:var(--green2);}
+.ba{background:var(--amber3);color:var(--amber2);}
+.br{background:var(--red3);color:var(--red2);}
+.bn{background:var(--navy3);color:var(--navy2);}
+.bt{background:var(--teal3);color:var(--teal2);}
+.bp{background:var(--purple3);color:var(--purple);}
+.bz{background:var(--gray2);color:var(--ink4);}
+.bo{background:var(--orange3);color:var(--orange);}
+.bb{background:var(--blue3);color:var(--blue);}
+.vt{width:100%;border-collapse:collapse;font-size:8.5pt;}
+.vt th{background:var(--navy);color:#fff;padding:8px 12px;text-align:left;
+  font-size:7.5pt;font-weight:700;letter-spacing:0.03em;}
+.vt td{padding:9px 12px;border-bottom:1px solid var(--gray2);vertical-align:middle;}
+.vt tr:hover td{background:var(--gray);}
+.vt tr:last-child td{border-bottom:none;}
+.callout{border-radius:0 8px 8px 0;padding:12px 16px;margin-bottom:16px;
+  border-left:4px solid;font-size:8.5pt;line-height:1.6;}
+.c-info{background:var(--navy3);border-color:var(--navy2);color:var(--navy2);}
+.c-teal{background:var(--teal3);border-color:var(--teal);color:var(--green2);}
+.c-amber{background:var(--amber3);border-color:var(--amber);color:var(--amber2);}
+.shdr{font-size:10pt;font-weight:800;color:var(--navy);margin:20px 0 10px;
+  display:flex;align-items:center;gap:8px;padding-bottom:8px;
+  border-bottom:2px solid var(--gray3);}
+.tab-bar{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.tab{font-size:8pt;padding:6px 14px;border-radius:20px;cursor:pointer;
+  border:1.5px solid var(--border2);background:#fff;font-family:inherit;
+  transition:all 0.15s;font-weight:600;color:var(--ink4);}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab:hover:not(.active){border-color:var(--navy);color:var(--navy);}
+.footer{margin-top:24px;padding-top:12px;border-top:1px solid var(--border);
+  font-size:7.5pt;color:var(--ink4);text-align:center;font-style:italic;}
+@media print{.back,.tab-bar{display:none!important;}.wrap{padding:12px!important;}}
+
+/* ── Hub Top Bar ── */
+.hub-top-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;height:48px;background:linear-gradient(90deg,rgba(15,30,60,0.98) 0%,rgba(10,22,40,0.98) 100%);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.08);}
+.htb-left{display:flex;align-items:center;gap:14px;}
+.htb-back{font-size:8.5pt;color:rgba(255,255,255,0.5);text-decoration:none;font-weight:500;}
+.htb-back:hover{color:#fff;}
+.htb-divider{width:1px;height:16px;background:rgba(255,255,255,0.12);}
+.htb-brand{font-size:8.5pt;font-weight:700;color:rgba(255,255,255,0.65);}
+.htb-right{display:flex;align-items:center;gap:12px;}
+.htb-meta{text-align:right;font-size:7.5pt;color:rgba(255,255,255,0.45);line-height:1.4;}
+.htb-meta-sub{font-size:7pt;}
+
+/* ── Hero Stage ── */
+.stage{background:linear-gradient(160deg,#0F1E3C 0%,#0a1628 60%,#061020 100%);
+  position:relative;overflow:hidden;padding:52px 0 40px;}
+.stage::before{content:'';position:absolute;top:-80px;right:-80px;width:500px;height:500px;
+  background:radial-gradient(circle,rgba(13,148,136,0.07) 0%,transparent 70%);pointer-events:none;}
+.stage-inner{max-width:1100px;margin:0 auto;padding:0 48px;}
+.stage-eyebrow{font-size:7.5pt;font-weight:700;color:var(--teal);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px;}
+.stage-title{font-size:28pt;font-weight:900;color:#fff;line-height:1.1;margin-bottom:6px;}
+.stage-accent{color:var(--teal);}
+.stage-pos{font-size:9pt;color:rgba(255,255,255,0.55);}
+
+/* ── Decision card grid ── */
+.dsc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:8px;}
+.dsc-link{text-decoration:none;}
+.dsc-card{border:1.5px solid var(--border2);border-radius:8px;padding:14px 16px;
+  cursor:pointer;transition:all 0.15s;background:#fff;}
+.dsc-card:hover{border-color:var(--teal);background:var(--teal3);}
+.dsc-card.hover-amber:hover{border-color:var(--amber);background:var(--amber3);}
+.dsc-card.hover-green:hover{border-color:var(--green);background:var(--green3);}
+.dsc-card.hover-red:hover{border-color:var(--red);background:var(--red3);}
+.dsc-card.hover-purple:hover{border-color:var(--purple);background:var(--purple3);}
+.dsc-card.hover-navy:hover{border-color:var(--navy);background:var(--navy3);}
+.dsc-card.hover-teal:hover{border-color:var(--teal);background:var(--teal3);}
+.dsc-card.hover-red:hover{border-color:var(--red);background:var(--red3);}
+.dsc-icon{font-size:14pt;margin-bottom:6px;}
+.dsc-title{font-size:9pt;font-weight:700;color:var(--navy);margin-bottom:4px;}
+.dsc-sub{font-size:8pt;color:var(--ink4);}
+
+/* ── Services cards ── */
+.svc-card-teal{border-top:3px solid var(--teal);}
+.svc-card-navy{border-top:3px solid var(--navy);}
+.svc-card-purple{border-top:3px solid var(--purple);}
+.svc-icon{font-size:18pt;margin-bottom:8px;}
+.svc-body{font-size:8.5pt;color:var(--ink3);line-height:1.7;}
+
+/* ── Contact CTA card ── */
+.cta-card{background:linear-gradient(135deg,var(--navy) 0%,#1E3A5F 100%);border:none;}
+.cta-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;}
+.cta-title{font-size:10pt;font-weight:800;color:#fff;margin-bottom:4px;}
+.cta-body{font-size:8.5pt;color:rgba(255,255,255,0.75);line-height:1.6;}
+.cta-btn{background:var(--teal);color:#fff;padding:10px 20px;border-radius:8px;
+  font-size:9pt;font-weight:700;white-space:nowrap;text-decoration:none;display:inline-block;}
+
+/* ── Dark mode ── */
+[data-theme="dark"]{
+  --gray:#0D1626;--gray2:#111F35;--gray3:#1A2D47;
+  --white:#0F1E3C;--border:#1E3A5F;--border2:#243E60;
+  --ink:#EFF6FF;--ink2:#C7D9F0;--ink3:#8BAACF;--ink4:#5A7899;
+  --navy3:#0F1E3C;--navy2:#1E3A5F;
+  --teal3:rgba(13,148,136,0.15);--green3:rgba(5,150,105,0.15);
+  --amber3:rgba(217,119,6,0.15);--red3:rgba(220,38,38,0.15);
+  --purple3:rgba(124,58,237,0.15);--orange3:rgba(234,88,12,0.15);
+  --blue3:rgba(37,99,235,0.15);
+}
+[data-theme="dark"] body{background:var(--gray);color:var(--ink2);}
+[data-theme="dark"] .card,[data-theme="dark"] .stat{background:var(--gray2);border-color:var(--border);}
+[data-theme="dark"] .card-title,[data-theme="dark"] .stat-val{color:var(--ink);}
+[data-theme="dark"] .c-info{background:#0F1E3C;border-left-color:var(--navy2);color:var(--ink3);}
+[data-theme="dark"] .c-teal{background:rgba(13,148,136,0.12);}
+[data-theme="dark"] .dsc-card{background:var(--gray2);border-color:var(--border);}
+.dm-toggle{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;
+  border-radius:20px;border:1px solid var(--border2);background:var(--gray2);
+  color:var(--ink4);font-size:7.5pt;font-weight:700;cursor:pointer;
+  font-family:inherit;transition:all 0.15s;white-space:nowrap;}
+.dm-toggle:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
+[data-theme="dark"] .dm-toggle{background:rgba(13,148,136,0.18);border-color:rgba(13,148,136,0.4);color:#0D9488;}
+
+/* scroll fade */
+.fade-in{opacity:0;transform:translateY(16px);transition:opacity 0.5s ease,transform 0.5s ease;}
+.fade-in.visible{opacity:1;transform:none;}
+
+/* advisory close */
+.advisory-close{background:linear-gradient(135deg,var(--navy) 0%,#1a2f50 100%);
+  color:rgba(255,255,255,0.6);padding:32px 48px;margin-top:40px;}
+.advisory-close-inner{max-width:1100px;margin:0 auto;}
+.advisory-title{font-size:9pt;font-weight:800;color:rgba(255,255,255,0.9);margin-bottom:8px;}
+.advisory-text{font-size:8pt;line-height:1.7;}
+.advisory-meta{margin-top:12px;font-size:7.5pt;color:rgba(255,255,255,0.35);}
+
+@media print{.hub-top-bar,.stage{display:none!important;}.wrap{padding:12px!important;}}
+.card-navy-top{border-top:3px solid var(--navy);margin-bottom:20px;}
+
+/* ── KPI Strip (hero) ── */
+.kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:24px;}
+.kpi-tile{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);
+  border-radius:10px;padding:16px 18px;border-top:2px solid var(--teal);}
+.kpi-tile.amber{border-top-color:var(--amber);}
+.kpi-tile.green{border-top-color:var(--green);}
+.kpi-tile.red{border-top-color:var(--red);}
+.kpi-tile-lbl{font-size:7.5pt;font-weight:700;color:rgba(255,255,255,0.45);
+  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;}
+.kpi-tile-val{font-size:22pt;font-weight:900;color:#fff;line-height:1;margin-bottom:4px;}
+.kpi-tile.amber .kpi-tile-val{color:#FCD34D;}
+.kpi-tile.green .kpi-tile-val{color:#6EE7B7;}
+.kpi-tile.red .kpi-tile-val{color:#FCA5A5;}
+.kpi-tile.teal2 .kpi-tile-val{color:#5EEAD4;}
+.kpi-tile-note{font-size:7.5pt;color:rgba(255,255,255,0.35);}
+</style>
+</head>
+<body>
+<nav class="hub-top-bar">
+  <div class="htb-left">
+    <a href="index.html" class="htb-back">&#8592; Hub</a>
+    <div class="htb-divider"></div>
+    <span class="htb-brand">Decision Support Center</span>
+  </div>
+  <div class="htb-right">
+    <button type="button" class="dm-toggle" id="dm-btn" onclick="_dmToggle()">&#9789; Dark Mode</button>
+    <div class="htb-meta">DET Portfolio Intelligence &mdash; Powered by VER<br><span class="htb-meta-sub">Updated: May 2026 &middot; Salesforce DET &middot; Confidential</span></div>
+  </div>
+</nav>
+
+<section class="stage">
+  <div class="stage-inner">
+    <div class="stage-eyebrow">VER Intelligence Hub · FY27</div>
+    <div class="stage-title">Decision <span class="stage-accent">Support Center</span></div>
+    <div class="stage-pos">Find the right VER intelligence for any vendor or engagement decision</div>
+    <div class="kpi-strip">
+      <div class="kpi-tile">
+        <div class="kpi-tile-lbl">Intelligence Modules</div>
+        <div class="kpi-tile-val">17</div>
+        <div class="kpi-tile-note">Active &middot; 4 new FY27</div>
+      </div>
+      <div class="kpi-tile amber">
+        <div class="kpi-tile-lbl">Portfolio Vendors</div>
+        <div class="kpi-tile-val">1,368</div>
+        <div class="kpi-tile-note">Tracked &middot; 242 in Coupa</div>
+      </div>
+      <div class="kpi-tile green">
+        <div class="kpi-tile-lbl">FY27 Spend</div>
+        <div class="kpi-tile-val">$295M</div>
+        <div class="kpi-tile-note">Coupa actuals &middot; All pillars</div>
+      </div>
+      <div class="kpi-tile red">
+        <div class="kpi-tile-lbl">Action Alerts</div>
+        <div class="kpi-tile-val">27</div>
+        <div class="kpi-tile-note">8 critical &middot; 9 DET pillars</div>
+      </div>
+      <div class="kpi-tile teal2">
+        <div class="kpi-tile-lbl">Savings Realized</div>
+        <div class="kpi-tile-val">$10.2M</div>
+        <div class="kpi-tile-note">FY27 YTD</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <div class="callout c-teal">
+    <strong>Your VER Intelligence Navigator.</strong>
+    Find the right intelligence for any vendor, engagement, or spend decision.
+    VER's role is to provide the analysis, guidance, and advisory support that helps
+    DET teams and leadership make better-informed decisions.
+  </div>
+
+  <!-- QUESTION NAVIGATOR -->
+  <div class="card card-navy-top fade-in">
+    <div class="card-title">What decision are you trying to make?</div>
+    <div class="card-sub">Select a scenario below to find the right VER intelligence resource</div>
+    <div class="dsc-grid">
+
+      <a href="vendor_selector.html" class="dsc-link">
+        <div class="dsc-card">
+          <div class="dsc-icon">🎯</div>
+          <div class="dsc-title">Who should I use for this engagement?</div>
+          <div class="dsc-sub">→ VER Vendor Selector — AI-powered recommendation engine</div>
+        </div>
+      </a>
+
+      <a href="page_renewal.html" class="dsc-link">
+        <div class="dsc-card hover-amber">
+          <div class="dsc-icon">📅</div>
+          <div class="dsc-title">When does my vendor contract renew?</div>
+          <div class="dsc-sub">→ Renewal Calendar — 12-month forward view</div>
+        </div>
+      </a>
+
+      <a href="page_rate_benchmarks.html" class="dsc-link">
+        <div class="dsc-card hover-green">
+          <div class="dsc-icon">💰</div>
+          <div class="dsc-title">Are we paying market rates?</div>
+          <div class="dsc-sub">→ Rate Benchmarks — 35 role records, leverage scores, negotiation playbooks</div>
+        </div>
+      </a>
+
+      <a href="vendor_risk.html" class="dsc-link">
+        <div class="dsc-card hover-red">
+          <div class="dsc-icon">⚠️</div>
+          <div class="dsc-title">What's the risk profile of this vendor?</div>
+          <div class="dsc-sub">→ Risk Dashboard — concentration, delivery, compliance, financial</div>
+        </div>
+      </a>
+
+      <a href="vendor_intake.html" class="dsc-link">
+        <div class="dsc-card hover-purple">
+          <div class="dsc-icon">📥</div>
+          <div class="dsc-title">I need to start a new vendor engagement</div>
+          <div class="dsc-sub">→ VER Intake — submit and track your request</div>
+        </div>
+      </a>
+
+      <a href="page_consumption.html" class="dsc-link">
+        <div class="dsc-card">
+          <div class="dsc-icon">📈</div>
+          <div class="dsc-title">Are we approaching a license or usage cap?</div>
+          <div class="dsc-sub">→ Consumption Monitoring — utilization by tool</div>
+        </div>
+      </a>
+
+      <a href="page_pillar.html" class="dsc-link">
+        <div class="dsc-card hover-navy">
+          <div class="dsc-icon">🎯</div>
+          <div class="dsc-title">What is my pillar spending on vendors?</div>
+          <div class="dsc-sub">→ Pillar Portfolio Intelligence — pillar-by-pillar view</div>
+        </div>
+      </a>
+
+      <a href="vendor_sow.html" class="dsc-link">
+        <div class="dsc-card hover-navy">
+          <div class="dsc-icon">📄</div>
+          <div class="dsc-title">I need to generate a Statement of Work</div>
+          <div class="dsc-sub">→ SOW Generator — Salesforce standard template</div>
+        </div>
+      </a>
+
+      <a href="page_governance.html" class="dsc-link">
+        <div class="dsc-card">
+          <div class="dsc-icon">⏱️</div>
+          <div class="dsc-title">When is the next vendor review scheduled?</div>
+          <div class="dsc-sub">→ Governance Cadence — review schedule &amp; health</div>
+        </div>
+      </a>
+
+      <a href="page_scorecards.html" class="dsc-link">
+        <div class="dsc-card hover-teal">
+          <div class="dsc-icon">🏆</div>
+          <div class="dsc-title">How is a specific vendor performing?</div>
+          <div class="dsc-sub">→ Vendor Scorecards — SLA, risk dimensions, 1,368 vendors</div>
+        </div>
+      </a>
+
+      <a href="page_spend_analysis.html" class="dsc-link">
+        <div class="dsc-card hover-green">
+          <div class="dsc-icon">🤖</div>
+          <div class="dsc-title">What are our biggest spend opportunities?</div>
+          <div class="dsc-sub">→ AI-Assisted Spend Analysis — $295M Coupa actuals, scenario builder</div>
+        </div>
+      </a>
+
+      <a href="page_pillar_alerts.html" class="dsc-link">
+        <div class="dsc-card hover-red">
+          <div class="dsc-icon">🚨</div>
+          <div class="dsc-title">What actions are time-sensitive right now?</div>
+          <div class="dsc-sub">→ Pillar Action Alerts — 27 alerts, 8 critical, across all 9 pillars</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- VER ADVISORY SERVICES SUMMARY -->
+  <div class="shdr">🤝 What VER Can Help With</div>
+  <div class="g3 fade-in">
+    <div class="card svc-card-teal">
+      <div class="svc-icon">🔍</div>
+      <div class="card-title">Vendor Intelligence</div>
+      <div class="svc-body">Risk scoring · Rate benchmarking · Capability assessment ·
+        Vendor selection analysis · Market positioning · Concentration risk</div>
+    </div>
+    <div class="card svc-card-navy">
+      <div class="svc-icon">📊</div>
+      <div class="card-title">Spend Intelligence</div>
+      <div class="svc-body">Portfolio visibility · Pillar-level analysis · MFT support ·
+        Savings identification · Rate optimization · Renewal strategy</div>
+    </div>
+    <div class="card svc-card-purple">
+      <div class="svc-icon">🛡️</div>
+      <div class="card-title">Engagement Governance</div>
+      <div class="svc-body">SOW review support · Intake evaluation · SLA monitoring ·
+        QBR facilitation · Escalation advisory · Compliance monitoring</div>
+    </div>
+  </div>
+
+  <!-- CONTACT CTA -->
+  <div class="card cta-card fade-in">
+    <div class="cta-inner">
+      <div>
+        <div class="cta-title">Need Advisory Support?</div>
+        <div class="cta-body">Submit a VER intake request for any new engagement, vendor assessment, SOW review,
+          or advisory need. VER will review and respond within 3-5 business days.</div>
+      </div>
+      <a href="vendor_intake.html" class="cta-btn">Submit Intake Request →</a>
+    </div>
+  </div>
+
+</div>
+
+<footer class="advisory-close">
+  <div class="advisory-close-inner">
+    <div class="advisory-title">VER Intelligence Hub · Advisory Notice</div>
+    <div class="advisory-text">Decision Support Center is a navigation aid for DET teams and leadership.
+    VER's role is to provide analysis, guidance, and advisory support that helps DET make better-informed vendor decisions.
+    All spend and sourcing decisions rest with the respective Pillar Lead and Procurement.</div>
+    <div class="advisory-meta">VER Intelligence Hub · Vendor Engagement &amp; Reliability · Salesforce DET · DET Portfolio Intelligence — Powered by VER · Confidential</div>
+  </div>
+</footer>
+
+<script>
+function _dmToggle(){
+  var t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  try{localStorage.setItem('ver-theme',t);}catch(e){}
+  var btn=document.getElementById('dm-btn');
+  if(btn) btn.innerHTML=t==='dark'?'&#9790; Light Mode':'&#9789; Dark Mode';
+}
+(function(){
+  var t;try{t=localStorage.getItem('ver-theme');}catch(e){}
+  if(!t) t=window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
+  document.documentElement.setAttribute('data-theme',t);
+  var btn=document.getElementById('dm-btn');
+  if(btn) btn.innerHTML=t==='dark'?'&#9790; Light Mode':'&#9789; Dark Mode';
+  document.addEventListener('DOMContentLoaded',function(){
+    var fadeEls=document.querySelectorAll('.fade-in');
+    var obs=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+    },{threshold:0.1});
+    fadeEls.forEach(function(el){obs.observe(el);});
+  });
+})();
+</script>
+</body>
+</html>

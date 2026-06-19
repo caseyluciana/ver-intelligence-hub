@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Executive Snapshot &mdash; VER Intelligence Hub</title>
+<style>
+:root {
+  --navy:#0F1E3C;--navy2:#1E3A5F;--navy3:#EFF6FF;
+  --teal:#0D9488;--teal2:#0F766E;--teal3:#F0FDF9;
+  --green:#059669;--green2:#065F46;--green3:#D1FAE5;
+  --amber:#D97706;--amber2:#78350F;--amber3:#FEF3C7;
+  --red:#DC2626;--red2:#7F1D1D;--red3:#FEE2E2;
+  --purple:#7C3AED;--purple3:#F5F3FF;
+  --orange:#EA580C;--orange3:#FFF7ED;
+  --blue:#2563EB;--blue3:#EFF6FF;
+  --ink:#111827;--ink2:#1F2937;--ink3:#374151;--ink4:#6B7280;
+  --gray:#F9FAFB;--gray2:#F3F4F6;--gray3:#E5E7EB;
+  --border:#E5E7EB;--border2:#D1D5DB;--white:#FFFFFF;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;
+  background:var(--navy);color:#fff;min-height:100vh;}
+
+/* ── Sticky top bar ── */
+.hub-top-bar{position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 28px;
+  background:linear-gradient(90deg,rgba(15,30,60,0.98) 0%,rgba(10,22,40,0.98) 100%);
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);}
+.htb-left{display:flex;align-items:center;gap:14px;}
+.htb-back{font-size:8.5pt;color:rgba(255,255,255,0.5);text-decoration:none;
+  display:flex;align-items:center;gap:5px;transition:color 0.15s;}
+.htb-back:hover{color:var(--teal);}
+.htb-divider{width:1px;height:16px;background:rgba(255,255,255,0.12);}
+.htb-brand{font-size:8.5pt;font-weight:700;color:rgba(255,255,255,0.65);
+  letter-spacing:0.04em;}
+.htb-right{display:flex;align-items:center;gap:10px;}
+.htb-meta{font-size:7.5pt;color:rgba(255,255,255,0.3);}
+.dm-toggle{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;
+  border-radius:20px;border:1px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.06);
+  color:rgba(255,255,255,0.55);font-size:7.5pt;font-weight:700;cursor:pointer;
+  font-family:inherit;transition:all 0.15s;white-space:nowrap;}
+.dm-toggle:hover{background:rgba(13,148,136,0.2);border-color:var(--teal);color:var(--teal);}
+[data-theme="dark"] .dm-toggle{background:rgba(13,148,136,0.18);
+  border-color:rgba(13,148,136,0.4);color:#0D9488;}
+
+/* ── Hero stage ── */
+.stage{padding:40px 0 32px;
+  background:linear-gradient(160deg,#0F1E3C 0%,#0a1628 60%,#061020 100%);
+  border-bottom:1px solid rgba(255,255,255,0.06);position:relative;overflow:hidden;}
+.stage::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 80% 50%,
+    rgba(13,148,136,0.08) 0%,transparent 65%);pointer-events:none;}
+.stage-inner{max-width:1280px;margin:0 auto;padding:0 48px;}
+.stage-eyebrow{font-size:7.5pt;font-weight:700;color:var(--teal);
+  text-transform:uppercase;letter-spacing:0.16em;margin-bottom:12px;}
+.stage-title{font-size:28pt;font-weight:900;color:#fff;line-height:1.1;
+  margin-bottom:10px;letter-spacing:-0.02em;}
+.stage-title span{color:var(--teal);}
+.stage-position{font-size:11pt;color:rgba(255,255,255,0.60);
+  line-height:1.6;max-width:680px;margin-bottom:28px;}
+.stage-position strong{color:rgba(255,255,255,0.85);}
+
+/* ── KPI strip ── */
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.kpi{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);
+  border-radius:10px;padding:16px 20px;border-top:2px solid var(--teal);
+  transition:all 0.2s;}
+.kpi:hover{background:rgba(255,255,255,0.08);}
+.kpi-val{font-size:22pt;font-weight:900;color:#fff;line-height:1;margin-bottom:4px;}
+.kpi-lbl{font-size:7.5pt;font-weight:700;color:rgba(255,255,255,0.45);
+  text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px;}
+.kpi-note{font-size:7.5pt;color:rgba(255,255,255,0.35);}
+.kpi.good{border-top-color:var(--green);}
+.kpi.good .kpi-val{color:var(--green);}
+.kpi.warn{border-top-color:var(--amber);}
+.kpi.warn .kpi-val{color:var(--amber);}
+.kpi.risk{border-top-color:var(--red);}
+.kpi.risk .kpi-val{color:var(--red);}
+
+/* ── Body wrapper ── */
+.exec-body{background:var(--gray);color:var(--ink);}
+.exec-inner{max-width:1280px;margin:0 auto;padding:0 48px;}
+
+/* ── Section headers ── */
+.sec-hdr{padding:20px 0 12px;display:flex;align-items:center;justify-content:space-between;}
+.sec-title{font-size:8pt;font-weight:800;color:var(--ink4);
+  text-transform:uppercase;letter-spacing:0.12em;}
+.sec-action{font-size:8pt;color:var(--teal);font-weight:600;
+  text-decoration:none;transition:opacity 0.15s;}
+.sec-action:hover{opacity:0.7;}
+.sec-note{font-size:8pt;color:var(--ink4);}
+
+/* ── Pillar health strip ── */
+.pillar-strip{display:grid;grid-template-columns:repeat(9,1fr);gap:6px;padding-bottom:20px;}
+.p-pill{border-radius:8px;padding:10px 8px;text-align:center;cursor:pointer;
+  transition:all 0.2s;text-decoration:none;display:block;
+  border:1px solid rgba(0,0,0,0.06);}
+.p-pill:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.12);}
+.p-name{font-size:7.5pt;font-weight:700;color:#fff;margin-bottom:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.p-spend{font-size:7pt;color:rgba(255,255,255,0.65);margin-bottom:5px;}
+.p-risk{font-size:7pt;font-weight:700;padding:2px 6px;border-radius:8px;display:inline-block;}
+.risk-green{background:rgba(5,150,105,0.25);color:#6EE7B7;}
+.risk-amber{background:rgba(217,119,6,0.25);color:#FCD34D;}
+.risk-red{background:rgba(220,38,38,0.25);color:#FCA5A5;}
+
+/* ── Savings story ── */
+.savings-story{margin-bottom:20px;
+  background:linear-gradient(135deg,var(--navy) 0%,#1E3A5F 100%);
+  border-radius:12px;padding:20px 24px;
+  border:1px solid rgba(13,148,136,0.3);
+  display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.ss-eyebrow{font-size:7.5pt;font-weight:700;color:var(--teal);
+  text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;}
+.ss-total{font-size:32pt;font-weight:900;color:#fff;line-height:1;margin-bottom:4px;}
+.ss-total span{color:var(--teal);}
+.ss-desc{font-size:8.5pt;color:rgba(255,255,255,0.55);line-height:1.6;}
+.ss-right{display:flex;flex-direction:column;gap:10px;justify-content:center;}
+.ss-item{background:rgba(255,255,255,0.06);border-radius:8px;
+  padding:12px 16px;border-left:3px solid var(--teal);}
+.ss-item-val{font-size:14pt;font-weight:900;color:var(--teal);line-height:1;}
+.ss-item-lbl{font-size:8pt;color:rgba(255,255,255,0.65);margin-top:3px;}
+.ss-item.second{border-left-color:var(--green);}
+.ss-item.second .ss-item-val{color:var(--green);}
+
+/* Savings bar chart */
+.ss-bar-wrap{margin-top:16px;}
+.ss-bar-track{background:rgba(255,255,255,0.08);border-radius:6px;
+  height:10px;overflow:hidden;display:flex;}
+.ss-bar-fill-teal{height:10px;background:var(--teal);border-radius:6px 0 0 6px;width:88%;}
+.ss-bar-fill-green{height:10px;background:var(--green);width:12%;border-radius:0 6px 6px 0;}
+.ss-bar-labels{display:flex;justify-content:space-between;margin-top:5px;}
+.ss-bar-lbl{font-size:7pt;color:rgba(255,255,255,0.40);}
+
+/* ── Engagement cards ── */
+.eng-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-bottom:20px;}
+.eng-card{background:var(--white);border-radius:10px;overflow:hidden;
+  border:1px solid var(--border);transition:all 0.2s;}
+.eng-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08);}
+.eng-signal{height:3px;}
+.eng-signal-green{background:var(--green);}
+.eng-signal-amber{background:var(--amber);}
+.eng-signal-red{background:var(--red);}
+.eng-signal-navy{background:var(--navy);}
+.eng-top{display:flex;align-items:center;gap:12px;padding:14px 16px 12px;}
+.eng-logo{width:36px;height:36px;border-radius:7px;object-fit:contain;
+  border:1px solid var(--border);background:#fff;flex-shrink:0;padding:2px;}
+.eng-info{flex:1;min-width:0;}
+.eng-vendor{font-size:9pt;font-weight:800;color:var(--navy);margin-bottom:2px;}
+.eng-name{font-size:8pt;color:var(--ink4);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;}
+.eng-value{text-align:right;flex-shrink:0;}
+.eng-val-num{font-size:14pt;font-weight:900;line-height:1;}
+.eng-val-green{color:var(--green);}
+.eng-val-amber{color:var(--amber);}
+.eng-val-red{color:var(--red);}
+.eng-val-navy{color:var(--navy);}
+.eng-val-lbl{font-size:7.5pt;color:var(--ink4);margin-top:2px;}
+.eng-badges{padding:0 16px 10px;display:flex;gap:5px;flex-wrap:wrap;}
+.badge{font-size:7pt;padding:2px 8px;border-radius:10px;font-weight:700;}
+.b-green{background:var(--green3);color:var(--green2);}
+.b-amber{background:var(--amber3);color:var(--amber2);}
+.b-red{background:var(--red3);color:var(--red2);}
+.b-navy{background:var(--navy3);color:var(--navy);}
+.b-gray{background:var(--gray2);color:var(--ink4);}
+.b-teal{background:var(--teal3);color:var(--teal2);}
+.eng-detail{padding:0 16px 14px;font-size:8.5pt;color:var(--ink4);
+  line-height:1.6;border-top:1px solid var(--gray2);padding-top:10px;display:none;}
+.eng-card.open .eng-detail{display:block;}
+.eng-expand{padding:4px 16px 10px;font-size:7.5pt;color:var(--teal);
+  font-weight:600;cursor:pointer;-webkit-user-select:none;user-select:none;}
+.eng-expand:hover{opacity:0.7;}
+
+/* ── Intel panels ── */
+.intel-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-bottom:20px;}
+.intel-card{background:var(--white);border-radius:10px;padding:16px;
+  border:1px solid var(--border);cursor:pointer;transition:all 0.2s;}
+.intel-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08);}
+.intel-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.intel-icon{font-size:20pt;}
+.intel-title{font-size:9.5pt;font-weight:800;color:var(--navy);margin-bottom:2px;}
+.intel-sub{font-size:8pt;color:var(--ink4);}
+.intel-nav{margin-left:auto;font-size:8.5pt;color:var(--teal);font-weight:600;}
+
+/* Q-cell grid — named classes replace inline background/color */
+.q-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.q-cell{text-align:center;padding:8px;border-radius:6px;}
+.q-cell-red{background:var(--red3);}
+.q-cell-amber{background:var(--amber3);}
+.q-cell-green{background:var(--green3);}
+.q-cell-navy{background:var(--navy3);}
+.q-num{font-size:13pt;font-weight:900;line-height:1.1;}
+.q-num-red{color:var(--red);}
+.q-num-amber{color:var(--amber);}
+.q-num-green{color:var(--green);}
+.q-num-navy{color:var(--navy);}
+.q-lbl{font-size:7pt;font-weight:700;margin-top:2px;}
+.q-lbl-red{color:var(--red2);}
+.q-lbl-amber{color:var(--amber2);}
+.q-lbl-green{color:var(--green2);}
+.q-lbl-navy{color:var(--navy2);}
+.q-val{font-size:7pt;color:var(--ink4);margin-top:1px;}
+
+/* MFT mini-stats */
+.mft-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.mft-stat{padding:10px;border-radius:6px;}
+.mft-stat-green{background:var(--green3);}
+.mft-stat-amber{background:var(--amber3);}
+.mft-stat-num{font-size:13pt;font-weight:900;line-height:1;}
+.mft-stat-num-green{color:var(--green);}
+.mft-stat-num-amber{color:var(--amber);}
+.mft-stat-lbl{font-size:7.5pt;font-weight:700;}
+.mft-stat-lbl-green{color:var(--green2);}
+.mft-stat-lbl-amber{color:var(--amber2);}
+.mft-bar{background:var(--gray2);border-radius:4px;height:8px;overflow:hidden;display:flex;margin-top:10px;}
+.mft-seg{height:8px;}
+.mft-seg-green{width:10%;background:var(--green);}
+.mft-seg-indigo{width:8%;background:#6366F1;}
+.mft-seg-amber{width:7%;background:var(--amber);}
+.mft-seg-gray{width:75%;background:var(--gray3);}
+.mft-legend{font-size:7pt;color:var(--ink4);margin-top:5px;}
+
+/* ── Open items ── */
+.open-items{padding-bottom:20px;}
+.blocker{background:var(--white);border-radius:10px;padding:16px;
+  border:1px solid var(--border);border-left:4px solid var(--red);
+  display:flex;gap:14px;align-items:flex-start;}
+.blocker-icon{font-size:20pt;flex-shrink:0;}
+.blocker-title{font-size:9pt;font-weight:800;color:var(--navy);margin-bottom:4px;}
+.blocker-desc{font-size:8.5pt;color:var(--ink3);line-height:1.6;margin-bottom:8px;}
+.blocker-badges{display:flex;gap:6px;flex-wrap:wrap;}
+
+/* ── VER advisory close ── */
+.advisory-close{margin-bottom:28px;
+  background:linear-gradient(135deg,var(--navy) 0%,#1a2f50 100%);
+  border-radius:12px;padding:20px 24px;
+  border:1px solid rgba(255,255,255,0.06);}
+.ac-eyebrow{font-size:7.5pt;font-weight:700;color:var(--teal);
+  text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;}
+.ac-text{font-size:9pt;color:rgba(255,255,255,0.70);line-height:1.75;}
+.ac-footer{font-size:7.5pt;color:rgba(255,255,255,0.30);
+  margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);}
+
+/* ── Scroll fade-in ── */
+.fade-in{opacity:0;transform:translateY(16px);transition:opacity 0.5s ease,transform 0.5s ease;}
+.fade-in.visible{opacity:1;transform:none;}
+
+/* ── Dark mode ── */
+[data-theme="dark"]{
+  --gray:#0D1626;--gray2:#111F35;--gray3:#1A2D47;
+  --white:#0F1E3C;--border:#1E3A5F;--border2:#243E60;
+  --ink:#EFF6FF;--ink2:#C7D9F0;--ink3:#8BAACF;--ink4:#5A7899;
+  --navy3:#0F1E3C;--teal3:rgba(13,148,136,0.15);--green3:rgba(5,150,105,0.15);
+  --amber3:rgba(217,119,6,0.15);--red3:rgba(220,38,38,0.15);
+}
+[data-theme="dark"] body{background:var(--gray);color:var(--ink2);}
+[data-theme="dark"] .exec-body{background:var(--gray);}
+[data-theme="dark"] .intel-card,[data-theme="dark"] .eng-card,[data-theme="dark"] .blocker{
+  background:var(--gray2);border-color:var(--border);}
+[data-theme="dark"] .intel-title,[data-theme="dark"] .eng-vendor,[data-theme="dark"] .blocker-title{color:var(--ink);}
+[data-theme="dark"] .intel-sub,[data-theme="dark"] .eng-name,[data-theme="dark"] .eng-val-lbl{color:var(--ink4);}
+[data-theme="dark"] .mft-bar{background:var(--gray3);}
+[data-theme="dark"] .mft-seg-gray{background:var(--gray3);}
+[data-theme="dark"] .q-cell-navy{background:rgba(15,30,60,0.6);}
+[data-theme="dark"] .q-num-navy{color:#93C5FD;}
+[data-theme="dark"] .q-lbl-navy{color:#60A5FA;}
+
+/* ── Engagement modal ── */
+.eng-modal-backdrop{position:fixed;inset:0;z-index:200;
+  background:rgba(6,13,26,0.80);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  opacity:0;pointer-events:none;transition:opacity 0.25s ease;}
+.eng-modal-backdrop.open{opacity:1;pointer-events:all;}
+.eng-modal{background:var(--white);border-radius:14px;
+  border:1px solid var(--border);
+  box-shadow:0 32px 80px rgba(0,0,0,0.35),0 8px 24px rgba(0,0,0,0.18);
+  width:100%;max-width:620px;max-height:88vh;
+  overflow:hidden;display:flex;flex-direction:column;
+  transform:translateY(28px) scale(0.97);
+  transition:transform 0.25s ease;}
+.eng-modal-backdrop.open .eng-modal{transform:translateY(0) scale(1);}
+.eng-modal-signal{height:4px;flex-shrink:0;}
+.eng-modal-hdr{display:flex;align-items:center;gap:14px;
+  padding:18px 20px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.eng-modal-logo{width:44px;height:44px;border-radius:8px;object-fit:contain;
+  border:1px solid var(--border);background:#fff;flex-shrink:0;padding:3px;}
+.eng-modal-info{flex:1;min-width:0;}
+.eng-modal-vendor{font-size:10pt;font-weight:800;color:var(--navy);margin-bottom:2px;}
+.eng-modal-name{font-size:8.5pt;color:var(--ink4);}
+.eng-modal-val{text-align:right;flex-shrink:0;}
+.eng-modal-val-num{font-size:18pt;font-weight:900;line-height:1;}
+.eng-modal-val-lbl{font-size:7.5pt;color:var(--ink4);margin-top:2px;}
+.eng-modal-close{width:34px;height:34px;border-radius:50%;border:none;
+  background:var(--gray2);color:var(--ink4);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;transition:all 0.15s;flex-shrink:0;}
+.eng-modal-close:hover{background:var(--red3);color:var(--red);}
+.eng-modal-badges{padding:12px 20px;display:flex;gap:6px;flex-wrap:wrap;
+  border-bottom:1px solid var(--border);flex-shrink:0;}
+.eng-modal-body{padding:18px 20px;overflow-y:auto;flex:1;}
+.eng-modal-detail-lbl{font-size:8pt;font-weight:700;color:var(--ink4);
+  text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;}
+.eng-modal-detail-text{font-size:9pt;color:var(--ink3);line-height:1.7;}
+.eng-modal-meta{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;
+  margin-top:16px;padding-top:14px;border-top:1px solid var(--border);}
+.eng-modal-meta-item{background:var(--gray2);border-radius:8px;padding:10px 12px;}
+.eng-modal-meta-val{font-size:10pt;font-weight:800;color:var(--navy);line-height:1.2;}
+.eng-modal-meta-lbl{font-size:7.5pt;color:var(--ink4);margin-top:3px;}
+[data-theme="dark"] .eng-modal{background:var(--gray2);border-color:var(--border);}
+[data-theme="dark"] .eng-modal-vendor{color:var(--ink);}
+[data-theme="dark"] .eng-modal-close{background:var(--gray3);color:var(--ink4);}
+[data-theme="dark"] .eng-modal-meta-item{background:var(--gray3);}
+[data-theme="dark"] .eng-modal-meta-val{color:var(--ink);}
+</style>
+</head>
+<body>
+
+<!-- Sticky top bar -->
+<div class="hub-top-bar">
+  <div class="htb-left">
+    <a href="index.html" class="htb-back">&#8592; VER Intelligence Hub</a>
+    <div class="htb-divider"></div>
+    <span class="htb-brand">Executive Snapshot</span>
+  </div>
+  <div class="htb-right">
+    <span class="htb-meta">FY27 &middot; Salesforce DET &middot; Confidential</span>
+    <button type="button" class="dm-toggle" id="dm-btn" onclick="_dmToggle()">&#9789; Dark Mode</button>
+  </div>
+</div>
+
+<!-- Hero stage -->
+<div class="stage">
+  <div class="stage-inner">
+  <div class="stage-eyebrow">VER Intelligence Hub &middot; Executive Snapshot &middot; FY27</div>
+  <div class="stage-title">DET Portfolio <span>Intelligence</span></div>
+  <div class="stage-position">
+    <strong>$10.236M in realized savings.</strong> 1,368 vendors under VER advisory.
+    Two critical renewals within 90 days. The DET third-party spend portfolio
+    is actively monitored, benchmarked, and advised by VER.
+  </div>
+  <div class="kpi-strip">
+    <div class="kpi good">
+      <div class="kpi-lbl">Savings Realized</div>
+      <div class="kpi-val" data-count="10.236" data-prefix="$" data-suffix="M">$0M</div>
+      <div class="kpi-note">FY27 &middot; NTT AD + Cognizant</div>
+    </div>
+    <div class="kpi warn">
+      <div class="kpi-lbl">Critical Renewals</div>
+      <div class="kpi-val" data-count="2" data-decimals="0">0</div>
+      <div class="kpi-note">Within 90 days &middot; $33.7M at risk</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">Active SOWs</div>
+      <div class="kpi-val" data-count="2397" data-decimals="0">0</div>
+      <div class="kpi-note">Coupa POs tracked &middot; FY27</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">MFT Forecast</div>
+      <div class="kpi-val" data-count="93.4" data-prefix="$" data-suffix="M">$0M</div>
+      <div class="kpi-note">Approved pipeline &middot; 351 items</div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- Body -->
+<div class="exec-body">
+<div class="exec-inner">
+
+  <!-- Pillar health -->
+  <div class="sec-hdr fade-in">
+    <div class="sec-title">Pillar Portfolio Health</div>
+    <a href="page_pillar.html" class="sec-action">View SSI &rarr;</a>
+  </div>
+  <div class="pillar-strip fade-in" id="pillar-strip"></div>
+
+  <!-- Savings story -->
+  <div class="sec-hdr fade-in">
+    <div class="sec-title">Savings &amp; Value Realization</div>
+  </div>
+  <div class="savings-story fade-in">
+    <div>
+      <div class="ss-eyebrow">FY27 Advisory Savings</div>
+      <div class="ss-total">$10.<span>236M</span></div>
+      <div class="ss-desc">
+        Realized through VER advisory engagement in FY27.
+        Two engagements restructured or terminated, generating
+        $10.236M in confirmed savings for DET. Savings pipeline
+        of $3&ndash;5M identified for H2 FY27.
+      </div>
+      <div class="ss-bar-wrap">
+        <div class="ss-bar-track">
+          <div class="ss-bar-fill-teal"></div>
+          <div class="ss-bar-fill-green"></div>
+        </div>
+        <div class="ss-bar-labels">
+          <span class="ss-bar-lbl">NTT Data AD &mdash; $9.0M (88%)</span>
+          <span class="ss-bar-lbl">Cognizant &mdash; $1.236M (12%)</span>
+        </div>
+      </div>
+    </div>
+    <div class="ss-right">
+      <div class="ss-item">
+        <div class="ss-item-val">$9.0M</div>
+        <div class="ss-item-lbl">NTT Data AD restructure &middot; DA&amp;O &middot; Apr 2026</div>
+      </div>
+      <div class="ss-item second">
+        <div class="ss-item-val">$1.236M</div>
+        <div class="ss-item-lbl">Cognizant engagement termination &middot; SF on SF &middot; FY27</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key engagements -->
+  <div class="sec-hdr fade-in">
+    <div class="sec-title">Key Engagements</div>
+    <span class="sec-note">Click any card for full detail</span>
+  </div>
+  <div class="eng-grid fade-in" id="eng-grid"></div>
+
+  <!-- SOW & MFT -->
+  <div class="sec-hdr fade-in">
+    <div class="sec-title">SOW &amp; MFT Intelligence</div>
+  </div>
+  <div class="intel-grid fade-in">
+    <div class="intel-card" onclick="window.location.href='page_sow.html'">
+      <div class="intel-header">
+        <div class="intel-icon">&#128203;</div>
+        <div>
+          <div class="intel-title">SOW &amp; PO Expiry Tracker</div>
+          <div class="intel-sub">2,397 POs &middot; FY27</div>
+        </div>
+        <div class="intel-nav">View full &rarr;</div>
+      </div>
+      <div class="q-grid">
+        <div class="q-cell q-cell-red">
+          <div class="q-num q-num-red">800</div>
+          <div class="q-lbl q-lbl-red">Q1</div>
+          <div class="q-val">$57.6M</div>
+        </div>
+        <div class="q-cell q-cell-amber">
+          <div class="q-num q-num-amber">374</div>
+          <div class="q-lbl q-lbl-amber">Q2</div>
+          <div class="q-val">$88.2M</div>
+        </div>
+        <div class="q-cell q-cell-green">
+          <div class="q-num q-num-green">397</div>
+          <div class="q-lbl q-lbl-green">Q3</div>
+          <div class="q-val">$56.4M</div>
+        </div>
+        <div class="q-cell q-cell-navy">
+          <div class="q-num q-num-navy">826</div>
+          <div class="q-lbl q-lbl-navy">Q4</div>
+          <div class="q-val">$118.2M</div>
+        </div>
+      </div>
+    </div>
+    <div class="intel-card" onclick="window.location.href='page_mft.html'">
+      <div class="intel-header">
+        <div class="intel-icon">&#128200;</div>
+        <div>
+          <div class="intel-title">MFT Forecasted Spend</div>
+          <div class="intel-sub">$93.4M &middot; 351 items &middot; FY27</div>
+        </div>
+        <div class="intel-nav">View full &rarr;</div>
+      </div>
+      <div class="mft-stats">
+        <div class="mft-stat mft-stat-green">
+          <div class="mft-stat-num mft-stat-num-green">$9.3M</div>
+          <div class="mft-stat-lbl mft-stat-lbl-green">Approved &middot; 45 items</div>
+        </div>
+        <div class="mft-stat mft-stat-amber">
+          <div class="mft-stat-num mft-stat-num-amber">$14.1M</div>
+          <div class="mft-stat-lbl mft-stat-lbl-amber">In Flight &middot; 74 items</div>
+        </div>
+      </div>
+      <div class="mft-bar">
+        <div class="mft-seg mft-seg-green"></div>
+        <div class="mft-seg mft-seg-indigo"></div>
+        <div class="mft-seg mft-seg-amber"></div>
+        <div class="mft-seg mft-seg-gray"></div>
+      </div>
+      <div class="mft-legend">10% approved &middot; 8% new &middot; 7% under review &middot; 75% pipeline</div>
+    </div>
+  </div>
+
+  <!-- Rate + Scorecard intel -->
+  <div class="sec-hdr fade-in">
+    <div class="sec-title">Market &amp; Vendor Intelligence</div>
+    <a href="page_scorecards.html" class="sec-action">All Scorecards &rarr;</a>
+  </div>
+  <div class="intel-grid fade-in">
+    <div class="intel-card" onclick="window.location.href='page_rate_benchmarks.html'">
+      <div class="intel-header">
+        <div class="intel-icon">&#128178;</div>
+        <div>
+          <div class="intel-title">Rate Benchmarks</div>
+          <div class="intel-sub">35 roles &middot; 9 categories &middot; 4 regions</div>
+        </div>
+        <div class="intel-nav">View full &rarr;</div>
+      </div>
+      <div class="q-grid">
+        <div class="q-cell q-cell-red">
+          <div class="q-num q-num-red">8</div>
+          <div class="q-lbl">Above market</div>
+        </div>
+        <div class="q-cell q-cell-green">
+          <div class="q-num q-num-green">18</div>
+          <div class="q-lbl">Inline</div>
+        </div>
+        <div class="q-cell q-cell-amber">
+          <div class="q-num q-num-amber">9</div>
+          <div class="q-lbl">Below market</div>
+        </div>
+        <div class="q-cell q-cell-navy">
+          <div class="q-num q-num-navy">$2.1M</div>
+          <div class="q-lbl">Savings opp.</div>
+        </div>
+      </div>
+    </div>
+    <div class="intel-card" onclick="window.location.href='page_scorecards.html'">
+      <div class="intel-header">
+        <div class="intel-icon">&#127942;</div>
+        <div>
+          <div class="intel-title">Vendor Performance Scorecards</div>
+          <div class="intel-sub">1,368 vendors &middot; 360° health view</div>
+        </div>
+        <div class="intel-nav">View full &rarr;</div>
+      </div>
+      <div class="q-grid">
+        <div class="q-cell q-cell-green">
+          <div class="q-num q-num-green">892</div>
+          <div class="q-lbl">Healthy</div>
+        </div>
+        <div class="q-cell q-cell-amber">
+          <div class="q-num q-num-amber">341</div>
+          <div class="q-lbl">Watch</div>
+        </div>
+        <div class="q-cell q-cell-red">
+          <div class="q-num q-num-red">135</div>
+          <div class="q-lbl">At Risk</div>
+        </div>
+        <div class="q-cell q-cell-navy">
+          <div class="q-num q-num-navy">1,368</div>
+          <div class="q-lbl">Total</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Open items -->
+  <div class="sec-hdr fade-in">
+    <div class="sec-title">Open Items</div>
+    <span class="badge b-red">1 Open</span>
+  </div>
+  <div class="open-items fade-in">
+    <div class="blocker">
+      <div class="blocker-icon">&#9888;</div>
+      <div>
+        <div class="blocker-title">Sonata Software &mdash; SF Support SOW Renewal Decision Required</div>
+        <div class="blocker-desc">
+          Year 3 of Sonata SF Support SOW ended May 15, 2026. Immediate Renew or Wind-Down
+          decision required. 30-day notice period. VER recommends aligning with Procurement
+          and responsible Pillar Lead before any extension is executed.
+        </div>
+        <div class="blocker-badges">
+          <span class="badge b-red">Immediate Action</span>
+          <span class="badge b-gray">Owner: VER + Procurement + Pillar Lead</span>
+          <span class="badge b-gray">M&amp;A Inherited &middot; Informatica</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VER Advisory close -->
+  <div class="advisory-close fade-in">
+    <div class="ac-eyebrow">VER Advisory Position &mdash; FY27</div>
+    <div class="ac-text">
+      DET's third-party spend portfolio is performing under active VER advisory.
+      The $10.236M in realized savings demonstrates VER's value in renegotiation
+      and engagement restructuring. The two critical renewals — NTT Data AD (Aug 2026)
+      and Workday ELP (Nov 2026) — represent $33.7M in combined annual spend and
+      require Pillar Lead engagement now. VER is monitoring the GSA re-assignment
+      of NTT AMS and the Informatica M&amp;A implications across the Data Solutions pillar.
+      The portfolio is stable. VER advisory is active.
+    </div>
+    <div class="ac-footer">
+      VER Intelligence Hub &middot; Executive Snapshot &middot; FY27 &middot;
+      Salesforce DET &middot; Powered by VER &middot; Confidential
+    </div>
+  </div>
+
+</div><!-- /exec-inner -->
+</div><!-- /exec-body -->
+
+<!-- Engagement modal -->
+<div class="eng-modal-backdrop" id="eng-modal-backdrop" onclick="if(event.target===this)closeEngModal()">
+  <div class="eng-modal" id="eng-modal">
+    <div class="eng-modal-signal" id="eng-modal-signal"></div>
+    <div class="eng-modal-hdr">
+      <img class="eng-modal-logo" id="eng-modal-logo" src="" alt="">
+      <div class="eng-modal-info">
+        <div class="eng-modal-vendor" id="eng-modal-vendor"></div>
+        <div class="eng-modal-name" id="eng-modal-name"></div>
+      </div>
+      <div class="eng-modal-val">
+        <div class="eng-modal-val-num" id="eng-modal-val-num"></div>
+        <div class="eng-modal-val-lbl">annual value</div>
+      </div>
+      <button type="button" class="eng-modal-close" onclick="closeEngModal()">&#10005;</button>
+    </div>
+    <div class="eng-modal-badges" id="eng-modal-badges"></div>
+    <div class="eng-modal-body">
+      <div class="eng-modal-detail-lbl">Engagement Detail</div>
+      <div class="eng-modal-detail-text" id="eng-modal-detail"></div>
+      <div class="eng-modal-meta" id="eng-modal-meta"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+var ENGAGEMENTS = [
+  {"vendor":"NTT Data","domain":"nttdata.com","name":"AMS — Application Maintenance Services","pillar":"DA&O","value":"$22.8M","status":"amber","badge":"GSA Re-assignment In Progress","expiry":"Sep 2028","detail":"TCV $33M+ · Sep 2023–Sep 2028 · 180-day notice · L1/L2/L3 application maintenance across DET pillars. Budget owner: DA&O. Mission-critical — no disruption during GSA transition."},
+  {"vendor":"NTT Data","domain":"nttdata.com","name":"AD — Application Development (Restructured)","pillar":"DA&O","value":"$10.0M","status":"red","badge":"Expires Aug 2026 — 99 days","expiry":"Aug 2026","detail":"24 individual POs · Expires Aug 12, 2026 · 30-day notice · ~140 resources · Restructured Apr 2026. $9.0M savings realized. Renewal decision required before Aug 2026."},
+  {"vendor":"Cognizant","domain":"cognizant.com","name":"Workday ADAMS — Enterprise Systems","pillar":"SF on SF","value":"$2.43M","status":"green","badge":"Year 3 of 3","expiry":"Feb 2027","detail":"Year 3 of 3 · Expires Feb 14, 2027 · Per GSA notice · All SLAs meeting targets. Workday ADAMS L2 + L3 support scope. Renewal decision needed before FY28."},
+  {"vendor":"Cognizant","domain":"cognizant.com","name":"Workday ADAMS — Financials","pillar":"SF on SF","value":"$3.83M","status":"green","badge":"Year 2 of 2","expiry":"Feb 2027","detail":"Year 2 of 2 · Expires Feb 14, 2027 · Per GSA notice · L2 + L3 AMS support performing to scope. Renewal decision before FY28."},
+  {"vendor":"Workday","domain":"workday.com","name":"Enterprise License — HCM & Financials","pillar":"SF on SF","value":"$23.7M","status":"red","badge":"Renews Nov 2026 — Critical","expiry":"Nov 2026","detail":"Critical renewal Nov 30, 2026 · 90-day notice · Rate benchmarking in progress. Largest SF on SF spend item. Renewal strategy to Pillar Lead and Procurement by Q2 FY27."},
+  {"vendor":"Tech Mahindra","domain":"techmahindra.com","name":"Techforce — Service Desk & On-Site","pillar":"IT","value":"$6.5M","status":"amber","badge":"Expires Apr 2027","expiry":"Apr 2027","detail":"Service Desk $1.08M + On-Site Services $5.45M · Both expire Apr 30, 2027 · 90-day notice · 24x7 managed service · ~30K tickets/mo."},
+  {"vendor":"AWS","domain":"aws.amazon.com","name":"Cloud Infrastructure — EDP Committed Spend","pillar":"Engineering","value":"$17.2M","status":"green","badge":"Expires Mar 2027","expiry":"Mar 2027","detail":"Enterprise Discount Program (EDP) committed spend · Expires Mar 1, 2027 · 90-day notice · Usage within EDP envelope on track."}
+];
+var PILLARS = [
+  {"key":"sf-on-sf","short":"SF on SF","color":"#0D9488","risk":"amber","spend":"$22.2M"},
+  {"key":"eng-dev","short":"Engineering","color":"#D97706","risk":"amber","spend":"$15.9M"},
+  {"key":"it","short":"IT","color":"#2563EB","risk":"amber","spend":"$116.8M"},
+  {"key":"da-ops","short":"DA&amp;O","color":"#059669","risk":"amber","spend":"$0 Coupa"},
+  {"key":"data","short":"Data","color":"#0EA5E9","risk":"green","spend":"$11.9M"},
+  {"key":"dig-mkt","short":"Dig Mktg","color":"#7C3AED","risk":"green","spend":"$4.7M"},
+  {"key":"agentic","short":"Agentic","color":"#EC4899","risk":"green","spend":"$0"},
+  {"key":"cdo","short":"CDO","color":"#64748B","risk":"amber","spend":"$6.3M"},
+  {"key":"emerging","short":"Emerging","color":"#EA580C","risk":"green","spend":"$0"}
+];
+
+var BF = '1idLxwmT7Sv6VAWJq9j';
+var BADGE_CLASS = {green:'b-green',amber:'b-amber',red:'b-red'};
+var SIGNAL_CLASS = {green:'eng-signal-green',amber:'eng-signal-amber',red:'eng-signal-red'};
+var VAL_CLASS = {green:'eng-val-green',amber:'eng-val-amber',red:'eng-val-red'};
+
+function buildPillarStrip(){
+  var el = document.getElementById('pillar-strip');
+  if(!el) return;
+  el.innerHTML = PILLARS.map(function(p){
+    var rc = 'risk-'+p.risk;
+    var rl = p.risk==='green'?'Healthy':p.risk==='amber'?'Monitor':'Action';
+    return '<a href="page_pillar_detail.html?pillar='+p.key+'" class="p-pill" '
+      +'style="background:linear-gradient(160deg,'+p.color+' 0%,'+p.color+'cc 100%);">'
+      +'<div class="p-name">'+p.short+'</div>'
+      +'<div class="p-spend">'+p.spend+'</div>'
+      +'<span class="p-risk '+rc+'">'+rl+'</span>'
+      +'</a>';
+  }).join('');
+}
+
+function buildEngGrid(){
+  var el = document.getElementById('eng-grid');
+  if(!el) return;
+  el.innerHTML = ENGAGEMENTS.map(function(e,i){
+    var sc = SIGNAL_CLASS[e.status] || 'eng-signal-navy';
+    var bc = BADGE_CLASS[e.status] || 'b-gray';
+    var vc = VAL_CLASS[e.status] || 'eng-val-navy';
+    return '<div class="eng-card" id="eng-'+i+'" onclick="openEngModal('+i+')" style="cursor:pointer;">'
+      +'<div class="eng-signal '+sc+'"></div>'
+      +'<div class="eng-top">'
+        +'<img class="eng-logo" src="https://cdn.brandfetch.io/'+e.domain+'?c='+BF+'" onerror="this.style.display=\'none\'" alt="">'
+        +'<div class="eng-info">'
+          +'<div class="eng-vendor">'+e.vendor+'</div>'
+          +'<div class="eng-name">'+e.name+'</div>'
+        +'</div>'
+        +'<div class="eng-value">'
+          +'<div class="eng-val-num '+vc+'">'+e.value+'</div>'
+          +'<div class="eng-val-lbl">annual value</div>'
+        +'</div>'
+      +'</div>'
+      +'<div class="eng-badges">'
+        +'<span class="badge b-gray">'+e.pillar+'</span>'
+        +'<span class="badge '+bc+'">'+e.badge+'</span>'
+        +'<span class="badge b-gray">'+e.expiry+'</span>'
+      +'</div>'
+      +'</div>';
+  }).join('');
+}
+
+var SIGNAL_COLORS = {green:'var(--green)',amber:'var(--amber)',red:'var(--red)',navy:'var(--navy)'};
+
+function openEngModal(i){
+  var e = ENGAGEMENTS[i];
+  if(!e) return;
+  var bc  = BADGE_CLASS[e.status]  || 'b-gray';
+  var vc  = VAL_CLASS[e.status]    || 'eng-val-navy';
+  var sig = SIGNAL_COLORS[e.status]|| 'var(--navy)';
+  document.getElementById('eng-modal-signal').style.background = sig;
+  document.getElementById('eng-modal-logo').src = 'https://cdn.brandfetch.io/'+e.domain+'?c='+BF;
+  document.getElementById('eng-modal-vendor').textContent = e.vendor;
+  document.getElementById('eng-modal-name').textContent   = e.name;
+  var valEl = document.getElementById('eng-modal-val-num');
+  valEl.textContent  = e.value;
+  valEl.className    = 'eng-modal-val-num '+vc;
+  document.getElementById('eng-modal-badges').innerHTML =
+    '<span class="badge b-gray">'+e.pillar+'</span>'
+    +'<span class="badge '+bc+'">'+e.badge+'</span>'
+    +'<span class="badge b-gray">Expires '+e.expiry+'</span>';
+  document.getElementById('eng-modal-detail').textContent = e.detail;
+  var parts = e.detail.split('·');
+  document.getElementById('eng-modal-meta').innerHTML = [
+    ['Value',e.value],['Expiry',e.expiry],['Pillar',e.pillar]
+  ].map(function(m){
+    return '<div class="eng-modal-meta-item">'
+      +'<div class="eng-modal-meta-val">'+m[1]+'</div>'
+      +'<div class="eng-modal-meta-lbl">'+m[0]+'</div>'
+      +'</div>';
+  }).join('');
+  var bd = document.getElementById('eng-modal-backdrop');
+  bd.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEngModal(){
+  document.getElementById('eng-modal-backdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ── Animated KPI counters ── */
+function animateCounter(el){
+  var target = parseFloat(el.getAttribute('data-count'));
+  var prefix = el.getAttribute('data-prefix') || '';
+  var suffix = el.getAttribute('data-suffix') || '';
+  var decimals = parseInt(el.getAttribute('data-decimals') || '1', 10);
+  var start = null;
+  var duration = 1200;
+  function ease(t){ return 1 - Math.pow(1 - t, 3); }
+  function step(ts){
+    if(!start) start = ts;
+    var p = Math.min((ts - start) / duration, 1);
+    var val = target * ease(p);
+    el.textContent = prefix + (decimals===0 ? Math.round(val).toLocaleString() : val.toFixed(decimals)) + suffix;
+    if(p < 1) requestAnimationFrame(step);
+    else el.textContent = prefix + (decimals===0 ? target.toLocaleString() : target.toFixed(decimals)) + suffix;
+  }
+  requestAnimationFrame(step);
+}
+
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeEngModal(); });
+
+/* ── Scroll fade-in ── */
+(function(){
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  },{threshold:0.1});
+  document.querySelectorAll('.fade-in').forEach(function(el){ obs.observe(el); });
+})();
+
+/* ── Dark mode ── */
+function _dmToggle(){
+  var t = document.documentElement.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  try{ localStorage.setItem('ver-theme',t); }catch(e){}
+  var btn = document.getElementById('dm-btn');
+  if(btn) btn.innerHTML = t==='dark' ? '&#9790; Light Mode' : '&#9789; Dark Mode';
+}
+(function(){
+  var t; try{ t = localStorage.getItem('ver-theme'); }catch(e){}
+  if(!t) t = window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme',t);
+  var btn = document.getElementById('dm-btn');
+  if(btn) btn.innerHTML = t==='dark' ? '&#9790; Light Mode' : '&#9789; Dark Mode';
+})();
+
+document.addEventListener('DOMContentLoaded',function(){
+  buildPillarStrip();
+  buildEngGrid();
+  document.querySelectorAll('.kpi-val[data-count]').forEach(function(el){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ animateCounter(e.target); obs.unobserve(e.target); }
+      });
+    },{threshold:0.5});
+    obs.observe(el);
+  });
+});
+</script>
+</body>
+</html>

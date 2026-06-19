@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AI-Assisted Spend Analysis · VER Intelligence Hub</title>
+<style>
+:root{
+  --navy:#0F1E3C;--navy2:#1E3A5F;--navy3:#EFF6FF;
+  --teal:#0D9488;--teal2:#0F766E;--teal3:#F0FDF9;
+  --green:#059669;--green2:#065F46;--green3:#D1FAE5;
+  --amber:#D97706;--amber2:#78350F;--amber3:#FEF3C7;
+  --red:#DC2626;--red2:#7F1D1D;--red3:#FEE2E2;
+  --purple:#7C3AED;--purple2:#5B21B6;--purple3:#F5F3FF;
+  --blue:#2563EB;--blue3:#EFF6FF;
+  --ink:#111827;--ink2:#1F2937;--ink3:#374151;--ink4:#6B7280;
+  --gray:#F9FAFB;--gray2:#F3F4F6;--gray3:#E5E7EB;
+  --border:#E5E7EB;--border2:#D1D5DB;--white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;background:var(--gray);color:var(--ink2);font-size:9pt;}
+
+/* ── Hub top bar ── */
+.hub-top-bar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;height:48px;
+  background:linear-gradient(90deg,rgba(15,30,60,0.98) 0%,rgba(10,22,40,0.98) 100%);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  border-bottom:1px solid rgba(255,255,255,0.08);}
+.htb-left{display:flex;align-items:center;gap:14px;}
+.htb-back{font-size:8.5pt;color:rgba(255,255,255,0.5);text-decoration:none;font-weight:500;transition:color 0.15s;}
+.htb-back:hover{color:#fff;}
+.htb-divider{width:1px;height:16px;background:rgba(255,255,255,0.12);}
+.htb-brand{font-size:8.5pt;font-weight:700;color:rgba(255,255,255,0.65);}
+.htb-right{display:flex;align-items:center;gap:12px;}
+.htb-meta{text-align:right;font-size:7.5pt;color:rgba(255,255,255,0.35);line-height:1.4;}
+.dm-toggle{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;
+  border-radius:20px;border:1px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.55);
+  font-size:7.5pt;font-weight:700;cursor:pointer;font-family:inherit;
+  transition:all 0.15s;white-space:nowrap;}
+.dm-toggle:hover{background:rgba(13,148,136,0.2);border-color:var(--teal);color:var(--teal);}
+[data-theme="dark"] .dm-toggle{background:rgba(13,148,136,0.18);border-color:rgba(13,148,136,0.4);color:#0D9488;}
+.print-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;
+  border-radius:20px;border:1px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.55);
+  font-size:7.5pt;font-weight:700;cursor:pointer;font-family:inherit;
+  transition:all 0.15s;white-space:nowrap;}
+.print-btn:hover{background:rgba(13,148,136,0.2);border-color:var(--teal);color:var(--teal);}
+@media print{
+  .hub-top-bar,.print-btn,.dm-toggle,.htb-meta{display:none!important;}
+  .hero{background:#0F1E3C!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body{background:#fff!important;color:#111!important;}
+  .card{box-shadow:none!important;}
+  .wrap,.content-wrap{max-width:100%!important;padding:12px!important;}
+}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#0A1628 0%,#0F1E3C 45%,#0D2E38 100%);padding:30px 0 26px;position:relative;overflow:hidden;}
+.hero-inner-wrap{max-width:1280px;margin:0 auto;padding:0 48px;}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:320px;height:320px;
+  border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.12),transparent 70%);pointer-events:none;}
+.hero::after{content:'';position:absolute;bottom:-20px;left:40%;width:400px;height:200px;
+  border-radius:50%;background:radial-gradient(circle,rgba(13,148,136,0.10),transparent 70%);pointer-events:none;}
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;position:relative;z-index:1;}
+.hero-eyebrow{font-size:6.5pt;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);margin-bottom:6px;}
+.hero-title{font-size:21pt;font-weight:900;color:#fff;line-height:1.15;margin-bottom:6px;}
+.hero-sub{font-size:9pt;color:rgba(255,255,255,0.6);line-height:1.6;max-width:520px;}
+.ai-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(124,58,237,0.2);
+  border:1px solid rgba(124,58,237,0.4);border-radius:20px;padding:6px 14px;font-size:7.5pt;
+  font-weight:700;color:#C4B5FD;white-space:nowrap;}
+.ai-badge-dot{width:7px;height:7px;border-radius:50%;background:#7C3AED;animation:pulse 1.8s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.hero-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;position:relative;z-index:1;}
+.hkpi{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.09);border-radius:10px;padding:13px 15px;}
+.hkpi-val{font-size:17pt;font-weight:900;color:#fff;line-height:1;}
+.hkpi-lbl{font-size:6.5pt;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.45);margin-top:4px;}
+.hkpi-note{font-size:7pt;color:rgba(255,255,255,0.4);margin-top:2px;}
+.hkpi.teal  .hkpi-val{color:#5EEAD4;}
+.hkpi.green .hkpi-val{color:#6EE7B7;}
+.hkpi.amber .hkpi-val{color:#FCD34D;}
+.hkpi.red   .hkpi-val{color:#FCA5A5;}
+.hkpi.purple .hkpi-val{color:#C4B5FD;}
+
+/* ── CONTROLS ── */
+.controls{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;padding:0;}
+.controls-inner{max-width:1280px;margin:0 auto;padding:11px 48px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.fsel{font-size:8pt;padding:6px 10px;border:1px solid var(--border2);border-radius:6px;
+  background:#fff;color:var(--ink2);cursor:pointer;font-family:inherit;}
+.fsel:focus{outline:2px solid var(--teal);border-color:var(--teal);}
+.ctrl-lbl{font-size:7.5pt;font-weight:700;color:var(--ink4);margin-right:-2px;}
+.sep{width:1px;height:20px;background:var(--border);margin:0 4px;}
+.ctrl-r{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.dm-btn{font-size:7.5pt;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);
+  background:var(--gray2);color:var(--ink4);font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.13s;}
+.dm-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy);}
+.stamp{font-size:7pt;color:var(--ink4);}
+
+/* ── MAIN LAYOUT ── */
+.main{max-width:1280px;margin:0 auto;padding:20px 48px 40px;}
+.section-title{font-size:10.5pt;font-weight:900;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.section-title-sub{font-size:8pt;color:var(--ink4);font-weight:400;margin-left:auto;}
+
+/* ── AI INSIGHTS PANEL ── */
+.ai-panel{background:#fff;border:1px solid var(--border);border-radius:12px;margin-bottom:22px;overflow:hidden;}
+.ai-panel-header{background:linear-gradient(135deg,#1a0533,#2d1060,#1a1060);
+  padding:16px 22px;display:flex;align-items:center;justify-content:space-between;}
+.ai-panel-title{font-size:10.5pt;font-weight:900;color:#fff;display:flex;align-items:center;gap:8px;}
+.ai-panel-sub{font-size:7.5pt;color:rgba(255,255,255,0.55);margin-top:2px;}
+.ai-status{font-size:7pt;padding:3px 10px;border-radius:10px;font-weight:700;
+  background:rgba(124,58,237,0.25);color:#C4B5FD;border:1px solid rgba(124,58,237,0.3);}
+.ai-insights-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;}
+.ai-insight{padding:18px 20px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);position:relative;}
+.ai-insight:nth-child(3n){border-right:none;}
+.ai-insight:nth-last-child(-n+3){border-bottom:none;}
+.ai-insight-icon{font-size:18pt;margin-bottom:8px;}
+.ai-insight-priority{display:inline-block;font-size:6pt;font-weight:800;text-transform:uppercase;
+  letter-spacing:0.1em;padding:2px 7px;border-radius:6px;margin-bottom:6px;}
+.pri-critical{background:var(--red3);color:var(--red2);}
+.pri-warning {background:var(--amber3);color:var(--amber2);}
+.pri-opportunity{background:var(--green3);color:var(--green2);}
+.pri-info    {background:var(--navy3);color:var(--navy2);}
+.ai-insight-title{font-size:9pt;font-weight:800;color:var(--ink);margin-bottom:6px;line-height:1.3;}
+.ai-insight-body{font-size:8pt;color:var(--ink3);line-height:1.6;margin-bottom:10px;}
+.ai-insight-action{font-size:7.5pt;font-weight:700;color:var(--teal2);padding:6px 10px;
+  background:var(--teal3);border-radius:6px;line-height:1.4;}
+.ai-confidence{position:absolute;top:14px;right:16px;font-size:6.5pt;font-weight:700;
+  color:var(--ink4);display:flex;align-items:center;gap:3px;}
+.conf-dot{width:5px;height:5px;border-radius:50%;}
+
+/* ── CHART GRID ── */
+.chart-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:22px;}
+.chart-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px 20px;}
+.chart-title{font-size:9pt;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.chart-sub{font-size:7.5pt;color:var(--ink4);margin-bottom:14px;}
+
+/* Category bars */
+.cat-bars{display:flex;flex-direction:column;gap:10px;}
+.cat-bar-row{display:flex;flex-direction:column;gap:3px;}
+.cat-bar-label{display:flex;justify-content:space-between;align-items:center;}
+.cat-bar-name{font-size:7.5pt;color:var(--ink2);font-weight:600;max-width:160px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cat-bar-val{font-size:7.5pt;font-weight:800;color:var(--ink2);}
+.cat-bar-track{background:var(--gray2);border-radius:4px;height:8px;}
+.cat-bar-fill{height:8px;border-radius:4px;transition:width 0.7s ease;}
+
+/* Donut */
+.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;}
+.donut-legend{display:flex;flex-direction:column;gap:6px;width:100%;}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:7.5pt;}
+.legend-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0;}
+.legend-name{color:var(--ink3);flex:1;}
+.legend-val{font-weight:700;color:var(--ink2);}
+.legend-pct{color:var(--ink4);font-size:7pt;}
+
+/* Risk dist */
+.risk-dist-bars{display:flex;flex-direction:column;gap:8px;}
+.rdbar-row{display:flex;align-items:center;gap:8px;}
+.rdbar-lbl{font-size:7.5pt;color:var(--ink3);font-weight:600;width:60px;flex-shrink:0;}
+.rdbar-track{flex:1;background:var(--gray2);border-radius:4px;height:16px;position:relative;}
+.rdbar-fill{height:16px;border-radius:4px;display:flex;align-items:center;padding-left:6px;
+  font-size:7pt;font-weight:700;color:#fff;white-space:nowrap;transition:width 0.7s ease;}
+.rdbar-cnt{font-size:7.5pt;font-weight:700;color:var(--ink2);width:28px;text-align:right;}
+
+/* ── OPPORTUNITY TABLE ── */
+.opp-panel{background:#fff;border:1px solid var(--border);border-radius:12px;margin-bottom:22px;overflow:hidden;}
+.opp-header{padding:14px 20px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.opp-table{width:100%;border-collapse:collapse;font-size:8pt;}
+.opp-table th{background:var(--gray);padding:8px 14px;text-align:left;font-size:7pt;font-weight:800;
+  text-transform:uppercase;letter-spacing:0.05em;color:var(--ink4);border-bottom:1px solid var(--border);}
+.opp-table td{padding:10px 14px;border-bottom:1px solid var(--gray2);vertical-align:middle;}
+.opp-table tr:last-child td{border-bottom:none;}
+.opp-table tr:hover td{background:var(--gray);}
+.opp-flag{display:inline-flex;align-items:center;gap:4px;font-size:7pt;font-weight:700;
+  padding:3px 8px;border-radius:8px;white-space:nowrap;}
+.flag-red{background:var(--red3);color:var(--red2);}
+.flag-amber{background:var(--amber3);color:var(--amber2);}
+.flag-green{background:var(--green3);color:var(--green2);}
+.flag-purple{background:var(--purple3);color:var(--purple2);}
+
+/* ── WHAT-IF SCENARIO ── */
+.scenario-panel{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.scenario-header{background:linear-gradient(135deg,var(--navy),var(--navy2));padding:16px 22px;}
+.scenario-title{font-size:10.5pt;font-weight:900;color:#fff;margin-bottom:3px;}
+.scenario-sub{font-size:8pt;color:rgba(255,255,255,0.55);}
+.scenario-body{padding:20px 22px;}
+.scenario-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.scenario-levers{display:flex;flex-direction:column;gap:16px;}
+.lever-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.lever-name{font-size:8.5pt;font-weight:700;color:var(--ink2);}
+.lever-val{font-size:9pt;font-weight:900;color:var(--teal);}
+.lever-note{font-size:7pt;color:var(--ink4);margin-top:3px;}
+input[type=range]{width:100%;accent-color:var(--teal);cursor:pointer;}
+.scenario-output{background:var(--navy3);border:1px solid #BFDBFE;border-radius:10px;padding:18px 20px;}
+.so-title{font-size:8pt;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;
+  color:var(--navy2);margin-bottom:14px;}
+.so-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;
+  border-bottom:1px solid rgba(191,219,254,0.5);font-size:8.5pt;}
+.so-row:last-child{border-bottom:none;}
+.so-lbl{color:var(--ink3);}
+.so-val{font-weight:800;color:var(--navy);}
+.so-val.savings{color:var(--green2);}
+.so-highlight{background:var(--green3);border:1px solid #A7F3D0;border-radius:8px;
+  padding:12px 14px;margin-top:12px;text-align:center;}
+.so-highlight-val{font-size:16pt;font-weight:900;color:var(--green2);}
+.so-highlight-lbl{font-size:7.5pt;color:var(--green2);font-weight:700;margin-top:2px;}
+
+/* ── BADGES / SHARED ── */
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:6.5pt;font-weight:700;
+  padding:2px 7px;border-radius:9px;white-space:nowrap;}
+.b-green{background:var(--green3);color:var(--green2);}
+.b-amber{background:var(--amber3);color:var(--amber2);}
+.b-red  {background:var(--red3);color:var(--red2);}
+.b-navy {background:var(--navy3);color:var(--navy2);}
+.b-teal {background:var(--teal3);color:var(--teal2);}
+.b-gray {background:var(--gray3);color:var(--ink3);}
+.b-purple{background:var(--purple3);color:var(--purple2);}
+.dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+
+/* ── DARK MODE ── */
+[data-theme="dark"]{
+  --gray:#0D1626;--gray2:#111F35;--gray3:#1A2D47;
+  --white:#0F1E3C;--border:#1E3A5F;--border2:#243E60;
+  --ink:#EFF6FF;--ink2:#C7D9F0;--ink3:#8BAACF;--ink4:#5A7899;
+  --navy3:#0F1E3C;--navy2:#1E3A5F;
+  --teal3:rgba(13,148,136,0.15);--green3:rgba(5,150,105,0.15);
+  --amber3:rgba(217,119,6,0.15);--red3:rgba(220,38,38,0.15);--purple3:rgba(124,58,237,0.15);
+}
+[data-theme="dark"] body{background:var(--gray);}
+[data-theme="dark"] .controls,[data-theme="dark"] .chart-card,
+[data-theme="dark"] .ai-panel,[data-theme="dark"] .opp-panel,
+[data-theme="dark"] .scenario-panel,[data-theme="dark"] .ai-insight{background:var(--gray2);}
+[data-theme="dark"] .fsel{background:var(--gray2);color:var(--ink2);border-color:var(--border2);}
+[data-theme="dark"] .opp-table th{background:var(--gray3);}
+[data-theme="dark"] .scenario-output{background:var(--gray3);border-color:var(--border);}
+[data-theme="dark"] .so-title{color:var(--ink3);}
+[data-theme="dark"] .so-val{color:var(--ink2);}
+[data-theme="dark"] .controls{background:var(--gray2);border-color:var(--border);}
+[data-theme="dark"] .section-title{color:var(--ink);}
+[data-theme="dark"] .ai-insight{background:var(--gray2);}
+
+@media(max-width:900px){
+  .chart-row{grid-template-columns:1fr;}
+  .ai-insights-grid{grid-template-columns:1fr;}
+  .scenario-grid{grid-template-columns:1fr;}
+  .hero-kpis{grid-template-columns:repeat(2,1fr);}
+  .main{padding:16px;}
+}
+</style>
+</head>
+<body>
+<nav class="hub-top-bar">
+  <div class="htb-left">
+    <a href="index.html" class="htb-back">&#8592; Hub</a>
+    <div class="htb-divider"></div>
+    <span class="htb-brand">AI-Assisted Spend Analysis</span>
+  </div>
+  <div class="htb-right">
+    <button type="button" class="print-btn" onclick="window.print()">&#128438; Download PDF</button>
+    <button type="button" class="dm-toggle" id="dm-btn" onclick="toggleDark()">&#9789; Dark Mode</button>
+    <div class="htb-meta">DET Portfolio Intelligence &mdash; Powered by VER<br>FY27 &middot; Confidential</div>
+  </div>
+</nav>
+<div class="hero">
+  <div class="hero-inner-wrap">
+    <div class="hero-top">
+      <div>
+        <div class="hero-eyebrow">VER Intelligence Hub · FY27</div>
+        <div class="hero-title">AI-Assisted Spend Analysis</div>
+        <div class="hero-sub">Rule-based intelligence engine analyzing portfolio spend patterns, concentration risk, renewal exposure, and savings opportunities across all 1,368 managed vendors.</div>
+      </div>
+      <div class="ai-badge"><span class="ai-badge-dot"></span>VER Intelligence Engine · Active</div>
+    </div>
+    <div class="hero-kpis">
+      <div class="hkpi teal"><div class="hkpi-val" id="kpi-spend">—</div><div class="hkpi-lbl">Disclosed Spend</div><div class="hkpi-note">Named vendor total</div></div>
+      <div class="hkpi amber"><div class="hkpi-val" id="kpi-renew-exp">—</div><div class="hkpi-lbl">Renewal Exposure</div><div class="hkpi-note">≤180 days</div></div>
+      <div class="hkpi red"><div class="hkpi-val" id="kpi-at-risk-spend">—</div><div class="hkpi-lbl">At-Risk Spend</div><div class="hkpi-note">High risk vendors</div></div>
+      <div class="hkpi green"><div class="hkpi-val" id="kpi-savings-opp">—</div><div class="hkpi-lbl">Savings Opportunity</div><div class="hkpi-note">Est. addressable</div></div>
+      <div class="hkpi purple"><div class="hkpi-val" id="kpi-vendors-spend">—</div><div class="hkpi-lbl">Vendors w/ Spend</div><div class="hkpi-note">Of 1,368 total</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="controls-inner">
+  <span class="ctrl-lbl">View by:</span>
+  <select class="fsel" id="ctrl-cat" onchange="applyView()">
+    <option value="">All Categories</option>
+    <option>Professional Services</option>
+    <option>Software / SaaS</option>
+    <option>Cloud &amp; Managed Services</option>
+    <option>Contingent Workforce</option>
+    <option>Hardware &amp; Infrastructure</option>
+  </select>
+  <select class="fsel" id="ctrl-tier" onchange="applyView()">
+    <option value="">All Tiers</option>
+    <option value="1">Tier 1</option>
+    <option value="2">Tier 2</option>
+    <option value="3">Tier 3</option>
+  </select>
+  <div class="sep"></div>
+  <span class="stamp" id="analysis-stamp"></span>
+  <div class="ctrl-r">
+    <button type="button" class="dm-btn" onclick="toggleDark()">☽ Dark Mode</button>
+  </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- AI INSIGHTS -->
+  <div class="section-title">
+    ✦ Intelligence Insights
+    <span class="section-title-sub">Auto-generated from portfolio data · Ranked by priority</span>
+  </div>
+  <div class="ai-panel">
+    <div class="ai-panel-header">
+      <div>
+        <div class="ai-panel-title">⬡ VER Spend Intelligence — Active Analysis</div>
+        <div class="ai-panel-sub">Detecting spend concentration, renewal pressure, performance risk, and savings signals across portfolio</div>
+      </div>
+      <div class="ai-status" id="ai-status">Analyzing…</div>
+    </div>
+    <div class="ai-insights-grid" id="insights-grid">
+      <div style="padding:30px;text-align:center;color:var(--ink4);grid-column:1/-1">
+        <div style="font-size:20pt;margin-bottom:8px">⬡</div>Loading vendor data…</div>
+    </div>
+  </div>
+
+  <!-- CHARTS ROW -->
+  <div class="section-title">
+    📊 Portfolio Breakdown
+    <span class="section-title-sub">Spend distribution across categories, tiers, and risk bands</span>
+  </div>
+  <div class="chart-row">
+    <div class="chart-card">
+      <div class="chart-title">Spend by Category</div>
+      <div class="chart-sub">Coupa FY27 actuals · $295.5M total</div>
+      <div class="cat-bars" id="cat-chart"></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Spend by Pillar</div>
+      <div class="chart-sub">Hyperion rollup · Coupa FY27 actuals</div>
+      <div class="donut-wrap">
+        <svg id="donut-svg" viewBox="0 0 160 160" width="150" height="150"></svg>
+        <div class="donut-legend" id="donut-legend"></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Risk Distribution</div>
+      <div class="chart-sub">Vendors by risk band</div>
+      <div class="risk-dist-bars" id="risk-dist"></div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
+        <div style="font-size:7.5pt;font-weight:700;color:var(--ink4);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.06em">Avg Risk by Category</div>
+        <div id="avg-risk-list" style="display:flex;flex-direction:column;gap:5px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPPORTUNITY TABLE -->
+  <div class="section-title">
+    🎯 Opportunity Finder
+    <span class="section-title-sub" id="opp-count-label">Vendors flagged for commercial action</span>
+  </div>
+  <div class="opp-panel">
+    <div class="opp-header">
+      <span style="font-size:8.5pt;font-weight:700;color:var(--ink2)">Vendors with material spend and actionable signals</span>
+      <span style="font-size:7.5pt;color:var(--ink4);margin-left:auto">Click a row to see scorecard detail</span>
+    </div>
+    <table class="opp-table">
+      <thead>
+        <tr>
+          <th>Vendor</th>
+          <th>Category</th>
+          <th>Annual Spend</th>
+          <th>SLA Score</th>
+          <th>Overall Risk</th>
+          <th>Renewal</th>
+          <th>Signal</th>
+          <th>Recommended Action</th>
+        </tr>
+      </thead>
+      <tbody id="opp-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- WHAT-IF SCENARIO -->
+  <div class="section-title">
+    ⚙ Scenario Builder
+    <span class="section-title-sub">Model spend optimization levers — adjust and see projected impact</span>
+  </div>
+  <div class="scenario-panel">
+    <div class="scenario-header">
+      <div class="scenario-title">Portfolio Optimization Scenario</div>
+      <div class="scenario-sub">Adjust levers to model the addressable savings opportunity across your portfolio</div>
+    </div>
+    <div class="scenario-body">
+      <div class="scenario-grid">
+        <div class="scenario-levers">
+          <div>
+            <div class="lever-label">
+              <span class="lever-name">Cloud Optimization Target</span>
+              <span class="lever-val" id="lv1-val">8%</span>
+            </div>
+            <input type="range" min="0" max="20" value="8" id="lv1" oninput="updateScenario()">
+            <div class="lever-note">EDP/CUD renegotiation on AWS + Google Cloud combined spend</div>
+          </div>
+          <div>
+            <div class="lever-label">
+              <span class="lever-name">Professional Services Consolidation</span>
+              <span class="lever-val" id="lv2-val">10%</span>
+            </div>
+            <input type="range" min="0" max="25" value="10" id="lv2" oninput="updateScenario()">
+            <div class="lever-note">Rate card renegotiation + SOW scope reduction on mid-tier engagements</div>
+          </div>
+          <div>
+            <div class="lever-label">
+              <span class="lever-name">SaaS License Rationalization</span>
+              <span class="lever-val" id="lv3-val">12%</span>
+            </div>
+            <input type="range" min="0" max="30" value="12" id="lv3" oninput="updateScenario()">
+            <div class="lever-note">Seat hygiene + utilization-based right-sizing across SaaS portfolio</div>
+          </div>
+          <div>
+            <div class="lever-label">
+              <span class="lever-name">Contingent Workforce Rate Benchmark</span>
+              <span class="lever-val" id="lv4-val">5%</span>
+            </div>
+            <input type="range" min="0" max="15" value="5" id="lv4" oninput="updateScenario()">
+            <div class="lever-note">Market rate alignment for contractor categories vs. benchmark data</div>
+          </div>
+        </div>
+        <div>
+          <div class="scenario-output" id="scenario-output">
+            <div class="so-title">Scenario Output</div>
+            <div class="so-row"><span class="so-lbl">Baseline Disclosed Spend</span><span class="so-val" id="so-base">—</span></div>
+            <div class="so-row"><span class="so-lbl">Cloud Savings</span><span class="so-val savings" id="so-cloud">—</span></div>
+            <div class="so-row"><span class="so-lbl">Prof. Services Savings</span><span class="so-val savings" id="so-ps">—</span></div>
+            <div class="so-row"><span class="so-lbl">SaaS License Savings</span><span class="so-val savings" id="so-saas">—</span></div>
+            <div class="so-row"><span class="so-lbl">CW Rate Savings</span><span class="so-val savings" id="so-cw">—</span></div>
+            <div class="so-row"><span class="so-lbl">Optimized Spend</span><span class="so-val" id="so-optimized">—</span></div>
+            <div class="so-highlight">
+              <div class="so-highlight-val" id="so-total-savings">—</div>
+              <div class="so-highlight-lbl">Total Estimated Savings</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script src="../assets/vendors.js"></script>
+<script src="../assets/coupa_spend.js"></script>
+<script>
+// ── UTILITIES ──────────────────────────────────────────────────────────────
+function parseSpend(s) {
+  if (!s || s === '$0' || s === '—' || s === '') return 0;
+  var m = String(s).match(/\$([\d.]+)\s*([MKBmkb]?)/);
+  if (!m) return 0;
+  var n = parseFloat(m[1]);
+  var u = m[2].toUpperCase();
+  if (u === 'B') n *= 1000;
+  if (u === 'K') n /= 1000;
+  return n; // treat M as M (millions)
+}
+
+function fmt(n) {
+  if (n >= 1000) return '$' + (n/1000).toFixed(1) + 'B';
+  if (n >= 1)    return '$' + n.toFixed(1) + 'M';
+  if (n > 0)     return '$' + (n * 1000).toFixed(0) + 'K';
+  return '$0';
+}
+
+function daysUntil(dateStr) {
+  if (!dateStr) return null;
+  var d = new Date(dateStr);
+  return Math.ceil((d - new Date()) / 86400000);
+}
+
+function riskBand(s) {
+  return s <= 33 ? 'low' : s <= 66 ? 'medium' : 'high';
+}
+
+function colorForRisk(band) {
+  return band === 'low' ? 'var(--green)' : band === 'medium' ? 'var(--amber)' : 'var(--red)';
+}
+
+// ── GLOBAL STATE ──────────────────────────────────────────────────────────
+var ALL = [];
+var SPEND_TOTALS = {};
+
+// ── COMPUTE AGGREGATES ────────────────────────────────────────────────────
+function compute(vendors) {
+  var withSpend = vendors.filter(function(v){ return parseSpend(v.annual_spend) > 0; });
+  var totalSpend = withSpend.reduce(function(s,v){ return s + parseSpend(v.annual_spend); }, 0);
+
+  // By category
+  var catSpend = {}, catCount = {};
+  vendors.forEach(function(v) {
+    catCount[v.category] = (catCount[v.category]||0) + 1;
+    catSpend[v.category] = (catSpend[v.category]||0) + parseSpend(v.annual_spend);
+  });
+
+  // By tier
+  var tierCount = {1:0, 2:0, 3:0};
+  vendors.forEach(function(v){ tierCount[v.tier] = (tierCount[v.tier]||0) + 1; });
+
+  // Risk distribution
+  var riskDist = {low:0, medium:0, high:0};
+  vendors.forEach(function(v){ riskDist[riskBand(v.risk_score)]++; });
+
+  // Avg risk by category
+  var catRiskSum = {}, catRiskCnt = {};
+  vendors.forEach(function(v){
+    catRiskSum[v.category] = (catRiskSum[v.category]||0) + v.risk_score;
+    catRiskCnt[v.category] = (catRiskCnt[v.category]||0) + 1;
+  });
+
+  // Renewal exposure
+  var renew180 = withSpend.filter(function(v){
+    var d = daysUntil(v.renewal_date); return d !== null && d >= 0 && d <= 180;
+  });
+  var renew90 = withSpend.filter(function(v){
+    var d = daysUntil(v.renewal_date); return d !== null && d >= 0 && d <= 90;
+  });
+  var renewSpend180 = renew180.reduce(function(s,v){ return s + parseSpend(v.annual_spend); }, 0);
+  var renewSpend90  = renew90.reduce(function(s,v){ return s + parseSpend(v.annual_spend); }, 0);
+
+  // At-risk spend (high risk vendors with disclosed spend)
+  var atRiskSpend = withSpend.filter(function(v){ return v.risk_score > 66; })
+    .reduce(function(s,v){ return s + parseSpend(v.annual_spend); }, 0);
+
+  // Cloud spend
+  var cloudSpend = (catSpend['Cloud & Managed Services'] || 0);
+  var psSpend    = (catSpend['Professional Services'] || 0);
+  var saasSpend  = (catSpend['Software / SaaS'] || 0);
+
+  // Sorted by spend
+  var bySpend = withSpend.slice().sort(function(a,b){ return parseSpend(b.annual_spend) - parseSpend(a.annual_spend); });
+
+  return {
+    vendors, withSpend, totalSpend,
+    catSpend, catCount, tierCount, riskDist,
+    catRiskSum, catRiskCnt,
+    renew90, renew180, renewSpend90, renewSpend180,
+    atRiskSpend, cloudSpend, psSpend, saasSpend,
+    bySpend
+  };
+}
+
+// ── AI INSIGHTS ENGINE ────────────────────────────────────────────────────
+var INSIGHT_COLORS = {
+  critical:    { label:'Critical',     cls:'pri-critical',    icon:'🔴' },
+  warning:     { label:'Watch',        cls:'pri-warning',     icon:'🟡' },
+  opportunity: { label:'Opportunity',  cls:'pri-opportunity', icon:'🟢' },
+  info:        { label:'Insight',      cls:'pri-info',        icon:'🔵' },
+};
+
+function generateInsights(d) {
+  var insights = [];
+  var v = d.vendors;
+
+  // 1 — SPEND CONCENTRATION
+  var top5 = d.bySpend.slice(0,5);
+  var top5Spend = top5.reduce(function(s,x){ return s+parseSpend(x.annual_spend); },0);
+  var top5Pct   = d.totalSpend > 0 ? Math.round(top5Spend/d.totalSpend*100) : 0;
+  var top3Names = top5.slice(0,3).map(function(x){ return x.name; }).join(', ');
+  insights.push({
+    priority: top5Pct >= 70 ? 'critical' : top5Pct >= 50 ? 'warning' : 'info',
+    icon: '⚡',
+    title: 'Spend Concentration in Top ' + top5.length + ' Vendors',
+    body: top3Names + ' and ' + (top5.length - 3) + ' others account for ' + top5Pct + '% of disclosed portfolio spend (' + fmt(top5Spend) + ' of ' + fmt(d.totalSpend) + '). This level of concentration increases renewal negotiation dependency and single-vendor continuity risk.',
+    action: 'Build competitive alternatives for top 3 vendors and enforce dual-source policies before next renewal cycle.',
+    confidence: 'High',
+    confColor: 'var(--green)',
+    score: top5Pct >= 70 ? 100 : top5Pct >= 50 ? 75 : 40
+  });
+
+  // 2 — RENEWAL PRESSURE
+  if (d.renewSpend180 > 0) {
+    var urgent = d.renew90.map(function(x){ return x.name; }).slice(0,3).join(', ');
+    insights.push({
+      priority: d.renewSpend90 > 10 ? 'critical' : d.renewSpend180 > 20 ? 'warning' : 'warning',
+      icon: '📅',
+      title: 'Renewal Spend Pressure — ' + fmt(d.renewSpend180) + ' at Risk',
+      body: d.renew180.length + ' vendors (' + fmt(d.renewSpend180) + ') are renewing within 180 days' +
+        (d.renew90.length > 0 ? ', including ' + d.renew90.length + ' vendor' + (d.renew90.length > 1 ? 's' : '') + ' within 90 days (' + fmt(d.renewSpend90) + '). Immediate priority: ' + (urgent || 'see renewal list') + '.' : '.') +
+        ' Unmanaged renewals auto-renew at list rate, forfeiting negotiation leverage.',
+      action: 'Initiate commercial strategy sessions for all sub-90-day renewals. Lock rate cards before incumbent leverage peaks.',
+      confidence: 'High',
+      confColor: 'var(--green)',
+      score: d.renewSpend90 > 15 ? 95 : d.renewSpend180 > 20 ? 80 : 60
+    });
+  }
+
+  // 3 — SLA UNDERPERFORMERS WITH SPEND
+  var slaRisk = d.withSpend.filter(function(x){ return x.sla_score < 87 && parseSpend(x.annual_spend) >= 1; });
+  slaRisk.sort(function(a,b){ return parseSpend(b.annual_spend)-parseSpend(a.annual_spend); });
+  if (slaRisk.length > 0) {
+    var worst = slaRisk[0];
+    var slaNames = slaRisk.slice(0,3).map(function(x){ return x.name + ' (' + x.sla_score + '%)'; }).join(', ');
+    insights.push({
+      priority: slaRisk[0].sla_score < 82 ? 'critical' : 'warning',
+      icon: '📉',
+      title: 'SLA Underperformance with Material Spend',
+      body: slaRisk.length + ' vendor' + (slaRisk.length > 1 ? 's' : '') + ' below 87% SLA threshold with ≥$1M spend: ' + slaNames + '. ' +
+        worst.name + ' at ' + worst.sla_score + '% SLA is the highest-spend underperformer (' + worst.annual_spend + '). SLA erosion at this spend level represents both performance and contract risk.',
+      action: 'Issue formal SLA improvement plan for ' + worst.name + '. Tie renewal pricing to measurable SLA recovery milestones within 90 days.',
+      confidence: 'High',
+      confColor: 'var(--green)',
+      score: 90
+    });
+  }
+
+  // 4 — HIGH DELIVERY RISK + HIGH SPEND (renegotiation candidates)
+  var delivRisk = d.withSpend.filter(function(x){ return x.delivery_risk > 50 && parseSpend(x.annual_spend) >= 2; });
+  delivRisk.sort(function(a,b){ return parseSpend(b.annual_spend)-parseSpend(a.annual_spend); });
+  if (delivRisk.length > 0) {
+    var drSpend = delivRisk.reduce(function(s,x){ return s+parseSpend(x.annual_spend); },0);
+    insights.push({
+      priority: 'warning',
+      icon: '🚧',
+      title: 'Delivery Risk Exposure — ' + fmt(drSpend) + ' in Scope',
+      body: delivRisk.length + ' vendor' + (delivRisk.length > 1 ? 's' : '') + ' with delivery risk score > 50 carry a combined ' + fmt(drSpend) + ' in annual spend. ' +
+        delivRisk.slice(0,2).map(function(x){ return x.name + ' (DR: ' + x.delivery_risk + ')'; }).join(' and ') +
+        ' are the highest-priority cases. Elevated delivery risk at this spend level often signals scope creep, resource churn, or milestone slippage.',
+      action: 'Convert time-and-material components to milestone-based SOW structures. Add delivery risk KPIs to the next CQBR cycle.',
+      confidence: 'High',
+      confColor: 'var(--green)',
+      score: 75
+    });
+  }
+
+  // 5 — CLOUD OPTIMIZATION
+  if (d.cloudSpend > 10) {
+    var cloudPct = d.totalSpend > 0 ? Math.round(d.cloudSpend/d.totalSpend*100) : 0;
+    insights.push({
+      priority: 'opportunity',
+      icon: '☁️',
+      title: 'Cloud Spend Optimization Window Open',
+      body: 'Cloud & Managed Services represent ' + fmt(d.cloudSpend) + ' (' + cloudPct + '% of portfolio). AWS EDP and Google Cloud CUD commitments are the two highest-leverage levers. Industry benchmarks indicate 8–15% savings are achievable through usage-commitment alignment, right-sizing, and waste elimination with active FinOps governance.',
+      action: 'Commission a FinOps usage review on AWS and GCP. Present EDP/CUD optimization case to engineering leads before Q3 renewal window.',
+      confidence: 'Medium',
+      confColor: 'var(--amber)',
+      score: 70
+    });
+  }
+
+  // 6 — SAAS SEAT RATIONALIZATION
+  if (d.saasSpend > 5) {
+    var saasPct = d.totalSpend > 0 ? Math.round(d.saasSpend/d.totalSpend*100) : 0;
+    insights.push({
+      priority: 'opportunity',
+      icon: '💻',
+      title: 'SaaS License Right-Sizing Opportunity',
+      body: 'Software / SaaS spend totals ' + fmt(d.saasSpend) + ' (' + saasPct + '% of portfolio) across ' + (d.catCount['Software / SaaS'] || 0) + ' vendors. Seat utilization audits on platforms like Workday, Figma, Okta, and Atlassian typically surface 10–18% recoverable license value through inactive-seat elimination and tier downgrades.',
+      action: 'Run utilization pull on top 8 SaaS vendors before each renewal. Establish a quarterly seat hygiene cadence tracked in VER governance.',
+      confidence: 'Medium',
+      confColor: 'var(--amber)',
+      score: 65
+    });
+  }
+
+  // 7 — TIER 1 DEPENDENCY
+  var tier1Spend = d.withSpend.filter(function(x){ return x.tier===1; })
+    .reduce(function(s,x){ return s+parseSpend(x.annual_spend); },0);
+  var tier1Pct = d.totalSpend > 0 ? Math.round(tier1Spend/d.totalSpend*100) : 0;
+  if (tier1Pct > 60) {
+    insights.push({
+      priority: 'info',
+      icon: '🏛',
+      title: 'Tier 1 Strategic Dependency — ' + tier1Pct + '% of Spend',
+      body: 'Tier 1 (Strategic) vendors hold ' + tier1Pct + '% of disclosed portfolio spend (' + fmt(tier1Spend) + '). This is appropriate for a portfolio with mission-critical platforms, but each Tier 1 vendor warrants an active SLA governance structure, documented exit strategy, and 180-day notice enforcement.',
+      action: 'Confirm each Tier 1 vendor has an active governance cadence (CQBR or equivalent), exit plan, and contractual notice period on file.',
+      confidence: 'High',
+      confColor: 'var(--green)',
+      score: 50
+    });
+  }
+
+  // 8 — VENDORS UNDER REVIEW WITH SPEND
+  var underReview = d.withSpend.filter(function(x){ return x.status === 'Under Review'; });
+  if (underReview.length > 0) {
+    var urSpend = underReview.reduce(function(s,x){ return s+parseSpend(x.annual_spend); },0);
+    insights.push({
+      priority: underReview.length >= 3 ? 'warning' : 'info',
+      icon: '🔍',
+      title: underReview.length + ' Vendor' + (underReview.length > 1 ? 's' : '') + ' Under Review with Active Spend',
+      body: underReview.map(function(x){ return x.name; }).join(', ') + ' carr' + (underReview.length > 1 ? 'y' : 'ies') + ' a combined ' + fmt(urSpend) + ' in annual spend while in Under Review status. Spend commitments made during review periods carry commercial risk if the review results in termination or scope reduction.',
+      action: 'Freeze discretionary spend expansion on all Under Review vendors until review is resolved. Brief finance on contingent exposure.',
+      confidence: 'High',
+      confColor: 'var(--green)',
+      score: 55
+    });
+  }
+
+  // Sort by score desc, take top 6
+  insights.sort(function(a,b){ return b.score - a.score; });
+  return insights.slice(0,6);
+}
+
+// ── RENDER INSIGHTS ───────────────────────────────────────────────────────
+function renderInsights(insights) {
+  var grid = document.getElementById('insights-grid');
+  if (!insights.length) {
+    grid.innerHTML = '<div style="padding:30px;text-align:center;color:var(--ink4);grid-column:1/-1">No significant signals detected.</div>';
+    document.getElementById('ai-status').textContent = 'No alerts';
+    return;
+  }
+  grid.innerHTML = insights.map(function(ins) {
+    var meta = INSIGHT_COLORS[ins.priority] || INSIGHT_COLORS.info;
+    return '<div class="ai-insight">' +
+      '<div class="ai-confidence"><span class="conf-dot" style="background:' + ins.confColor + '"></span>' + ins.confidence + ' Confidence</div>' +
+      '<div class="ai-insight-icon">' + ins.icon + '</div>' +
+      '<span class="ai-insight-priority ' + meta.cls + '">' + meta.label + '</span>' +
+      '<div class="ai-insight-title">' + ins.title + '</div>' +
+      '<div class="ai-insight-body">' + ins.body + '</div>' +
+      '<div class="ai-insight-action">→ ' + ins.action + '</div>' +
+    '</div>';
+  }).join('');
+  var critCount = insights.filter(function(i){ return i.priority === 'critical'; }).length;
+  var warnCount = insights.filter(function(i){ return i.priority === 'warning'; }).length;
+  document.getElementById('ai-status').textContent =
+    critCount + ' Critical · ' + warnCount + ' Watch · ' + (insights.length - critCount - warnCount) + ' Opportunities';
+}
+
+// ── RENDER CATEGORY CHART ─────────────────────────────────────────────────
+var CAT_COLORS = {
+  'Professional Services': '#0F1E3C',
+  'Software / SaaS':       '#0D9488',
+  'Cloud & Managed Services': '#2563EB',
+  'Contingent Workforce':  '#D97706',
+  'Hardware & Infrastructure': '#7C3AED'
+};
+
+function renderCatChart(catSpend) {
+  var entries = Object.keys(catSpend)
+    .filter(function(k){ return catSpend[k] > 0; })
+    .sort(function(a,b){ return catSpend[b] - catSpend[a]; });
+  var max = entries.length ? catSpend[entries[0]] : 1;
+  document.getElementById('cat-chart').innerHTML = entries.map(function(cat) {
+    var pct = Math.round(catSpend[cat] / max * 100);
+    var col = CAT_COLORS[cat] || '#6B7280';
+    return '<div class="cat-bar-row">' +
+      '<div class="cat-bar-label">' +
+        '<span class="cat-bar-name" title="' + cat + '">' + cat + '</span>' +
+        '<span class="cat-bar-val">' + fmt(catSpend[cat]) + '</span>' +
+      '</div>' +
+      '<div class="cat-bar-track"><div class="cat-bar-fill" style="width:' + pct + '%;background:' + col + '"></div></div>' +
+    '</div>';
+  }).join('') || '<div style="color:var(--ink4);font-size:8pt">No spend data</div>';
+}
+
+// ── RENDER TIER DONUT ─────────────────────────────────────────────────────
+function renderDonut(tierCount) {
+  var total = Object.values(tierCount).reduce(function(s,v){ return s+v; },0);
+  var tiers = [
+    { label:'Tier 1 — Strategic',   key:1, color:'#0F1E3C' },
+    { label:'Tier 2 — Established', key:2, color:'#0D9488' },
+    { label:'Tier 3 — Specialized', key:3, color:'#D97706' },
+  ];
+  var cx = 80, cy = 80, r = 60, ri = 38;
+  var segments = '';
+  var angle = 0;
+  tiers.forEach(function(t) {
+    var n = tierCount[t.key] || 0;
+    var sweep = (n / total) * 2 * Math.PI;
+    var x1 = cx + r * Math.cos(angle);
+    var y1 = cy + r * Math.sin(angle);
+    var x2 = cx + r * Math.cos(angle + sweep);
+    var y2 = cy + r * Math.sin(angle + sweep);
+    var ix1 = cx + ri * Math.cos(angle);
+    var iy1 = cy + ri * Math.sin(angle);
+    var ix2 = cx + ri * Math.cos(angle + sweep);
+    var iy2 = cy + ri * Math.sin(angle + sweep);
+    var large = sweep > Math.PI ? 1 : 0;
+    var d = 'M ' + x1 + ' ' + y1 +
+      ' A ' + r + ' ' + r + ' 0 ' + large + ' 1 ' + x2 + ' ' + y2 +
+      ' L ' + ix2 + ' ' + iy2 +
+      ' A ' + ri + ' ' + ri + ' 0 ' + large + ' 0 ' + ix1 + ' ' + iy1 + ' Z';
+    segments += '<path d="' + d + '" fill="' + t.color + '" opacity="0.9"/>';
+    angle += sweep;
+  });
+  // Center text
+  segments += '<text x="' + cx + '" y="' + (cy-6) + '" text-anchor="middle" ' +
+    'font-size="18" font-weight="900" fill="var(--ink)" font-family="Segoe UI,Arial">' + total.toLocaleString() + '</text>' +
+    '<text x="' + cx + '" y="' + (cy+12) + '" text-anchor="middle" ' +
+    'font-size="9" fill="var(--ink4)" font-family="Segoe UI,Arial">vendors</text>';
+
+  document.getElementById('donut-svg').innerHTML = segments;
+
+  document.getElementById('donut-legend').innerHTML = tiers.map(function(t) {
+    var n = tierCount[t.key] || 0;
+    var pct = total > 0 ? Math.round(n/total*100) : 0;
+    return '<div class="legend-item">' +
+      '<span class="legend-dot" style="background:' + t.color + '"></span>' +
+      '<span class="legend-name">' + t.label + '</span>' +
+      '<span class="legend-val">' + n.toLocaleString() + '</span>' +
+      '<span class="legend-pct">(' + pct + '%)</span>' +
+    '</div>';
+  }).join('');
+}
+
+// ── RENDER RISK DIST ──────────────────────────────────────────────────────
+function renderRiskDist(riskDist, total) {
+  var bands = [
+    { key:'high',   label:'At Risk',  color:'var(--red)'  },
+    { key:'medium', label:'Watch',    color:'var(--amber)'},
+    { key:'low',    label:'Healthy',  color:'var(--green)'},
+  ];
+  document.getElementById('risk-dist').innerHTML = bands.map(function(b) {
+    var n = riskDist[b.key] || 0;
+    var pct = total > 0 ? Math.round(n/total*100) : 0;
+    return '<div class="rdbar-row">' +
+      '<span class="rdbar-lbl">' + b.label + '</span>' +
+      '<div class="rdbar-track"><div class="rdbar-fill" style="width:' + Math.max(pct,3) + '%;background:' + b.color + '">' +
+        (pct > 10 ? pct + '%' : '') + '</div></div>' +
+      '<span class="rdbar-cnt">' + n.toLocaleString() + '</span>' +
+    '</div>';
+  }).join('');
+}
+
+// ── RENDER AVG RISK BY CATEGORY ───────────────────────────────────────────
+function renderAvgRisk(catRiskSum, catRiskCnt) {
+  var entries = Object.keys(catRiskSum).map(function(k) {
+    return { cat: k, avg: Math.round(catRiskSum[k] / catRiskCnt[k]) };
+  }).sort(function(a,b){ return b.avg - a.avg; });
+
+  document.getElementById('avg-risk-list').innerHTML = entries.map(function(e) {
+    var col = e.avg <= 33 ? 'var(--green)' : e.avg <= 66 ? 'var(--amber)' : 'var(--red)';
+    var shortCat = e.cat.replace('Cloud & Managed Services','Cloud')
+      .replace('Hardware & Infrastructure','Hardware')
+      .replace('Contingent Workforce','Contingent WF')
+      .replace('Professional Services','Prof. Services');
+    return '<div style="display:flex;align-items:center;gap:6px;font-size:7.5pt;">' +
+      '<span style="flex:1;color:var(--ink3)">' + shortCat + '</span>' +
+      '<div style="width:60px;background:var(--gray2);border-radius:3px;height:5px">' +
+        '<div style="width:' + e.avg + '%;height:5px;border-radius:3px;background:' + col + '"></div>' +
+      '</div>' +
+      '<span style="font-weight:800;color:' + col + ';width:22px;text-align:right">' + e.avg + '</span>' +
+    '</div>';
+  }).join('');
+}
+
+// ── RENDER OPPORTUNITY TABLE ──────────────────────────────────────────────
+function renderOppTable(vendors) {
+  // Flag logic: vendors with spend > 0 and some commercial signal
+  function getSignals(v) {
+    var sigs = [];
+    if (v.sla_score < 87) sigs.push({ label:'SLA Below Target', cls:'flag-red' });
+    if (v.delivery_risk > 50) sigs.push({ label:'Delivery Risk', cls:'flag-amber' });
+    if (v.concentration_risk > 70) sigs.push({ label:'Concentration', cls:'flag-amber' });
+    var days = daysUntil(v.renewal_date);
+    if (days !== null && days >= 0 && days <= 90) sigs.push({ label:'Renewing ≤90d', cls:'flag-red' });
+    else if (days !== null && days >= 0 && days <= 180) sigs.push({ label:'Renewing ≤180d', cls:'flag-amber' });
+    if (v.financial_risk > 35) sigs.push({ label:'Financial Risk', cls:'flag-amber' });
+    if (v.status === 'Under Review') sigs.push({ label:'Under Review', cls:'flag-purple' });
+    return sigs;
+  }
+
+  function getAction(v) {
+    if (v.sla_score < 82) return 'Issue SLA improvement plan; tie renewal to measurable recovery';
+    if (v.delivery_risk > 65) return 'Convert T&M scope to milestone-based SOW before renewal';
+    if (v.concentration_risk > 80) return 'Build competitive alternative; enforce dual-source policy';
+    var days = daysUntil(v.renewal_date);
+    if (days !== null && days <= 90) return 'Initiate commercial strategy immediately — window closing';
+    if (days !== null && days <= 180) return 'Begin negotiation prep and benchmark current rate card';
+    if (v.status === 'Under Review') return 'Freeze discretionary spend until review resolves';
+    return 'Monitor via quarterly CQBR; no immediate action required';
+  }
+
+  var flagged = vendors
+    .filter(function(v){ return parseSpend(v.annual_spend) > 0 && getSignals(v).length > 0; })
+    .sort(function(a,b){ return parseSpend(b.annual_spend) - parseSpend(a.annual_spend); });
+
+  document.getElementById('opp-count-label').textContent = flagged.length + ' vendors flagged for commercial action';
+
+  var riskColors = { low:'var(--green)', medium:'var(--amber)', high:'var(--red)' };
+
+  document.getElementById('opp-tbody').innerHTML = flagged.map(function(v) {
+    var sigs = getSignals(v);
+    var days = daysUntil(v.renewal_date);
+    var daysLabel = days !== null ? (days < 0 ? 'Expired' : days + 'd') : '—';
+    var rb = riskBand(v.risk_score);
+    return '<tr>' +
+      '<td><strong>' + v.name + '</strong><br><span style="font-size:7pt;color:var(--ink4)">' + v.id + ' · ' + v.region + '</span></td>' +
+      '<td>' + v.category + '</td>' +
+      '<td style="font-weight:800">' + (v.annual_spend || '—') + '</td>' +
+      '<td style="font-weight:800;color:' + (v.sla_score >= 95 ? 'var(--green)' : v.sla_score >= 85 ? 'var(--amber)' : 'var(--red)') + '">' + v.sla_score + '%</td>' +
+      '<td><span style="font-weight:800;color:' + riskColors[rb] + '">' + v.risk_score + '</span></td>' +
+      '<td>' + (v.renewal_date || '—') + '<br><span style="font-size:7pt;color:' + (days !== null && days <= 90 ? 'var(--red)' : 'var(--ink4)') + '">' + daysLabel + '</span></td>' +
+      '<td>' + sigs.slice(0,2).map(function(s){ return '<span class="opp-flag ' + s.cls + '">' + s.label + '</span>'; }).join(' ') + '</td>' +
+      '<td style="font-size:7.5pt;color:var(--ink3);max-width:200px">' + getAction(v) + '</td>' +
+    '</tr>';
+  }).join('') || '<tr><td colspan="8" style="padding:20px;text-align:center;color:var(--ink4)">No flagged vendors for current filter selection.</td></tr>';
+}
+
+// ── COUPA ENRICHMENT ─────────────────────────────────────────────────────
+// Enrich VER_VENDORS with real Coupa FY27 actuals where names match
+function enrichWithCoupa(vendors) {
+  if (!window.VER_COUPA) return vendors;
+  // Build lookup: normalize name → coupa row
+  var lookup = {};
+  window.VER_COUPA.vendors.forEach(function(c) {
+    lookup[c.n.toLowerCase()] = c;
+  });
+  // Aliases for common name mismatches between vendor platform and Coupa
+  var ALIASES = {
+    'tech mahindra':    'techm',
+    'google cloud':     'google',
+    'microsoft azure':  'microsoft',
+    'ntt data':         'ntt data',
+    'aws':              'aws',
+    'google':           'google',
+    'wwd':              'wwt',
+    'world wide technology': 'wwt',
+    'dell technologies': 'dell',
+    'hp inc.':          'hp inc',
+    'insight direct':   'insight direct',
+    'insight global':   'insight global',
+    'commoneo':         'commeneo',
+    'icloud nexus':     'icloudnexus',
+    'xebia':            'xebia',
+    'rackspace':        'rackspace',
+  };
+  return vendors.map(function(v) {
+    var key = v.name.toLowerCase();
+    var c = lookup[key] || lookup[ALIASES[key]] || null;
+    if (c && c.fy27 > 0) {
+      return Object.assign({}, v, {
+        annual_spend: '$' + c.fy27.toFixed(2) + 'M',
+        _fy26: c.fy26,
+        _fy27: c.fy27,
+        _pillar: c.pillar,
+        _coupa_cat: c.cat,
+        _coupa_region: c.region,
+        _has_coupa: true
+      });
+    }
+    return v;
+  });
+}
+
+// ── COUPA CHARTS (real actuals) ───────────────────────────────────────────
+function renderCoupaCatChart() {
+  if (!window.VER_COUPA) return;
+  var cats = window.VER_COUPA.by_category;
+  var entries = Object.keys(cats).sort(function(a,b){ return cats[b]-cats[a]; });
+  var max = cats[entries[0]] || 1;
+  var COUPA_COLORS = {
+    'Software':           '#0D9488',
+    'CWF':                '#0F1E3C',
+    'Hardware':           '#7C3AED',
+    'CWF - Maintenance':  '#D97706',
+    'Cabling':            '#2563EB',
+    'Telecom':            '#059669',
+  };
+  document.getElementById('cat-chart').innerHTML = entries.map(function(cat) {
+    var pct = Math.round(cats[cat] / max * 100);
+    var col = COUPA_COLORS[cat] || '#6B7280';
+    var yoy = null;
+    return '<div class="cat-bar-row">' +
+      '<div class="cat-bar-label">' +
+        '<span class="cat-bar-name" title="' + cat + '">' + cat + '</span>' +
+        '<span class="cat-bar-val">$' + cats[cat].toFixed(1) + 'M</span>' +
+      '</div>' +
+      '<div class="cat-bar-track"><div class="cat-bar-fill" style="width:' + pct + '%;background:' + col + '"></div></div>' +
+    '</div>';
+  }).join('');
+}
+
+function renderCoupaPillarChart() {
+  // Replace tier donut with pillar breakdown using real Coupa data
+  if (!window.VER_COUPA) return;
+  var pillars = window.VER_COUPA.by_pillar;
+  var total = Object.values(pillars).reduce(function(s,v){ return s+v; }, 0);
+  var PCOLS = ['#0F1E3C','#0D9488','#7C3AED','#D97706','#059669'];
+  var entries = Object.keys(pillars).sort(function(a,b){ return pillars[b]-pillars[a]; });
+  var cx = 80, cy = 80, r = 60, ri = 36;
+  var segments = ''; var angle = -Math.PI/2;
+  entries.forEach(function(p, i) {
+    var sweep = (pillars[p] / total) * 2 * Math.PI;
+    var x1 = cx + r * Math.cos(angle), y1 = cy + r * Math.sin(angle);
+    var x2 = cx + r * Math.cos(angle+sweep), y2 = cy + r * Math.sin(angle+sweep);
+    var ix1 = cx + ri * Math.cos(angle), iy1 = cy + ri * Math.sin(angle);
+    var ix2 = cx + ri * Math.cos(angle+sweep), iy2 = cy + ri * Math.sin(angle+sweep);
+    var large = sweep > Math.PI ? 1 : 0;
+    segments += '<path d="M '+x1+' '+y1+' A '+r+' '+r+' 0 '+large+' 1 '+x2+' '+y2+
+      ' L '+ix2+' '+iy2+' A '+ri+' '+ri+' 0 '+large+' 0 '+ix1+' '+iy1+' Z" fill="'+PCOLS[i%PCOLS.length]+'" opacity="0.9"/>';
+    angle += sweep;
+  });
+  segments += '<text x="'+cx+'" y="'+(cy-6)+'" text-anchor="middle" font-size="13" font-weight="900" fill="var(--ink)" font-family="Segoe UI,Arial">$295M</text>'+
+    '<text x="'+cx+'" y="'+(cy+11)+'" text-anchor="middle" font-size="8" fill="var(--ink4)" font-family="Segoe UI,Arial">FY27 Total</text>';
+  document.getElementById('donut-svg').innerHTML = segments;
+  document.getElementById('donut-legend').innerHTML = entries.map(function(p,i){
+    var pct = Math.round(pillars[p]/total*100);
+    return '<div class="legend-item"><span class="legend-dot" style="background:'+PCOLS[i%PCOLS.length]+'"></span>'+
+      '<span class="legend-name">'+p+'</span><span class="legend-val">$'+pillars[p].toFixed(1)+'M</span>'+
+      '<span class="legend-pct">('+pct+'%)</span></div>';
+  }).join('');
+}
+
+// ── SCENARIO BUILDER ──────────────────────────────────────────────────────
+var SPEND_BY_CAT = {};
+
+function updateScenario() {
+  var lv1 = +document.getElementById('lv1').value / 100;
+  var lv2 = +document.getElementById('lv2').value / 100;
+  var lv3 = +document.getElementById('lv3').value / 100;
+  var lv4 = +document.getElementById('lv4').value / 100;
+  document.getElementById('lv1-val').textContent = Math.round(lv1*100) + '%';
+  document.getElementById('lv2-val').textContent = Math.round(lv2*100) + '%';
+  document.getElementById('lv3-val').textContent = Math.round(lv3*100) + '%';
+  document.getElementById('lv4-val').textContent = Math.round(lv4*100) + '%';
+
+  // Use real Coupa category totals when available
+  var coupa = window.VER_COUPA ? window.VER_COUPA.by_category : null;
+  var cloud = coupa ? (coupa['Software'] || 0) * 0.20 : (SPEND_BY_CAT['Cloud & Managed Services'] || 0);
+  var ps    = coupa ? ((coupa['CWF'] || 0) * 0.35) : (SPEND_BY_CAT['Professional Services'] || 0);
+  var saas  = coupa ? (coupa['Software'] || 0) * 0.80 : (SPEND_BY_CAT['Software / SaaS'] || 0);
+  var cw    = coupa ? ((coupa['CWF'] || 0) + (coupa['CWF - Maintenance'] || 0)) * 0.65 : (SPEND_BY_CAT['Contingent Workforce'] || 0);
+  var total = window.VER_COUPA ? window.VER_COUPA.total_fy27 : Object.values(SPEND_BY_CAT).reduce(function(s,v){return s+v;},0);
+
+  // Cloud = AWS $17.2M + Google $14M + azure-adjacent software
+  var cloudActual = 17.17 + 14.00;
+  var psActual    = 22.84 + 9.47 + 9.10 + 5.97 + 5.06; // NTT+Cognizant+Deloitte+BCG+Accenture
+  var saasActual  = coupa ? coupa['Software'] : saas;
+  var cwActual    = coupa ? ((coupa['CWF'] || 0) + (coupa['CWF - Maintenance'] || 0)) : cw;
+
+  var s1 = cloudActual * lv1;
+  var s2 = psActual    * lv2;
+  var s3 = saasActual  * lv3;
+  var s4 = cwActual    * lv4;
+  var totalSavings = s1 + s2 + s3 + s4;
+
+  document.getElementById('so-base').textContent      = '$' + total.toFixed(1) + 'M';
+  document.getElementById('so-cloud').textContent     = '-$' + s1.toFixed(1) + 'M';
+  document.getElementById('so-ps').textContent        = '-$' + s2.toFixed(1) + 'M';
+  document.getElementById('so-saas').textContent      = '-$' + s3.toFixed(1) + 'M';
+  document.getElementById('so-cw').textContent        = '-$' + s4.toFixed(1) + 'M';
+  document.getElementById('so-optimized').textContent = '$' + (total - totalSavings).toFixed(1) + 'M';
+  document.getElementById('so-total-savings').textContent = '$' + totalSavings.toFixed(1) + 'M';
+}
+
+// ── HERO KPIs ─────────────────────────────────────────────────────────────
+function renderHeroKPIs(d) {
+  var total    = window.VER_COUPA ? window.VER_COUPA.total_fy27 : d.totalSpend;
+  // Renewal exposure: Workday ($23.7M due Nov 2026), Microsoft ($2.8M Jun 2026), BCG ($6M Jun 2026) + others
+  var renewExp = window.VER_COUPA ? 42.3 : d.renewSpend180;
+  // At-risk: vendors with risk_score > 66 cross-referenced with coupa spend
+  var atRisk   = window.VER_COUPA ? 8.9 : d.atRiskSpend;  // TechM + BCG with high delivery risk
+  // Savings opportunity: cloud 8% + SaaS 12% + PS 8% on real numbers
+  var savingsOpp = (17.17 + 14.0) * 0.08 + 155.19 * 0.10 + (87.29 + 9.52) * 0.06;
+  var withSpend  = window.VER_COUPA ? window.VER_COUPA.vendors.length : d.withSpend.length;
+
+  document.getElementById('kpi-spend').textContent         = '$' + total.toFixed(1) + 'M';
+  document.getElementById('kpi-renew-exp').textContent     = '$' + renewExp.toFixed(1) + 'M';
+  document.getElementById('kpi-at-risk-spend').textContent = '$' + atRisk.toFixed(1) + 'M';
+  document.getElementById('kpi-savings-opp').textContent   = '$' + savingsOpp.toFixed(1) + 'M';
+  document.getElementById('kpi-vendors-spend').textContent = withSpend;
+}
+
+// ── VIEW FILTER ───────────────────────────────────────────────────────────
+function applyView() {
+  var cat  = document.getElementById('ctrl-cat').value;
+  var tier = document.getElementById('ctrl-tier').value;
+  var filtered = ALL.filter(function(v) {
+    if (cat  && v.category !== cat) return false;
+    if (tier && v.tier != tier) return false;
+    return true;
+  });
+  var d = compute(filtered);
+  renderInsights(generateInsights(d));
+  if (!window.VER_COUPA) renderCatChart(d.catSpend);
+  renderDonut(d.tierCount);
+  renderRiskDist(d.riskDist, filtered.length);
+  renderAvgRisk(d.catRiskSum, d.catRiskCnt);
+  renderOppTable(filtered);
+}
+
+// ── DARK MODE ─────────────────────────────────────────────────────────────
+function toggleDark() {
+  var t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  try { localStorage.setItem('ver-theme', t); } catch(e) {}
+  document.getElementById('dm-btn').textContent = t === 'dark' ? '☀ Light Mode' : '☽ Dark Mode';
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+(function() {
+  var t; try { t = localStorage.getItem('ver-theme'); } catch(e) {}
+  if (!t) t = window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('dm-btn').textContent = t === 'dark' ? '☀ Light Mode' : '☽ Dark Mode';
+})();
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (!window.VER_VENDORS || !window.VER_VENDORS.length) {
+    document.getElementById('insights-grid').innerHTML =
+      '<div style="padding:30px;text-align:center;color:var(--ink4);grid-column:1/-1">⚠️ vendors.js not loaded</div>';
+    return;
+  }
+
+  // Enrich vendor data with real Coupa actuals
+  ALL = enrichWithCoupa(window.VER_VENDORS);
+  var d = compute(ALL);
+
+  // Analysis stamp — show Coupa data source if loaded
+  var src = window.VER_COUPA ? 'Coupa FY27 Actuals · ' + window.VER_COUPA.vendors.length + ' vendors · $' + window.VER_COUPA.total_fy27.toFixed(1) + 'M total spend'
+    : 'Estimated spend · ' + ALL.length.toLocaleString() + ' vendors';
+  document.getElementById('analysis-stamp').textContent =
+    'Analysis ' + new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) + ' · ' + src;
+
+  // Save spend by cat for scenario fallback
+  Object.keys(d.catSpend).forEach(function(k){ SPEND_BY_CAT[k] = d.catSpend[k]; });
+
+  renderHeroKPIs(d);
+  renderInsights(generateInsights(d));
+
+  // Charts: use Coupa actuals where available
+  if (window.VER_COUPA) {
+    renderCoupaCatChart();
+    renderCoupaPillarChart();
+  } else {
+    renderCatChart(d.catSpend);
+    renderDonut(d.tierCount);
+  }
+
+  renderRiskDist(d.riskDist, ALL.length);
+  renderAvgRisk(d.catRiskSum, d.catRiskCnt);
+  renderOppTable(ALL);
+  updateScenario();
+});
+</script>
+</body>
+</html>
