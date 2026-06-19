@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>VER Intelligence Hub &mdash; Salesforce DET</title>
+<style>
+
+/* ── VER Design Language v2.0 tokens ── */
+:root {
+  --font-sans:'Segoe UI',system-ui,-apple-system,Arial,sans-serif;
+  --text-xs:11px; --text-sm:12px; --text-base:14px; --text-md:15px;
+  --text-lg:18px; --text-xl:22px; --text-2xl:28px; --text-3xl:40px; --text-4xl:56px;
+  --weight-regular:400; --weight-medium:500; --weight-semibold:600;
+  --weight-bold:700; --weight-extrabold:800; --weight-black:900;
+  --tracking-tight:-0.03em; --tracking-snug:-0.01em; --tracking-normal:0;
+  --tracking-wide:0.04em; --tracking-wider:0.10em; --tracking-widest:0.18em;
+  --leading-none:1; --leading-tight:1.2; --leading-snug:1.4;
+  --leading-normal:1.6; --leading-relaxed:1.75;
+  --surface-base:#060D1A; --surface-raised:#0F1E3C; --surface-overlay:#1E3A5F;
+  --surface-light:#F9FAFB; --surface-card:#FFFFFF; --surface-subtle:#F3F4F6;
+  --teal:#0D9488; --teal-dim:#0F766E; --green:#059669; --amber:#D97706;
+  --red:#DC2626; --purple:#7C3AED; --blue:#2563EB; --orange:#EA580C;
+  --tint-teal:#F0FDF9; --tint-green:#D1FAE5; --tint-amber:#FEF3C7;
+  --tint-red:#FEE2E2; --tint-purple:#F5F3FF; --tint-navy:#EFF6FF;
+  --text-primary:#111827; --text-secondary:#1F2937;
+  --text-tertiary:#374151; --text-muted:#6B7280;
+  --on-dark-primary:rgba(255,255,255,0.92);
+  --on-dark-secondary:rgba(255,255,255,0.65);
+  --on-dark-muted:rgba(255,255,255,0.35);
+  --on-dark-micro:rgba(255,255,255,0.22);
+  --border:#E5E7EB; --border-md:#D1D5DB;
+  --border-dark:rgba(255,255,255,0.08);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px;
+  --sp-6:24px; --sp-8:32px; --sp-10:40px; --sp-12:48px; --sp-16:64px;
+  --r-sm:4px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-2xl:24px; --r-full:9999px;
+  --shadow-xs:0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm:0 1px 4px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.08),0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg:0 8px 24px rgba(0,0,0,0.10),0 4px 8px rgba(0,0,0,0.06);
+  --ease:cubic-bezier(0.16,1,0.3,1);
+  --dur-fast:120ms; --dur-base:200ms; --dur-slow:350ms;
+}
+
+/* ── Dark mode overrides ── */
+[data-theme="dark"] {
+  --surface-light:#080F1E; --surface-card:#0F1E3C; --surface-subtle:#162942;
+  --text-primary:rgba(255,255,255,0.92); --text-secondary:rgba(255,255,255,0.75);
+  --text-tertiary:rgba(255,255,255,0.60); --text-muted:rgba(255,255,255,0.40);
+  --border:rgba(255,255,255,0.08); --border-md:rgba(255,255,255,0.14);
+  --shadow-sm:0 1px 4px rgba(0,0,0,0.35),0 1px 2px rgba(0,0,0,0.25);
+  --shadow-md:0 4px 12px rgba(0,0,0,0.45),0 2px 4px rgba(0,0,0,0.30);
+  --tint-teal:rgba(13,148,136,0.18); --tint-green:rgba(5,150,105,0.18);
+  --tint-amber:rgba(217,119,6,0.18); --tint-red:rgba(220,38,38,0.18);
+  --tint-purple:rgba(124,58,237,0.18); --tint-navy:rgba(255,255,255,0.06);
+}
+
+/* ── Reset & base ── */
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:var(--font-sans);background:var(--surface-base);color:var(--text-primary);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  transition:background var(--dur-slow) var(--ease),color var(--dur-slow) var(--ease);}
+
+/* ── Theme toggle ── */
+.theme-toggle{
+  display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:var(--r-full);
+  background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);
+  cursor:pointer;font-family:var(--font-sans);font-size:var(--text-xs);
+  font-weight:var(--weight-bold);color:rgba(255,255,255,0.65);
+  transition:all var(--dur-base) var(--ease);}
+.theme-toggle:hover{background:rgba(255,255,255,0.14);color:rgba(255,255,255,0.90);}
+[data-theme="dark"] .theme-toggle{background:rgba(13,148,136,0.20);border-color:rgba(13,148,136,0.40);color:var(--teal);}
+.toggle-icon{font-size:12px;transition:transform var(--dur-slow) var(--ease);display:inline-block;}
+[data-theme="dark"] .toggle-icon{transform:rotate(180deg);}
+
+/* ── Cover ── */
+.cover{
+  background:linear-gradient(160deg,#071628 0%,#0D1E38 30%,#0a1628 65%,#040c18 100%);
+  position:relative;overflow:hidden;}
+.cover::before{content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 78% 18%,rgba(13,148,136,0.28) 0%,transparent 50%),
+    radial-gradient(ellipse at 12% 82%,rgba(124,58,237,0.18) 0%,transparent 48%),
+    radial-gradient(ellipse at 48% 48%,rgba(14,165,233,0.07) 0%,transparent 65%),
+    radial-gradient(ellipse at 95% 95%,rgba(13,148,136,0.10) 0%,transparent 40%);
+  pointer-events:none;}
+.cover::after{content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(13,148,136,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(13,148,136,0.03) 1px,transparent 1px);
+  background-size:56px 56px;pointer-events:none;}
+/* Shimmer scan line */
+.cover-scan{position:absolute;left:0;right:0;height:180px;pointer-events:none;z-index:2;top:0;
+  background:linear-gradient(180deg,transparent 0%,rgba(13,148,136,0.04) 50%,transparent 100%);
+  animation:cover-scan 8s linear infinite;}
+@keyframes cover-scan{from{transform:translateY(-180px)}to{transform:translateY(110vh)}}
+
+/* ── Top nav ── */
+.top-nav-wrap{border-bottom:1px solid rgba(255,255,255,0.06);position:relative;z-index:10;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  background:rgba(7,22,40,0.55);}
+.top-nav{max-width:1280px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;padding:14px var(--sp-12);}
+.nav-brand-wrap{display:flex;align-items:center;gap:var(--sp-3);}
+.nav-brand{font-size:var(--text-xs);font-weight:var(--weight-extrabold);
+  color:rgba(255,255,255,0.92);letter-spacing:var(--tracking-wider);text-transform:uppercase;}
+.nav-status{display:flex;align-items:center;gap:5px;padding:3px 10px;
+  border-radius:var(--r-full);background:rgba(13,148,136,0.15);border:1px solid rgba(13,148,136,0.25);}
+.nav-status-dot{width:6px;height:6px;border-radius:50%;background:#34D399;animation:pulse-dot 2.5s infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.8);}}
+.nav-status-label{font-size:10px;font-weight:var(--weight-bold);color:#34D399;
+  letter-spacing:var(--tracking-wider);text-transform:uppercase;}
+.nav-links{display:flex;gap:var(--sp-1);align-items:center;}
+.nav-quick-label{font-size:10px;font-weight:var(--weight-bold);color:var(--on-dark-micro);
+  text-transform:uppercase;letter-spacing:var(--tracking-wider);margin-right:var(--sp-1);}
+.nav-sep{font-size:10px;color:var(--on-dark-micro);margin:0 var(--sp-1);}
+.nav-link{padding:5px 12px;font-size:var(--text-xs);color:rgba(255,255,255,0.50);
+  text-decoration:none;border-radius:var(--r-sm);
+  transition:all var(--dur-fast) var(--ease);font-weight:var(--weight-medium);}
+.nav-link:hover{color:#fff;background:rgba(255,255,255,0.07);}
+.nav-link.primary{background:var(--teal);color:#fff;font-weight:var(--weight-bold);margin-left:var(--sp-2);}
+.nav-link.primary:hover{background:var(--teal-dim);}
+
+/* ── Hero ── */
+.hero{max-width:1280px;margin:0 auto;width:100%;
+  padding:var(--sp-16) var(--sp-12) var(--sp-10);position:relative;z-index:1;}
+.hero-accent{width:52px;height:3px;
+  background:linear-gradient(90deg,var(--teal),rgba(13,148,136,0.3));
+  border-radius:var(--r-full);margin-bottom:var(--sp-4);}
+.hero-eyebrow{font-size:var(--text-xs);font-weight:var(--weight-bold);color:var(--teal);
+  text-transform:uppercase;letter-spacing:var(--tracking-widest);margin-bottom:var(--sp-4);}
+.hero-title{font-size:clamp(44px,5.5vw,72px);font-weight:var(--weight-black);
+  color:var(--on-dark-primary);line-height:1.05;
+  letter-spacing:-0.04em;margin-bottom:var(--sp-5);max-width:780px;}
+.hero-title .accent{
+  color:var(--teal);
+  text-shadow:0 0 60px rgba(13,148,136,0.5);}
+.hero-sub{font-size:var(--text-lg);color:var(--on-dark-secondary);
+  line-height:var(--leading-relaxed);max-width:680px;margin-bottom:var(--sp-8);
+  font-weight:var(--weight-regular);}
+.hero-sub strong{color:var(--on-dark-primary);}
+
+/* ── Hero KPI strip ── */
+.hero-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--sp-3);margin-bottom:var(--sp-4);}
+.hkpi{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-bottom:2px solid rgba(255,255,255,0.06);
+  border-radius:var(--r-lg);padding:var(--sp-4) var(--sp-5);
+  transition:background var(--dur-base) var(--ease),transform var(--dur-base) var(--ease),
+    border-bottom-color var(--dur-base) var(--ease);
+  position:relative;}
+.hkpi:hover{background:rgba(255,255,255,0.075);transform:translateY(-2px);
+  border-bottom-color:var(--teal);}
+.hkpi-lbl{font-size:10px;font-weight:var(--weight-bold);color:var(--on-dark-muted);
+  text-transform:uppercase;letter-spacing:var(--tracking-wider);margin-bottom:var(--sp-2);}
+.hkpi-val{font-size:28px;font-weight:var(--weight-black);line-height:var(--leading-none);
+  margin-bottom:var(--sp-1);letter-spacing:-0.02em;}
+.hkpi-note{font-size:10px;color:var(--on-dark-micro);margin-top:4px;}
+.hkpi.std .hkpi-val{color:var(--on-dark-primary);}
+.hkpi.good .hkpi-val{color:#34D399;}
+.hkpi.warn .hkpi-val{color:#FCD34D;}
+.hkpi.red .hkpi-val{color:#F87171;}
+.hkpi.blue .hkpi-val{color:#93C5FD;}
+
+/* ── Scroll cue ── */
+.scroll-cue{max-width:1280px;margin:0 auto;padding:var(--sp-3) var(--sp-12) var(--sp-6);
+  display:flex;align-items:center;gap:var(--sp-2);font-size:10px;
+  font-weight:var(--weight-bold);letter-spacing:var(--tracking-wider);
+  text-transform:uppercase;color:var(--on-dark-micro);
+  border-top:1px solid rgba(255,255,255,0.06);position:relative;z-index:1;}
+.scroll-arrow{animation:bounce 2s infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(5px);}}
+
+/* ── Intelligence body ── */
+.intel-body{background:var(--surface-light);transition:background var(--dur-slow) var(--ease);}
+.inner{max-width:1280px;margin:0 auto;padding:0 var(--sp-8);}
+
+/* ── Section headers ── */
+.body-sec{padding:var(--sp-8) 0 var(--sp-4);display:flex;align-items:center;gap:var(--sp-3);
+  border-bottom:1px solid var(--border);margin-bottom:var(--sp-4);}
+.body-sec.pt2{padding-top:var(--sp-6);}
+.body-sec-accent{width:3px;height:18px;border-radius:var(--r-full);flex-shrink:0;}
+.bsa-teal{background:linear-gradient(180deg,var(--teal),rgba(13,148,136,0.3));}
+.bsa-purple{background:linear-gradient(180deg,var(--purple),rgba(124,58,237,0.3));}
+.bsa-blue{background:linear-gradient(180deg,var(--blue),rgba(37,99,235,0.3));}
+.bsa-amber{background:linear-gradient(180deg,var(--amber),rgba(217,119,6,0.3));}
+.body-sec-title{font-size:var(--text-xs);font-weight:var(--weight-extrabold);
+  color:var(--text-tertiary);text-transform:uppercase;letter-spacing:var(--tracking-widest);}
+.body-sec-sub{font-size:var(--text-xs);color:var(--text-muted);margin-left:auto;}
+
+/* ── Hub grid spacing variants ── */
+.hub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-3);}
+.hub-grid.sp3{margin-bottom:var(--sp-3);}
+.hub-grid.sp6{margin-bottom:var(--sp-6);}
+
+/* ── Hub cards ── */
+.hub-card{
+  background:var(--surface-card);border-radius:var(--r-lg);
+  padding:var(--sp-5);border:1px solid var(--border);
+  text-decoration:none;display:block;box-shadow:var(--shadow-sm);
+  transition:box-shadow var(--dur-base) var(--ease),transform var(--dur-base) var(--ease),
+    background var(--dur-slow) var(--ease),border-color var(--dur-slow) var(--ease);
+  position:relative;overflow:hidden;}
+.hub-card::after{content:'';position:absolute;inset:0;opacity:0;
+  background:linear-gradient(135deg,rgba(13,148,136,0.04) 0%,transparent 60%);
+  transition:opacity var(--dur-base) var(--ease);pointer-events:none;}
+.hub-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);}
+.hub-card:hover::after{opacity:1;}
+.hub-card:hover .hc-arrow{opacity:1;transform:translateX(0);}
+
+/* Hub card border-top color variants */
+.hc-navy{border-top:3px solid #0F1E3C;}
+.hc-teal{border-top:3px solid #0D9488;}
+.hc-green{border-top:3px solid #059669;}
+.hc-blue{border-top:3px solid #2563EB;}
+.hc-red{border-top:3px solid #DC2626;}
+.hc-orange{border-top:3px solid #EA580C;}
+.hc-amber{border-top:3px solid #D97706;}
+.hc-purple{border-top:3px solid #7C3AED;}
+
+.hc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:var(--sp-3);}
+.hc-icon-wrap{width:42px;height:42px;border-radius:var(--r-md);
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+
+/* Icon wrap color variants */
+.hci-navy{background:rgba(15,30,60,0.08);}
+.hci-teal{background:rgba(13,148,136,0.10);}
+.hci-green{background:rgba(5,150,105,0.10);}
+.hci-blue{background:rgba(37,99,235,0.10);}
+.hci-red{background:rgba(220,38,38,0.10);}
+.hci-orange{background:rgba(234,88,12,0.10);}
+.hci-amber{background:rgba(217,119,6,0.10);}
+.hci-purple{background:rgba(124,58,237,0.10);}
+
+.hc-badge{font-size:10px;font-weight:var(--weight-bold);letter-spacing:var(--tracking-wide);
+  padding:2px 8px;border-radius:var(--r-full);text-transform:uppercase;}
+.hc-badge.live{background:rgba(5,150,105,0.12);color:#059669;border:1px solid rgba(5,150,105,0.25);}
+.hc-badge.active{background:rgba(13,148,136,0.12);color:var(--teal);border:1px solid rgba(13,148,136,0.25);}
+.hc-badge.updated{background:rgba(37,99,235,0.10);color:var(--blue);border:1px solid rgba(37,99,235,0.20);}
+.hc-badge.soon{background:rgba(124,58,237,0.12);color:var(--purple);border:1px solid rgba(124,58,237,0.25);}
+[data-theme="dark"] .hc-badge.live{background:rgba(5,150,105,0.20);color:#34D399;}
+[data-theme="dark"] .hc-badge.active{background:rgba(13,148,136,0.20);color:#2DD4BF;}
+[data-theme="dark"] .hc-badge.updated{background:rgba(37,99,235,0.20);color:#93C5FD;}
+[data-theme="dark"] .hc-badge.soon{background:rgba(124,58,237,0.20);color:#A78BFA;}
+
+.hc-title{font-size:var(--text-md);font-weight:var(--weight-extrabold);
+  color:var(--text-primary);margin-bottom:var(--sp-2);
+  transition:color var(--dur-slow) var(--ease);line-height:var(--leading-snug);}
+.hc-desc{font-size:var(--text-sm);color:var(--text-muted);
+  line-height:var(--leading-normal);transition:color var(--dur-slow) var(--ease);}
+.hc-arrow{position:absolute;bottom:var(--sp-5);right:var(--sp-5);
+  font-size:var(--text-base);color:var(--teal);
+  opacity:0;transform:translateX(-6px);
+  transition:opacity var(--dur-base) var(--ease),transform var(--dur-base) var(--ease);}
+
+/* ── Fade-in on scroll ── */
+.fade-in{opacity:0;transform:translateY(16px);
+  transition:opacity 0.5s var(--ease),transform 0.5s var(--ease);}
+.fade-in.visible{opacity:1;transform:translateY(0);}
+
+/* ── Intelligence Series ── */
+.intel-series{background:var(--surface-card);border-radius:var(--r-xl);
+  border:1px solid var(--border);border-top:3px solid var(--teal);
+  padding:var(--sp-5);box-shadow:var(--shadow-sm);margin-bottom:var(--sp-3);
+  transition:background var(--dur-slow) var(--ease),border-color var(--dur-slow) var(--ease);}
+.is-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-4);}
+.is-header-title{font-size:var(--text-md);font-weight:var(--weight-extrabold);
+  color:var(--text-primary);transition:color var(--dur-slow) var(--ease);}
+.is-header-sub{font-size:var(--text-xs);color:var(--text-muted);}
+.is-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-3);}
+.is-item{border-radius:var(--r-lg);padding:var(--sp-5);text-decoration:none;display:block;
+  position:relative;overflow:hidden;
+  transition:transform var(--dur-base) var(--ease),box-shadow var(--dur-base) var(--ease),
+    border-color var(--dur-base) var(--ease);}
+.is-item:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);}
+.is-item--teal{background:var(--tint-teal);border:1px solid rgba(13,148,136,0.20);}
+.is-item--teal:hover{border-color:rgba(13,148,136,0.50);}
+.is-item--purple{background:var(--tint-purple);border:1px solid rgba(124,58,237,0.18);}
+.is-item--purple:hover{border-color:rgba(124,58,237,0.45);}
+.is-item--amber{background:var(--tint-amber);border:1px solid rgba(217,119,6,0.18);}
+.is-item--amber:hover{border-color:rgba(217,119,6,0.45);}
+.is-type-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;
+  font-weight:var(--weight-bold);letter-spacing:var(--tracking-wider);
+  text-transform:uppercase;margin-bottom:var(--sp-3);}
+.is-badge--teal{color:var(--teal-dim);}
+.is-badge--purple{color:var(--purple);}
+.is-badge--amber{color:#78350F;}
+.is-title{font-size:var(--text-base);font-weight:var(--weight-extrabold);
+  color:var(--text-primary);margin-bottom:var(--sp-1);line-height:var(--leading-snug);}
+.is-meta{font-size:var(--text-xs);color:var(--text-muted);margin-bottom:var(--sp-4);}
+.is-cta-row{display:flex;align-items:center;gap:6px;font-size:var(--text-xs);
+  font-weight:var(--weight-bold);letter-spacing:0.02em;}
+.is-cta--teal{color:var(--teal-dim);}
+.is-cta--purple{color:var(--purple);}
+.is-cta--amber{color:#78350F;}
+
+/* ── VP hero bar ── */
+.vp-bar{
+  display:grid;grid-template-columns:1fr repeat(4,auto) auto;
+  align-items:center;gap:var(--sp-4);
+  background:linear-gradient(135deg,#0D1E3A 0%,#112040 40%,#0a1628 100%);
+  border-radius:var(--r-xl);padding:var(--sp-6) var(--sp-6);
+  border:1px solid rgba(255,255,255,0.07);
+  border-left:3px solid var(--teal);
+  text-decoration:none;margin-bottom:var(--sp-3);
+  box-shadow:0 2px 16px rgba(0,0,0,0.2);
+  transition:box-shadow var(--dur-base) var(--ease),transform var(--dur-base) var(--ease);}
+.vp-bar:hover{box-shadow:0 8px 32px rgba(0,0,0,0.35);transform:translateY(-2px);}
+.vp-eyebrow{font-size:10px;font-weight:var(--weight-bold);color:var(--teal);
+  text-transform:uppercase;letter-spacing:var(--tracking-wider);margin-bottom:var(--sp-2);}
+.vp-title{font-size:var(--text-lg);font-weight:var(--weight-extrabold);
+  color:var(--on-dark-primary);margin-bottom:var(--sp-1);letter-spacing:-0.01em;}
+.vp-desc{font-size:var(--text-sm);color:var(--on-dark-secondary);}
+.vp-divider{width:1px;height:44px;background:rgba(255,255,255,0.08);flex-shrink:0;}
+.vp-stat{text-align:center;padding:var(--sp-3) var(--sp-4);
+  background:rgba(255,255,255,0.05);border-radius:var(--r-md);
+  border:1px solid rgba(255,255,255,0.06);}
+.vp-stat-val{font-size:var(--text-xl);font-weight:var(--weight-black);
+  color:var(--on-dark-primary);line-height:var(--leading-none);letter-spacing:-0.02em;}
+.vp-stat-val.green{color:#34D399;}
+.vp-stat-val.amber{color:#FCD34D;}
+.vp-stat-val.blue{color:#93C5FD;}
+.vp-stat-lbl{font-size:10px;color:var(--on-dark-muted);margin-top:4px;letter-spacing:0.04em;}
+.vp-cta{padding:var(--sp-3) var(--sp-6);background:var(--teal);border-radius:var(--r-md);
+  font-size:var(--text-sm);font-weight:var(--weight-bold);color:#fff;white-space:nowrap;
+  letter-spacing:0.02em;
+  box-shadow:0 2px 8px rgba(13,148,136,0.4);
+  transition:background var(--dur-fast) var(--ease),box-shadow var(--dur-fast) var(--ease);}
+.vp-bar:hover .vp-cta{background:var(--teal-dim);box-shadow:0 4px 12px rgba(13,148,136,0.5);}
+
+/* ── About grid ── */
+.about-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-3);margin-bottom:var(--sp-5);}
+
+/* ── Advisory footer card ── */
+.hub-advisory{
+  background:linear-gradient(135deg,#0C1C35 0%,#112240 60%,#0a1628 100%);
+  border-radius:var(--r-xl);padding:var(--sp-6) var(--sp-8);
+  border:1px solid rgba(255,255,255,0.07);
+  border-top:2px solid rgba(13,148,136,0.5);
+  margin-bottom:var(--sp-10);
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 24px rgba(0,0,0,0.25);}
+.hub-advisory::before{content:'';position:absolute;top:-60px;right:-60px;
+  width:320px;height:320px;border-radius:50%;
+  background:radial-gradient(circle,rgba(13,148,136,0.10) 0%,transparent 65%);pointer-events:none;}
+.hub-advisory::after{content:'';position:absolute;bottom:-40px;left:-40px;
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(124,58,237,0.06) 0%,transparent 65%);pointer-events:none;}
+.ha-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--sp-3);}
+.ha-eyebrow{font-size:var(--text-xs);font-weight:var(--weight-bold);color:var(--teal);
+  text-transform:uppercase;letter-spacing:var(--tracking-widest);}
+.ha-status{display:flex;align-items:center;gap:6px;padding:4px 12px;border-radius:var(--r-full);
+  background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.25);}
+.ha-status-dot{width:7px;height:7px;border-radius:50%;background:#34D399;animation:pulse-dot 2.5s infinite;}
+.ha-status-label{font-size:10px;font-weight:var(--weight-bold);color:#34D399;letter-spacing:var(--tracking-wider);}
+.ha-text{font-size:var(--text-base);color:var(--on-dark-secondary);line-height:var(--leading-relaxed);}
+.ha-footer{font-size:var(--text-xs);color:var(--on-dark-micro);
+  margin-top:var(--sp-4);padding-top:var(--sp-4);
+  border-top:1px solid rgba(255,255,255,0.06);
+  display:flex;align-items:center;justify-content:space-between;}
+
+/* ── Page footer ── */
+.page-footer{background:#050d1a;padding:var(--sp-5) var(--sp-12);
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid rgba(13,148,136,0.2);}
+.pf-brand{font-size:var(--text-xs);font-weight:var(--weight-bold);
+  color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:var(--tracking-wider);}
+.pf-meta{font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:0.02em;}
+.pf-class{font-size:10px;font-weight:var(--weight-bold);color:rgba(255,255,255,0.25);
+  letter-spacing:var(--tracking-wider);text-transform:uppercase;
+  padding:3px 10px;border:1px solid rgba(255,255,255,0.10);border-radius:var(--r-full);}
+</style>
+</head>
+<body>
+
+<!-- ══ COVER ══════════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-scan" aria-hidden="true"></div>
+  <div class="top-nav-wrap">
+    <div class="top-nav">
+      <div class="nav-brand-wrap">
+        <div class="nav-brand">VER Intelligence Hub</div>
+        <div class="nav-status">
+          <span class="nav-status-dot"></span>
+          <span class="nav-status-label">Active Advisory</span>
+        </div>
+      </div>
+      <div class="nav-links">
+        <span class="nav-quick-label">Quick Access</span>
+        <a href="page_exec.html"    class="nav-link">Executive</a>
+        <a href="page_pillar.html"  class="nav-link">Spend Intel</a>
+        <a href="page_renewal.html" class="nav-link">Renewals</a>
+        <a href="vendor_home.html"  class="nav-link">Vendor Platform</a>
+        <a href="page_tco.html"     class="nav-link">TCO</a>
+        <span class="nav-sep">|</span>
+        <button type="button" class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()">
+          <span class="toggle-icon">&#9789;</span> Dark Mode
+        </button>
+        <a href="#intel" class="nav-link primary"
+          onclick="document.getElementById('intel').scrollIntoView({behavior:'smooth'});return false;">
+          Enter Hub &rarr;</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-accent"></div>
+    <div class="hero-eyebrow">DET &middot; FY27 &middot; Vendor Engagement &amp; Reliability</div>
+    <div class="hero-title">
+      Third-party spend<br>
+      <span class="accent">intelligence.</span>
+    </div>
+    <div class="hero-sub">
+      VER monitors, benchmarks, and advises on DET&rsquo;s entire third-party
+      spend portfolio &mdash; surfacing intelligence, identifying savings,
+      and keeping Pillar Leads ahead of every critical decision.
+    </div>
+
+    <!-- Animated KPI strip -->
+    <div class="hero-kpis">
+      <div class="hkpi good">
+        <div class="hkpi-lbl">Savings Realized</div>
+        <div class="hkpi-val" data-count="10.2" data-prefix="$" data-suffix="M">$0M</div>
+        <div class="hkpi-note">FY27 year-to-date</div>
+      </div>
+      <div class="hkpi warn">
+        <div class="hkpi-lbl">Critical Renewals</div>
+        <div class="hkpi-val" data-count="2" data-integer="1">0</div>
+        <div class="hkpi-note">Action required &lt;90 days</div>
+      </div>
+      <div class="hkpi std">
+        <div class="hkpi-lbl">Active SOWs</div>
+        <div class="hkpi-val" data-count="2397" data-integer="1">0</div>
+        <div class="hkpi-note">VER advisory scope</div>
+      </div>
+      <div class="hkpi blue">
+        <div class="hkpi-lbl">MFT Forecast</div>
+        <div class="hkpi-val" data-count="93.4" data-prefix="$" data-suffix="M">$0M</div>
+        <div class="hkpi-note">FY27 approved pipeline</div>
+      </div>
+      <div class="hkpi std">
+        <div class="hkpi-lbl">Portfolio Vendors</div>
+        <div class="hkpi-val" data-count="1368" data-integer="1">0</div>
+        <div class="hkpi-note">1,368 tracked &middot; 20 assessed</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue">
+    <span class="scroll-arrow">&#8595;</span>
+    <span>Intelligence modules &amp; tools below</span>
+  </div>
+</div>
+
+<!-- ══ INTELLIGENCE BODY ══════════════════════════════════════ -->
+<div class="intel-body" id="intel">
+<div class="inner">
+
+  <!-- ── Intelligence & Tools ── -->
+  <div class="body-sec fade-in">
+    <div class="body-sec-accent bsa-teal"></div>
+    <div class="body-sec-title">Intelligence &amp; Tools</div>
+    <div class="body-sec-sub">13 active modules &middot; 3 new this build &middot; Click any card to enter</div>
+  </div>
+
+  <div class="hub-grid sp3 fade-in">
+    <a href="page_exec.html" class="hub-card hc-navy">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-navy">&#128202;</div>
+        <span class="hc-badge live">Live</span>
+      </div>
+      <div class="hc-title">Executive Snapshot</div>
+      <div class="hc-desc">Portfolio KPIs &middot; Key engagements &middot; VER advisory position</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+    <a href="page_pillar.html" class="hub-card hc-teal">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-teal">&#127963;</div>
+        <span class="hc-badge active">Active</span>
+      </div>
+      <div class="hc-title">Pillar Intelligence &mdash; SSI</div>
+      <div class="hc-desc">All 9 DET pillars &middot; Spend &amp; Savings Intelligence &middot; Advisory per pillar</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+    <a href="page_mft.html" class="hub-card hc-green">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-green">&#128200;</div>
+        <span class="hc-badge live">Live</span>
+      </div>
+      <div class="hc-title">MFT Forecast</div>
+      <div class="hc-desc">Medium-term forecast &middot; 351 line items &middot; Approved spend pipeline &middot; FY27</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+  </div>
+
+  <div class="hub-grid sp3 fade-in">
+    <a href="page_sow.html" class="hub-card hc-blue">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-blue">&#128203;</div>
+        <span class="hc-badge active">Active</span>
+      </div>
+      <div class="hc-title">SOW &amp; PO Tracker</div>
+      <div class="hc-desc">Active statements of work &middot; Expiry monitoring &middot; VER scope governance</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+    <a href="page_renewal.html" class="hub-card hc-red">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-red">&#128197;</div>
+        <span class="hc-badge live">Live</span>
+      </div>
+      <div class="hc-title">Renewal Horizon</div>
+      <div class="hc-desc">Contract expiry calendar &middot; 30/60/90-day alerts &middot; Spend at risk</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+    <a href="page_consumption.html" class="hub-card hc-orange">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-orange">&#9889;</div>
+        <span class="hc-badge updated">Updated</span>
+      </div>
+      <div class="hc-title">Consumption Monitoring</div>
+      <div class="hc-desc">License utilization &middot; SaaS consumption vs contract &middot; Waste identification</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+  </div>
+
+  <div class="hub-grid sp3 fade-in">
+    <a href="page_ma.html" class="hub-card hc-amber">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-amber">&#128260;</div>
+        <span class="hc-badge updated">Updated</span>
+      </div>
+      <div class="hc-title">M&amp;A Transition Tracker</div>
+      <div class="hc-desc">Acquisition impacts &middot; Contract continuity risk &middot; Vendor parent changes</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+    <a href="page_market.html" class="hub-card hc-purple">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-purple">&#127760;</div>
+        <span class="hc-badge active">Active</span>
+      </div>
+      <div class="hc-title">Market Intelligence</div>
+      <div class="hc-desc">Vendor financial health &middot; M&amp;A watch &middot; Analyst ratings</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+    <a href="page_cw_intel.html" class="hub-card hc-teal">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-teal">&#128101;</div>
+        <span class="hc-badge live">New</span>
+      </div>
+      <div class="hc-title">Contingent Workforce Intelligence</div>
+      <div class="hc-desc">2,308 active contractors &middot; By leader &amp; supplier &middot; Rates, start/end dates &middot; Tenure</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+  </div>
+
+  <div class="hub-grid sp3 fade-in">
+    <a href="vendor_risk.html" class="hub-card hc-purple">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-purple">&#128268;</div>
+        <span class="hc-badge live">Live</span>
+      </div>
+      <div class="hc-title">VER Risk Intelligence</div>
+      <div class="hc-desc">1,368 vendors &middot; 5-dimension scoring &middot; Live assessment engine</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+    <a href="page_tco_dashboard.html" class="hub-card hc-teal">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-teal">&#129518;</div>
+        <span class="hc-badge active">Active</span>
+      </div>
+      <div class="hc-title">TCO Dashboard</div>
+      <div class="hc-desc">Portfolio true cost &middot; Hidden cost index &middot; Savings opportunity intelligence</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+    <a href="page_decision.html" class="hub-card hc-navy">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-navy">&#127919;</div>
+        <span class="hc-badge updated">Updated</span>
+      </div>
+      <div class="hc-title">Decision Support</div>
+      <div class="hc-desc">Vendor selection framework &middot; Make vs buy &middot; Rate negotiation playbooks</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+  </div>
+
+  <!-- ── New Intelligence Pages (FY27 Build) ── -->
+  <div class="body-sec pt2 fade-in">
+    <div class="body-sec-accent bsa-teal"></div>
+    <div class="body-sec-title">New This Build &mdash; FY27</div>
+    <div class="body-sec-sub">In test &middot; Review before hub connection</div>
+  </div>
+
+  <div class="hub-grid sp6 fade-in">
+    <a href="page_scorecards.html" class="hub-card hc-teal">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-teal">&#127942;</div>
+        <span class="hc-badge live">New</span>
+      </div>
+      <div class="hc-title">Vendor Performance Scorecards</div>
+      <div class="hc-desc">All 1,368 vendors &middot; SLA + 5-dimension scoring &middot; Risk flags &middot; Filterable grid</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+    <a href="page_spend_analysis.html" class="hub-card hc-green">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-green">&#129302;</div>
+        <span class="hc-badge live">New</span>
+      </div>
+      <div class="hc-title">AI-Assisted Spend Analysis</div>
+      <div class="hc-desc">$295.5M Coupa actuals &middot; Rule-based insights &middot; Scenario builder &middot; Opportunity finder</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+    <a href="page_pillar_alerts.html" class="hub-card hc-red">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-red">&#128680;</div>
+        <span class="hc-badge live">New</span>
+      </div>
+      <div class="hc-title">Pillar Action Alerts</div>
+      <div class="hc-desc">27 time-sensitive actions &middot; 9 DET pillars &middot; Critical ticker &middot; Owner tracking</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+  </div>
+
+  <!-- ── VER Intelligence Series ── -->
+  <div class="body-sec pt2 fade-in">
+    <div class="body-sec-accent bsa-purple"></div>
+    <div class="body-sec-title">VER Intelligence Series</div>
+    <div class="body-sec-sub">On-demand &middot; No meeting required</div>
+  </div>
+
+  <div class="intel-series fade-in">
+    <div class="is-header">
+      <div class="is-header-title">&#127916; On-Demand Intelligence</div>
+      <div class="is-header-sub">3 releases available &middot; FY26&ndash;FY27</div>
+    </div>
+    <div class="is-grid">
+      <a href="Cognizant_QBR_FY26Q4_Cinematic_v2.html" target="_blank" class="is-item is-item--teal">
+        <div class="is-type-badge is-badge--teal">&#9654; Cinematic QBR</div>
+        <div class="is-title">Cognizant &mdash; FY26 Q4</div>
+        <div class="is-meta">Latest CQBR &middot; Quarterly Business Review</div>
+        <div class="is-cta-row is-cta--teal">Watch now &rarr;</div>
+      </a>
+      <a href="VER_Vision_Series_E1_WhoIsVER_v2.html" target="_blank" class="is-item is-item--purple">
+        <div class="is-type-badge is-badge--purple">&#9654; Vision Series</div>
+        <div class="is-title">E1 &mdash; Who Is VER?</div>
+        <div class="is-meta">Episode 1 of 6 &middot; VER Vision Series</div>
+        <div class="is-cta-row is-cta--purple">Watch now &rarr;</div>
+      </a>
+      <a href="VER_Monthly_Digest_May2026.html" target="_blank" class="is-item is-item--amber">
+        <div class="is-type-badge is-badge--amber">&#128240; Monthly Digest</div>
+        <div class="is-title">VER Intelligence Digest</div>
+        <div class="is-meta">May 2026 Edition &middot; Latest release</div>
+        <div class="is-cta-row is-cta--amber">Read now &rarr;</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ── Vendor Platform ── -->
+  <div class="body-sec pt2 fade-in">
+    <div class="body-sec-accent bsa-blue"></div>
+    <div class="body-sec-title">Vendor Platform</div>
+    <div class="body-sec-sub">Operational intelligence &middot; Working tool for VER and Pillar teams</div>
+  </div>
+
+  <a href="vendor_home.html" class="vp-bar fade-in">
+    <div>
+      <div class="vp-eyebrow">VER Vendor Platform</div>
+      <div class="vp-title">Operational intelligence for VER and Pillar teams</div>
+      <div class="vp-desc">Vendor registry &middot; Risk intelligence &middot; SOW &amp; change order tools &middot; Intake requests &middot; Supplier portal</div>
+    </div>
+    <div class="vp-divider"></div>
+    <div class="vp-stat">
+      <div class="vp-stat-val">1,368</div>
+      <div class="vp-stat-lbl">Vendors</div>
+    </div>
+    <div class="vp-stat">
+      <div class="vp-stat-val green">20</div>
+      <div class="vp-stat-lbl">VER Assessed</div>
+    </div>
+    <div class="vp-stat">
+      <div class="vp-stat-val amber">767</div>
+      <div class="vp-stat-lbl">Rate Records</div>
+    </div>
+    <div class="vp-stat">
+      <div class="vp-stat-val blue">7</div>
+      <div class="vp-stat-lbl">Active Engagements</div>
+    </div>
+    <div class="vp-cta">Enter Platform &rarr;</div>
+  </a>
+
+  <!-- ── About VER ── -->
+  <div class="body-sec pt2 fade-in">
+    <div class="body-sec-accent bsa-amber"></div>
+    <div class="body-sec-title">About VER</div>
+    <div class="body-sec-sub">Resources &middot; Governance &middot; What&rsquo;s next</div>
+  </div>
+
+  <div class="about-grid fade-in">
+    <a href="page_governance.html" class="hub-card hc-teal">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-teal">&#128208;</div>
+        <span class="hc-badge active">Active</span>
+      </div>
+      <div class="hc-title">VER Governance</div>
+      <div class="hc-desc">SOW standards &middot; Change order policy &middot; Intake requirements</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+    <a href="page_guide.html" class="hub-card hc-teal">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-teal">&#128218;</div>
+        <span class="hc-badge updated">Updated</span>
+      </div>
+      <div class="hc-title">VER Manager&rsquo;s Guide</div>
+      <div class="hc-desc">How to work with VER &middot; SOW requirements &middot; Intake process</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+    <a href="page_roadmap.html" class="hub-card hc-purple">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-purple">&#128506;</div>
+        <span class="hc-badge updated">Updated</span>
+      </div>
+      <div class="hc-title">VER Strategic Roadmap</div>
+      <div class="hc-desc">VER vision &middot; Strategic direction &middot; FY27 priorities</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+    <a href="page_coming.html" class="hub-card hc-purple">
+      <div class="hc-top">
+        <div class="hc-icon-wrap hci-purple">&#128640;</div>
+        <span class="hc-badge soon">Soon</span>
+      </div>
+      <div class="hc-title">Coming Soon</div>
+      <div class="hc-desc">Active development &middot; On the horizon &middot; What&rsquo;s next for VER Intelligence</div>
+      <div class="hc-arrow">&rarr;</div>
+    </a>
+  </div>
+
+  <!-- ── Advisory position ── -->
+  <div class="hub-advisory fade-in">
+    <div class="ha-top">
+      <div class="ha-eyebrow">VER Advisory Position</div>
+      <div class="ha-status">
+        <span class="ha-status-dot"></span>
+        <span class="ha-status-label">Active Advisory &middot; FY27</span>
+      </div>
+    </div>
+    <div class="ha-text">
+      DET&rsquo;s third-party spend portfolio is performing under active VER advisory.
+      Savings opportunities are being identified and realized. Critical renewals
+      are monitored and Pillar Leads are engaged ahead of key milestones.
+      The portfolio is stable. VER advisory is active.
+    </div>
+    <div class="ha-footer">
+      <span>VER Intelligence Hub &middot; Salesforce DET &middot; Vendor Engagement &amp; Reliability</span>
+      <span>Updated: June 2026 &middot; FY27</span>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- Page footer -->
+<div class="page-footer">
+  <div class="pf-brand">VER Intelligence Hub</div>
+  <div class="pf-meta">Salesforce DET &middot; FY27 &middot; June 2026</div>
+  <div class="pf-class">Confidential</div>
+</div>
+
+<script>
+
+// ── Theme system ──────────────────────────────────────────────
+(function(){
+  var saved = localStorage.getItem('ver-theme');
+  var prefersDark = window.matchMedia('(prefers-color-scheme:dark)').matches;
+  var theme = saved || (prefersDark ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+  updateToggle(theme);
+})();
+
+function toggleTheme(){
+  var current = document.documentElement.getAttribute('data-theme') || 'light';
+  var next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('ver-theme', next);
+  updateToggle(next);
+}
+
+function updateToggle(theme){
+  var btn = document.getElementById('theme-toggle-btn');
+  if(!btn) return;
+  btn.innerHTML = theme === 'dark'
+    ? '<span class="toggle-icon" style="transform:rotate(180deg);">&#9790;</span> Light Mode'
+    : '<span class="toggle-icon">&#9789;</span> Dark Mode';
+}
+
+window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',function(e){
+  if(!localStorage.getItem('ver-theme')){
+    var t = e.matches ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', t);
+    updateToggle(t);
+  }
+});
+
+// ── Animated KPI counters ─────────────────────────────────────
+function animateCounter(el){
+  var target   = parseFloat(el.getAttribute('data-count'));
+  var prefix   = el.getAttribute('data-prefix') || '';
+  var suffix   = el.getAttribute('data-suffix') || '';
+  var isInt    = el.getAttribute('data-integer') === '1';
+  var duration = 1200;
+  var start    = null;
+  function step(ts){
+    if(!start) start = ts;
+    var progress = Math.min((ts - start) / duration, 1);
+    var ease = 1 - Math.pow(1 - progress, 3);
+    var val  = target * ease;
+    el.textContent = isInt
+      ? prefix + Math.round(val).toLocaleString() + suffix
+      : prefix + val.toFixed(1) + suffix;
+    if(progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('[data-count]').forEach(function(el){ animateCounter(el); });
+});
+
+// ── Scroll fade-in ────────────────────────────────────────────
+(function(){
+  var els = document.querySelectorAll('.fade-in');
+  if(!window.IntersectionObserver){
+    els.forEach(function(e){ e.classList.add('visible'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){ entry.target.classList.add('visible'); io.unobserve(entry.target); }
+    });
+  },{threshold:0.08,rootMargin:'0px 0px -32px 0px'});
+  els.forEach(function(el){ io.observe(el); });
+})();
+
+// ── Apps Script link rewriter ─────────────────────────────────
+(function(){
+  var isAppsScript = window.location.href.indexOf('script.google.com') > -1
+    || window.location.href.indexOf('googleusercontent.com') > -1;
+  if(!isAppsScript) return;
+  function rewriteLinks(){
+    document.querySelectorAll('a[href]').forEach(function(a){
+      var href = a.getAttribute('href');
+      if(!href || href.startsWith('http') || href.startsWith('#')
+         || href.startsWith('mailto') || !href.match(/\.html/)) return;
+      var page = href.replace(/\.html.*$/, '').replace(/^.*\//, '');
+      var qs   = href.indexOf('?') > -1 ? href.slice(href.indexOf('?')+1) : '';
+      var base = window.location.href.split('?')[0];
+      a.setAttribute('href', base + '?page=' + page + (qs ? '&' + qs : ''));
+    });
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', rewriteLinks);
+  } else { rewriteLinks(); }
+  new MutationObserver(rewriteLinks).observe(document.body, {childList:true, subtree:true});
+})();
+</script>
+</body>
+</html>
